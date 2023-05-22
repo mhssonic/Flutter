@@ -50,8 +50,11 @@ public class SQLDB {
         }
     }
 
-    public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate){
-//        statement.executeUpdate("INSERT INTO users")
+
+    //TODO let them add bio and etc at first
+    public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate , String biography , String avatarPath , String headerPath){
+        String profileId = ProfileDB.CreateProfile(firstName,lastName,email,phoneNumber,country,birthdate,biography,avatarPath,headerPath);
+        UserDB.CreateUser(username,password,profileId);
     }
 
     public static void SQLScripRunner(String fileName){
