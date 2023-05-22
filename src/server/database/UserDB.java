@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class UserDB extends SQLDB{
     public static void main(String[] args) {
         run();
-        System.out.println(containFieldKey("users", "username", "sdf"));
+        createUser("mhs", "pashmaki", "21312");
     }
 
     public static boolean matchUserPass(String username, String password){
@@ -22,17 +22,16 @@ public class UserDB extends SQLDB{
         }
     }
 
-    public static void CreateUser(String username , String password , String profileId){
+    public static void createUser(String username , String password , String profileId){
         try{
-            String id = new String(); //TODO
-            preparedStatement = connection.prepareStatement("INSERT INTO users (id,profile_id , username , password) VALUES (?,?,?,?)");
-            preparedStatement.setString(1,id);
-            preparedStatement.setString(2,profileId);
-            preparedStatement.setString(3,username);
-            preparedStatement.setString(4,password);
+            preparedStatement = connection.prepareStatement("INSERT INTO users (profile_id , username , password, following, follower, blocked) VALUES (?,?,?, '{}', '{}', '{}')");
+            preparedStatement.setString(1,profileId);
+            preparedStatement.setString(2,username);
+            preparedStatement.setString(3,password);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-        }catch (Exception e){
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
             throw  new RuntimeException(e);
         }
     }
