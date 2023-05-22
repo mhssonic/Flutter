@@ -47,10 +47,10 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
-    public static boolean containFieldKey(String table, String field, String key){
+    public static boolean containFieldKey(String table, String field,Object key){
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
-            preparedStatement.setString(1, key);
+            preparedStatement.setObject(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         }catch (Exception e){
