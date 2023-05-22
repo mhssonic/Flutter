@@ -3,11 +3,13 @@ package server.database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class UserDB extends SQLDB{
     public static void main(String[] args) {
         run();
-        createUser("mhs", "pashmaki", "21312");
+//        createUser("mhs1", "pash1maki", "211312");
+        createUserProfile("asdf", "asdf", "mhs2", "sdfsdf", "sdafasdf", "asdfasdf", "dsa", LocalDate.now(), "sdf", "asdf", "asdf");
     }
 
     public static boolean matchUserPass(String username, String password){
@@ -28,7 +30,7 @@ public class UserDB extends SQLDB{
             preparedStatement.setString(1,profileId);
             preparedStatement.setString(2,username);
             preparedStatement.setString(3,password);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
         }catch (SQLException e){
             System.out.println(e.getMessage());
