@@ -3,10 +3,9 @@ package server.user;
 import java.time.LocalDate;
 
 public class Profile {
+    private String profileId;
     private String firstName;
     private String lastName;
-    private String userName;
-    private String password;
     private String email;
     private String phoneNumber;
     private String country;
