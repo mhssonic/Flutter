@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tweet (
-	id VARCHAR(16) PRIMARY KEY,
+	id VARCHAR(16) PRIMARY KEY default unique_random(16, 'tweet', 'id'),
 	author VARCHAR(16),
 	context VARCHAR(280),
 	attachmenst VARCHAR(16) array[8],
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tweet (
 	postingTime timestamp
 );
 CREATE TABLE IF NOT EXISTS profile (
-	id VARCHAR(16) PRIMARY KEY,
+	id VARCHAR(16) PRIMARY KEY default unique_random(16, 'tweet', 'id'),
 	first_name VARCHAR(50),
 	last_name VARCHAR(50),
 	email VARCHAR(64),
@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS profile (
 	header VARCHAR(128)
 );
 CREATE TABLE IF NOT EXISTS chat_box (
- 	id VARCHAR(16) PRIMARY KEY,
+ 	id VARCHAR(16) PRIMARY KEY default unique_random(16, 'tweet', 'id'),
  	message_id VARCHAR(16) array[4096]
 );
 CREATE TABLE IF NOT EXISTS users (
- 	id VARCHAR(16) PRIMARY KEY,
+ 	id VARCHAR(16) PRIMARY KEY default unique_random(16, 'tweet', 'id'),
  	profile_id VARCHAR(16),
  	username VARCHAR(32),
  	password VARCHAR(32),
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS users (
  	blocked VARCHAR(16) array[1024]
 );
 CREATE TABLE IF NOT EXISTS attachment (
-    id VARCHAR(16) PRIMARY KEY,
+    id VARCHAR(16) PRIMARY KEY default unique_random(16, 'tweet', 'id'),
  	type type_file,
  	path VARCHAR(128)
 );
