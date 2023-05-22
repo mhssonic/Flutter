@@ -1,0 +1,1 @@
+create type type_file as enum('image', 'video');

@@ -1,5 +1,8 @@
 package server.database;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,22 +21,14 @@ public class SQLDB {
     public static void run(){
         try {
             creatConnection();
-            creatTables();
-        }catch (Exception e){};
-    }
-
-    public static void creatTables(){
-        try {
-            TweetDB.creatTable();
-            UserDB.creatTable();
-            System.out.println("2");
-            AttachmentDB.creatTable();
-            ChatBoxDB.creatTable();
-            ProfileDB.creatTable();
+            SQLScripRunner("functions");
+            SQLScripRunner("types");
+            SQLScripRunner("tables");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
+
 
     private static void creatConnection(){
         String url = "jdbc:postgresql://localhost:5432/flutter";
@@ -53,13 +48,31 @@ public class SQLDB {
             preparedStatement.setObject(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
-        }catch (Exception e){
+        }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }
 
     public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate){
 //        statement.executeUpdate("INSERT INTO users")
+    }
+
+    public static void SQLScripRunner(String fileName){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/server/sql/" + fileName + ".sql"));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append("\n");
+            }
+            reader.close();
+            String sql = sb.toString();
+            statement.executeUpdate(sql);
+        }catch (SQLException | IOException e){
+            System.out.println(e.getMessage());
+//            throw new RuntimeException(e);
+        }
     }
 
 
