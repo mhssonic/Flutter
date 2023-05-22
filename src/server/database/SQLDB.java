@@ -1,22 +1,20 @@
 package server.database;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SQLDB {
-    private static Connection connection;
+    protected static Connection connection;
     protected static Statement statement;
 
-    public static void main(String[] args) {
-        creatTables();
+    public static void run(){
+        try {
+            creatConnection();
+            creatTables();
+        }catch (Exception e){};
     }
 
     public static void creatTables(){
         try {
-            creatConnection();
             TweetDB.creatTable();
             UserDB.creatTable();
             AttachmentDB.creatTable();
@@ -39,6 +37,15 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
-
+    public static boolean containFieldKey(String table, String field, String key){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
+            preparedStatement.setString(1, key);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 
 }
