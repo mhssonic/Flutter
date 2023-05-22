@@ -6,21 +6,38 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class SQLDB {
+public class SQLDB {
     private static Connection connection;
     protected static Statement statement;
 
-    private static void creatConnection() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/Flutter";
+    public static void main(String[] args) {
+        creatTables();
+    }
+
+    public static void creatTables(){
+        try {
+            creatConnection();
+            TweetDB.creatTable();
+            UserDB.creatTable();
+            AttachmentDB.creatTable();
+            ChatBoxDB.creatTable();
+            ProfileDB.creatTable();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void creatConnection(){
+        String url = "jdbc:postgresql://localhost:5432/flutter";
         String user = "postgres";
         String password = "pashmak";
 
-        connection = DriverManager.getConnection(url, user, password);
-        statement = connection.createStatement();
-    }
-
-    private static void creatTable(String tableName){
-        
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
