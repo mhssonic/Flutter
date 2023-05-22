@@ -28,18 +28,6 @@ public class ProfileDB extends SQLDB {
         }
     }
 
-    public static Boolean containUsername(String username) {
-        return containFieldKey("users", "username", username);
-    }
-
-    public static Boolean containEmail(String email) {
-        return containFieldKey("users", "email", email);
-    }
-
-    public static Boolean containPhoneNumber(String phoneNumber) {
-        return containFieldKey("users", "phone-number", phoneNumber);
-    }
-
     public static String createProfile(String firstName, String lastName, String email, String phoneNumber, String country, LocalDate birthdate, String biography , String avatarPath , String headerPath) {
         try {
             LocalDateTime lastEdit = LocalDateTime.now();

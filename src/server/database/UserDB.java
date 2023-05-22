@@ -37,4 +37,16 @@ public class UserDB extends SQLDB{
             throw  new RuntimeException(e);
         }
     }
+
+    public static Boolean containUsername(String username) {
+        return containFieldKey("users", "username", username);
+    }
+
+    public static Boolean containEmail(String email) {
+        return containFieldKey("users", "email", email);
+    }
+
+    public static Boolean containPhoneNumber(String phoneNumber) {
+        return containFieldKey("users", "phone-number", phoneNumber);
+    }
 }

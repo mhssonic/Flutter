@@ -1,10 +1,13 @@
 package server.database;
 
+import server.Tools;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class SQLDB {
     protected static Connection connection;
@@ -13,6 +16,7 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
+        System.out.println(containInArrayFieldObject("users", "I44sUI10jHbXao7F", "follower" , "werf"));
     }
 
     public static void run(){
@@ -26,7 +30,6 @@ public class SQLDB {
         }
     }
 
-
     private static void creatConnection(){
         String url = "jdbc:postgresql://localhost:5432/flutter";
         String user = "postgres";
@@ -38,23 +41,6 @@ public class SQLDB {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-    public static boolean containFieldKey(String table, String field,Object key){
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
-            preparedStatement.setObject(1, key);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    //TODO let them add bio and etc at first
-    public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate , String biography , String avatarPath , String headerPath){
-        String profileId = ProfileDB.createProfile(firstName,lastName,email,phoneNumber,country,birthdate,biography,avatarPath,headerPath);
-        UserDB.createUser(username,password,profileId);
     }
 
     public static void SQLScripRunner(String fileName){
@@ -73,5 +59,52 @@ public class SQLDB {
             System.out.println(e.getMessage());
 //            throw new RuntimeException(e);
         }
+    }
+
+    //check if table contain an object with filed = key
+    protected static boolean containFieldKey(String table, String field,Object key){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
+            preparedStatement.setObject(1, key);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }catch (SQLException e){
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    //check if in table where id = "id" array(field) contain obj
+    protected static boolean containInArrayFieldObject(String table, String id, String field, Object obj){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ? AND ? = ANY(" + field + ")");
+            preparedStatement.setString(1, id);
+            preparedStatement.setObject(2, obj);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }catch (SQLException e){
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+
+    //push an obj to an array(field) of a row where id = "id" in table
+    protected static void appendToArrayField(String table, String id, String field, Object obj){
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET "+ field +" = array_append("+ field + ",?) WHERE id = ?");
+            preparedStatement.setObject(1, obj);
+            preparedStatement.setString(2, id);
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+
+    //TODO let them add bio and etc at first
+    public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate , String biography , String avatarPath , String headerPath){
+        String profileId = ProfileDB.createProfile(firstName,lastName,email,phoneNumber,country,birthdate,biography,avatarPath,headerPath);
+        UserDB.createUser(username,password,profileId);
     }
 }
