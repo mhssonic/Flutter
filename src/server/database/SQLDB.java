@@ -6,11 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SQLDB {
+public abstract class SQLDB {
     private static Connection connection;
-    private static Statement statement;
-    private static String sql;
-
+    protected static Statement statement;
 
     private static void creatConnection() throws SQLException {
         String url = "jdbc:postgresql://localhost:5432/Flutter";
