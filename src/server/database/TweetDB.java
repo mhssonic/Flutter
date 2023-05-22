@@ -1,4 +1,4 @@
 package server.database;
 
-public class TweetDB {
+public class TweetDB extends SQLDB{
 }

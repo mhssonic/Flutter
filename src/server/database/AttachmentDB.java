@@ -1,4 +1,4 @@
 package server.database;
 
-public class AttachmentDB {
+public class AttachmentDB extends SQLDB{
 }

@@ -1,4 +1,4 @@
 package server.database;
 
-public class UserDB {
+public class UserDB extends SQLDB{
 }

@@ -1,4 +1,4 @@
 package server.database;
 
-public class ProfileDB {
+public class ProfileDB extends SQLDB{
 }
