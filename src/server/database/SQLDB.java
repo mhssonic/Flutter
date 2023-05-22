@@ -1,10 +1,19 @@
 package server.database;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SQLDB {
     protected static Connection connection;
     protected static Statement statement;
+    protected static PreparedStatement preparedStatement;
+
+    public static void main(String[] args) {
+        run();
+    }
 
     public static void run(){
         try {
@@ -17,6 +26,7 @@ public class SQLDB {
         try {
             TweetDB.creatTable();
             UserDB.creatTable();
+            System.out.println("2");
             AttachmentDB.creatTable();
             ChatBoxDB.creatTable();
             ProfileDB.creatTable();
@@ -39,7 +49,7 @@ public class SQLDB {
     }
     public static boolean containFieldKey(String table, String field, String key){
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
             preparedStatement.setString(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
@@ -47,5 +57,10 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
+
+    public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate){
+//        statement.executeUpdate("INSERT INTO users")
+    }
+
 
 }
