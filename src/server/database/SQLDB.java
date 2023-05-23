@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class SQLDB {
@@ -16,7 +18,10 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        System.out.println(containInArrayFieldObject("users", "I44sUI10jHbXao7F", "follower" , "werf"));
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("username", "mhs");
+        hashMap.put("password", "pass");
+        updateFieldsKeys("users", "I44sUI10jHbXao7F", hashMap);
     }
 
     public static void run(){
@@ -98,6 +103,35 @@ public class SQLDB {
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    //update row based on HashMap<field, key>
+    protected static void updateFieldsKeys(String table, String id, HashMap<String, Object> fieldKeys){
+        try {
+            StringBuilder sql =  new StringBuilder();
+            sql.append("UPDATE ");
+            sql.append(table);
+            sql.append(" SET ");
+            for(String field : fieldKeys.keySet()){
+                sql.append(field);
+                sql.append("=");
+                sql.append("?,");
+            }
+            sql.setCharAt(sql.length() - 1, ' ');
+            sql.append("where id = ?");
+
+            preparedStatement = connection.prepareStatement(sql.toString());
+            int i = 1;
+            for(Object obj : fieldKeys.values()){
+                preparedStatement.setObject(i, obj);
+                i++;
+            }
+            preparedStatement.setString(i, id);
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
         }
     }
 
