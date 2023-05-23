@@ -1,4 +1,6 @@
 package server.database;
 
-public class TweetDB {
+import java.sql.SQLException;
+
+public class TweetDB extends  SQLDB{
 }
