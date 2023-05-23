@@ -1,0 +1,56 @@
+package server.enums.error;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+public class ErrorHandling {
+    public static ErrorType validUsername(String username) {
+//        if (DataBase.containUsername(username)) return ErrorType.DUPLICATED_USERNAME;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validPass(String password) {
+        if (password.length() < 8) return ErrorType.INVALID_PASS;
+        if (password.equals(password.toUpperCase()) || password.equals(password.toLowerCase()))
+            return ErrorType.INVALID_PASS;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validConfirm(String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) return ErrorType.MISMATCH;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validEmail(String email) {
+//        if (DataBase.containEmail(email)) return ErrorType.DUPLICATED_EMAIL;
+        String regex = "^[\\w!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&amp;'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) return ErrorType.INVALID_EMAIL;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validPhoneNumber(String phoneNumber) {
+//        if (DataBase.containPhoneNumber(phoneNumber)) return ErrorType.DUPLICATED_PHONE_NUMBER;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validBirthDate(String birthDate) {
+        //TODO slow
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(birthDate, dtf);
+            date = date.plusYears(18);
+            LocalDate certainTime = LocalDate.now();
+
+            if (certainTime.isBefore(date)) return ErrorType.UNDER_AGE;
+            return ErrorType.SUCCESS;
+        } catch (Exception e) {
+            return ErrorType.INVALID_BIRTHDATE;
+        }
+    }
+
+}
