@@ -7,9 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class SQLDB {
     protected static Connection connection;
@@ -18,10 +16,7 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("username", "mhs");
-        hashMap.put("password", "pass");
-        updateFieldsKeys("users", "I44sUI10jHbXao7F", hashMap);
+        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
     }
 
     public static void run(){
@@ -106,6 +101,18 @@ public class SQLDB {
         }
     }
 
+    protected static void removeFromArrayField(String table, String id, String field, Object obj){
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET "+ field +" = array_remove("+ field + ",?) WHERE id = ?");
+            preparedStatement.setObject(1, obj);
+            preparedStatement.setString(2, id);
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
     //update row based on HashMap<field, key>
     protected static void updateFieldsKeys(String table, String id, HashMap<String, Object> fieldKeys){
         try {
@@ -134,7 +141,6 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
-
 
     //TODO let them add bio and etc at first
     public static void createUserProfile(String firstName , String lastName , String username , String password, String email , String phoneNumber , String country , LocalDate birthdate , String biography , String avatarPath , String headerPath){
