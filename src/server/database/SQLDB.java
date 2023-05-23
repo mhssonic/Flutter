@@ -16,7 +16,9 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
+        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
+//        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
+        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
     }
 
     public static void run(){
@@ -139,6 +141,19 @@ public class SQLDB {
             preparedStatement.executeUpdate();
         }catch (SQLException e){
             throw new RuntimeException(e);
+        }
+    }
+
+    protected static Object getFieldObject(String table, String id, String field){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ?");
+            preparedStatement.setString(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getObject(field);
+        }catch (SQLException e){
+            throw new RuntimeException(e);//TODO handle exception
         }
     }
 
