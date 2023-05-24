@@ -30,5 +30,17 @@ public class TweetDB extends SQLDB {
         }
 
 
+
+    public static void removeTweet(int messageId) {
+        try {
+            preparedStatement = connection.prepareStatement("DELETE FROM tweet WHERE id = ?");
+            preparedStatement.setInt(1 , messageId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 }
