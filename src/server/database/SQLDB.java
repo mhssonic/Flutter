@@ -21,14 +21,7 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-//        createUserProfile("HOSNA" , "be" , "8564" , "123" , "beheshti" , "45" , "ljn" , LocalDate.now(), "kn", "" , " ");
-//        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "1555");
-//        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
-//        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
-        HashMap<String,Object> updatedData = new HashMap<>();
-        updatedData.put("first_name", "5555555555555555555");
-//        updateUserProfile(updatedData,"OmY2iJMmGj8Nm6eO","hQ1wovR5GG8twM0n");
-
+        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
     }
 
     public static void run() {
@@ -173,6 +166,7 @@ public class SQLDB {
     public static void createUserProfile(String firstName, String lastName, String username, String password, String email, String phoneNumber, String country, LocalDate birthdate, String biography, String avatarPath, String headerPath) {
         int userId = UserDB.createUser(username, password);
         ProfileDB.createProfile(userId, firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
+        ChatBoxDB.creatChatBox(Tools.jenkinsHash(userId, userId, false));
     }
 
     public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId , int profileId) {
@@ -185,33 +179,33 @@ public class SQLDB {
             switch (key) {
                 case "first_name":
                 case "last_name":
-                    output = ErrorHandling.validLength(value.length() , 50);
+                    output = ErrorHandling.validLength(value , 50);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
                 case "username":
-                    output = ErrorHandling.validLength(value.length() , 32);
+                    output = ErrorHandling.validLength(value , 32);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validUsername(value);
                     if (output != ErrorType.SUCCESS) return output;
                     userUpdate.put(key, value);
                     break;
                 case "password":
-                    output = ErrorHandling.validLength(value.length() , 32);
+                    output = ErrorHandling.validLength(value, 32);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validPass(value);
                     if (output != ErrorType.SUCCESS) return output;
                     userUpdate.put(key, value);
                     break;
                 case "email":
-                    output = ErrorHandling.validLength(value.length() , 64);
+                    output = ErrorHandling.validLength(value , 64);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validEmail(value);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
                 case "phone_number":
-                    output = ErrorHandling.validLength(value.length() , 13);
+                    output = ErrorHandling.validLength(value , 13);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validPhoneNumber(value);
                     if (output != ErrorType.SUCCESS) return output;
@@ -225,7 +219,7 @@ public class SQLDB {
                     profileUpdate.put(key, value);
                     break;
                 case "bio":
-                    output = ErrorHandling.validLength(value.length() , 160);
+                    output = ErrorHandling.validLength(value , 160);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;

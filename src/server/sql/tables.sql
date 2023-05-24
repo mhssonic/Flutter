@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS tweet (
     author INT,
     context VARCHAR(280),
     attachment INT array[8],
-    retweet smallserial,
+    retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
     comments INT Array[1024],
