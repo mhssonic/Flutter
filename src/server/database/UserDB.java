@@ -25,7 +25,7 @@ public class UserDB extends SQLDB{
         }
     }
 
-    public static String createUser(String username , String password){
+    public static int createUser(String username , String password){
         try{
             preparedStatement = connection.prepareStatement("INSERT INTO users (username , password) VALUES (?,?) returning id");
             preparedStatement.setString(1,username);
@@ -33,7 +33,7 @@ public class UserDB extends SQLDB{
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return resultSet.getString("id");
+            return resultSet.getInt("id");
         }catch (SQLException e){
             System.out.println(e.getMessage());
             throw  new RuntimeException(e);
@@ -52,7 +52,7 @@ public class UserDB extends SQLDB{
         return containFieldKey("users", "phone-number", phoneNumber);
     }
 
-    public static void updateUser(HashMap<String,Object> userUpdate , String userId){
+    public static void updateUser(HashMap<String,Object> userUpdate , int userId){
         SQLDB.updateFieldsKeys("users" , userId , userUpdate);
     }
 }
