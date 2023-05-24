@@ -12,5 +12,6 @@ public enum ErrorType {
     INVALID_PHONE_NUMBER,
     INVALID_BIRTHDATE,
     UNDER_AGE,
+    TOO_LONG_MESSAGE,
     TOO_LONG,
 }
