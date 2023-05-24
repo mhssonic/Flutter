@@ -1,5 +1,7 @@
 package server.enums.error;
 
+import server.database.SQLDB;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -8,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class ErrorHandling {
     public static ErrorType validUsername(String username) {
-//        if (DataBase.containUsername(username)) return ErrorType.DUPLICATED_USERNAME;
+        if (SQLDB.containFieldKey("users", "username" , username)) return ErrorType.DUPLICATED_USERNAME;
         return ErrorType.SUCCESS;
     }
 
@@ -25,7 +27,7 @@ public class ErrorHandling {
     }
 
     public static ErrorType validEmail(String email) {
-//        if (DataBase.containEmail(email)) return ErrorType.DUPLICATED_EMAIL;
+        if (SQLDB.containFieldKey("profile","email" , email)) return ErrorType.DUPLICATED_EMAIL;
         String regex = "^[\\w!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&amp;'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
@@ -34,7 +36,8 @@ public class ErrorHandling {
     }
 
     public static ErrorType validPhoneNumber(String phoneNumber) {
-//        if (DataBase.containPhoneNumber(phoneNumber)) return ErrorType.DUPLICATED_PHONE_NUMBER;
+        if (phoneNumber.length() != 13) return ErrorType.INVALID_PHONE_NUMBER;
+        if (SQLDB.containFieldKey("profile", "phone_number" , phoneNumber)) return ErrorType.DUPLICATED_PHONE_NUMBER;
         return ErrorType.SUCCESS;
     }
 
@@ -57,5 +60,4 @@ public class ErrorHandling {
         if (length > maxLen) return ErrorType.TOO_LONG;
         return ErrorType.SUCCESS;
     }
-
 }

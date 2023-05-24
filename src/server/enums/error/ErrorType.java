@@ -2,7 +2,6 @@ package server.enums.error;
 
 public enum ErrorType {
     SUCCESS,
-    INVALID_LOGIN,
     DUPLICATED_USERNAME,
     INVALID_PASS,
     MISMATCH,
@@ -13,4 +12,6 @@ public enum ErrorType {
     INVALID_BIRTHDATE,
     UNDER_AGE,
     TOO_LONG,
+    BLOCKED,
+    ALREADY_EXIST,
 }
