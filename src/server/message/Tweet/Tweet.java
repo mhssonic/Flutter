@@ -9,7 +9,7 @@ public class Tweet {
     HashSet<User> like = new HashSet<>();
     HashSet<String> comment;
     ArrayList<String> hashtag;
-    int retweet;
+    int retweetCount;
     Boolean faveStar;
 
 
