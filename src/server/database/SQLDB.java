@@ -4,6 +4,7 @@ import server.Tools;
 import server.enums.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.message.Tweet.Tweet;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,7 +22,14 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
+        Integer[] one = new Integer[10];
+////
+//        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
+//        UserDB.follow(-2000000000, -1999999999 );
+        Tweet.tweet(-1999999999, "hi,Im stupid", one, one);
+//        TweetDB.removeTweet(-1999999980);
+//
     }
 
     public static void run() {
