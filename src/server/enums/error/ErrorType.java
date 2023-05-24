@@ -13,4 +13,6 @@ public enum ErrorType {
     INVALID_BIRTHDATE,
     UNDER_AGE,
     TOO_LONG,
+    BLOCKED,
+    ALREADY_EXIST,
 }
