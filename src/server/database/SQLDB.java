@@ -68,7 +68,7 @@ public class SQLDB {
     }
 
     //check if table contain an object with filed = key
-    protected static boolean containFieldKey(String table, String field, Object key) {
+    public static boolean containFieldKey(String table, String field, Object key) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
             preparedStatement.setObject(1, key);
