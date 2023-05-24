@@ -22,7 +22,8 @@ public class Tweet {
 
     public static void main(String[] args) {
         SQLDB.run();
-        tweet(-1999999990, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
+//        tweet(-1999999990, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
+        like(-2000000000,-2000000000);
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
