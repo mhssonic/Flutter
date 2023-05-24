@@ -4,6 +4,7 @@ import server.Tools;
 import server.enums.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.message.Attachment;
 import server.message.Tweet.Tweet;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SQLDB {
@@ -27,7 +29,9 @@ public class SQLDB {
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
 //        UserDB.follow(-2000000000, -1999999999 );
-        Tweet.tweet(-1999999999, "hi,Im stupid", one, one);
+        ArrayList<Attachment> attachments = new ArrayList<>();
+        attachments.add(new Attachment("123" , FileType.VIDEO));
+        Tweet.tweet(-1999999999, "hi,Im not that stupid",attachments , one);
 //        TweetDB.removeTweet(-1999999980);
 //
     }

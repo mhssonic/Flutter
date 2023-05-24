@@ -1,12 +1,10 @@
 package server.message.Tweet;
 
 import server.Tools;
-import server.database.ChatBoxDB;
-import server.database.SQLDB;
-import server.database.TweetDB;
-import server.database.UserDB;
+import server.database.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.message.Attachment;
 import server.user.User;
 
 import java.sql.Array;
@@ -27,9 +25,17 @@ public class Tweet {
         tweet(-1999999990, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
     }
 
-    public static ErrorType tweet(int userId, String context, Integer[] attachments, Integer[] hashtag){
-        SQLDB.run();
-        int tweetId = TweetDB.createTweet(userId, context, attachments, hashtag, LocalDateTime.now());
+    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
+        SQLDB.run(); //TODO  WHY?
+
+        Integer[] attachmentId = new Integer[attachments.size()];
+        int i = 0;
+        for ( Attachment attachment : attachments) {
+            attachmentId[i] = AttachmentDB.createAttachment(attachment);
+            i++;
+        }
+
+        int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         try {
             Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());
             ErrorType errorType = ErrorHandling.validLength(context, MAX_LENGTH_TWEET);

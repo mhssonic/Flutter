@@ -33,7 +33,7 @@ public class TweetDB extends SQLDB {
     public static void removeTweet(int messageId) {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM tweet WHERE id = ?");
-            preparedStatement.setInt(1 , messageId);
+            preparedStatement.setInt(1, messageId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
         } catch (SQLException e) {
@@ -41,5 +41,12 @@ public class TweetDB extends SQLDB {
         }
     }
 
+    public static void like(int messageId, int userId) {
+        SQLDB.appendToArrayField("tweet", messageId, "like", userId);
+    }
+
+    public static void removeLike(int messageId, int userId) {
+        SQLDB.removeFromArrayField("tweet", messageId, "like", userId);
+    }
 
 }
