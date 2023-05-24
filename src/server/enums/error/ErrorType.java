@@ -14,4 +14,6 @@ public enum ErrorType {
     TOO_LONG,
     BLOCKED,
     ALREADY_EXIST,
+    ALREADY_LIKED,
+    HAVE_NOT_LIKED,
 }

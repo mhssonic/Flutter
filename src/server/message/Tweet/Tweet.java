@@ -26,15 +26,8 @@ public class Tweet {
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
-        SQLDB.run(); //TODO  WHY?
 
-        Integer[] attachmentId = new Integer[attachments.size()];
-        int i = 0;
-        for ( Attachment attachment : attachments) {
-            attachmentId[i] = AttachmentDB.createAttachment(attachment);
-            i++;
-        }
-
+        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         try {
             Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());
@@ -50,5 +43,19 @@ public class Tweet {
             System.out.println(e.getMessage());
             return ErrorType.SUCCESS;
         }
+    }
+
+    public static ErrorType like(int userId, int tweetId){
+        if(TweetDB.likedBefore(userId, tweetId))
+            return ErrorType.ALREADY_LIKED;
+        TweetDB.like(tweetId, userId);
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType removeLike(int userId, int tweetId){
+        if(!TweetDB.likedBefore(userId, tweetId))
+            return ErrorType.HAVE_NOT_LIKED;
+        TweetDB.removeLike(tweetId, userId);
+        return ErrorType.SUCCESS;
     }
 }

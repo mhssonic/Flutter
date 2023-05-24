@@ -31,7 +31,7 @@ public class SQLDB {
 //        UserDB.follow(-2000000000, -1999999999 );
         ArrayList<Attachment> attachments = new ArrayList<>();
         attachments.add(new Attachment("123" , FileType.VIDEO));
-        Tweet.tweet(-1999999999, "hi,Im not that stupid",attachments , one);
+        Tweet.tweet(-1999999990, "hi,Im not that stupid",attachments , one);
 //        TweetDB.removeTweet(-1999999980);
 //
     }
