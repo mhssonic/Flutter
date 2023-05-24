@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class UserDB extends SQLDB{
     public static void main(String[] args) {
@@ -26,7 +27,7 @@ public class UserDB extends SQLDB{
 
     public static void createUser(String username , String password , String profileId){
         try{
-            preparedStatement = connection.prepareStatement("INSERT INTO users (profile_id , username , password, following, follower, blocked) VALUES (?,?,?, '{}', '{}', '{}')");
+            preparedStatement = connection.prepareStatement("INSERT INTO users (profile_id , username , password) VALUES (?,?,?)");
             preparedStatement.setString(1,profileId);
             preparedStatement.setString(2,username);
             preparedStatement.setString(3,password);
@@ -48,5 +49,9 @@ public class UserDB extends SQLDB{
 
     public static Boolean containPhoneNumber(String phoneNumber) {
         return containFieldKey("users", "phone-number", phoneNumber);
+    }
+
+    public static void updateUser(HashMap<String,Object> userUpdate , String userId){
+        SQLDB.updateFieldsKeys("users" , userId , userUpdate);
     }
 }

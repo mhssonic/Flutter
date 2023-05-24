@@ -1,11 +1,14 @@
 package server.database;
 
+import server.enums.error.ErrorType;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class ProfileDB extends SQLDB {
     public static void creatTable() {
@@ -51,4 +54,10 @@ public class ProfileDB extends SQLDB {
             throw new RuntimeException(e);
         }
     }
+
+    //TODO PROFILE ID?
+    public static void updateProfile(HashMap<String,Object> profileUpdate , String profileId){
+        SQLDB.updateFieldsKeys("profile" , profileId , profileUpdate);
+    }
+
 }

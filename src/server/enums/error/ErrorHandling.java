@@ -53,4 +53,9 @@ public class ErrorHandling {
         }
     }
 
+    public static ErrorType validLength(int length , int maxLen){
+        if (length > maxLen) return ErrorType.TOO_LONG;
+        return ErrorType.SUCCESS;
+    }
+
 }
