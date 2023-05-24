@@ -22,12 +22,12 @@ public class SQLDB {
     public static void main(String[] args) {
         run();
 //        createUserProfile("HOSNA" , "be" , "8564" , "123" , "beheshti" , "45" , "ljn" , LocalDate.now(), "kn", "" , " ");
-        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "1555");
+//        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "1555");
 //        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
 //        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
         HashMap<String,Object> updatedData = new HashMap<>();
         updatedData.put("first_name", "5555555555555555555");
-        updateUserProfile(updatedData,"OmY2iJMmGj8Nm6eO","hQ1wovR5GG8twM0n");
+//        updateUserProfile(updatedData,"OmY2iJMmGj8Nm6eO","hQ1wovR5GG8twM0n");
 
     }
 

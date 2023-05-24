@@ -78,14 +78,14 @@ public class UserDB extends SQLDB {
     }
 
 
-    public static Array getFollower(String userId) {
+    public static Array getFollower(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "follower");
     }
-    public static Array getFollowing(String userId) {
+    public static Array getFollowing(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "following");
     }
 
-    public static ErrorType block(String userId, String targetId) {
+    public static ErrorType block(int userId, int targetId) {
         if (SQLDB.containInArrayFieldObject("users", targetId, "blocked-user", userId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users" , userId , "follower" , targetId)){
             SQLDB.removeFromArrayField("users", userId, "following", targetId);
@@ -95,7 +95,7 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
-    public static void unBlock (String userId, String targetId) {
+    public static void unBlock (int userId, int targetId) {
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
     }
 

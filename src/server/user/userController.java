@@ -38,7 +38,9 @@ public class userController {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);
+
         SQLDB.createUserProfile(firstName, lastName, username, password, email, phoneNumber, country, date, biography, avatarPath, headerPath);
+
         return ErrorType.SUCCESS;
     }
 
