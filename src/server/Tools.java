@@ -3,6 +3,30 @@ package server;
 import java.util.Arrays;
 
 public class Tools {
+
+    public static int jenkinsHash(int a, int b, boolean sort) {
+        if (sort && a < b){
+            int c = a;
+            a = b;
+            b = c;
+        }
+        int hash = 0;
+
+        hash += a;
+        hash += hash << 10;
+        hash ^= hash >>> 6;
+
+        hash += b;
+        hash += hash << 10;
+        hash ^= hash >>> 6;
+
+        hash += hash << 3;
+        hash ^= hash >>> 11;
+        hash += hash << 15;
+
+        return hash;
+    }
+
     public static String jenkinsHash(String s1, String s2, boolean sort) {
         // Sort the strings to ensure that the order of the arguments doesn't matter
         String[] sortedStrings = new String[]{s1, s2};
