@@ -1,0 +1,12 @@
+DROP TAble if exists  users;
+DROP TAble if exists tweet;
+DROP TAble if exists chat_box;
+DROP TAble if exists profile;
+DROP TAble if exists attachment;
+DROP function if exists gen_random_bytes;
+DROP function if exists random_string;
+DROP function if exists unique_random;
+drop type if exists type_file;
+drop sequence if exists seq_attachment_id;
+drop sequence if exists seq_tweet_id;
+drop sequence if exists seq_users_id;
