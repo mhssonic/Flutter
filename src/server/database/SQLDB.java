@@ -21,7 +21,14 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        createUserProfile("MH", "S", "mhs", "123123", "dafadsf", "", "usa", LocalDate.now(),"dfsf", "sdf", "");
+//        createUserProfile("HOSNA" , "be" , "8564" , "123" , "beheshti" , "45" , "ljn" , LocalDate.now(), "kn", "" , " ");
+        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "1555");
+//        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
+//        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
+        HashMap<String,Object> updatedData = new HashMap<>();
+        updatedData.put("first_name", "5555555555555555555");
+        updateUserProfile(updatedData,"OmY2iJMmGj8Nm6eO","hQ1wovR5GG8twM0n");
+
     }
 
     public static void run() {
@@ -33,6 +40,7 @@ public class SQLDB {
             SQLScripRunner("tables");
         } catch (Exception e) {
             System.out.println(e.getMessage());
+
         }
     }
 
@@ -97,7 +105,7 @@ public class SQLDB {
     //push an obj to an array(field) of a row where id = "id" in table
     protected static void appendToArrayField(String table, int id, String field, Object obj) {
         try {
-            preparedStatement = connection.prepareStatement("value " + table + " SET " + field + " = array_append(" + field + ",?) WHERE id = ?");
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_append(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
             preparedStatement.setInt(2, id);
 
@@ -109,7 +117,7 @@ public class SQLDB {
 
     protected static void removeFromArrayField(String table, int id, String field, Object obj) {
         try {
-            preparedStatement = connection.prepareStatement("value " + table + " SET " + field + " = array_remove(" + field + ",?) WHERE id = ?");
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_remove(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
             preparedStatement.setInt(2, id);
 
@@ -123,7 +131,7 @@ public class SQLDB {
     protected static void updateFieldsKeys(String table, int id, HashMap<String, Object> fieldKeys) {
         try {
             StringBuilder sql = new StringBuilder();
-            sql.append("value ");
+            sql.append("UPDATE ");
             sql.append(table);
             sql.append(" SET ");
             for (String field : fieldKeys.keySet()) {

@@ -42,5 +42,4 @@ public class userController {
         return ErrorType.SUCCESS;
     }
 
-
 }

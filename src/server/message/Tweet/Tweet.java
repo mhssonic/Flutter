@@ -16,7 +16,7 @@ public class Tweet {
     HashSet<User> like = new HashSet<>();
     HashSet<String> comment;
     ArrayList<String> hashtag;
-    int retweet;
+    int retweetCount;
     Boolean faveStar;
 
 //    public static ErrorType tweet(String userId, String context, ArrayList<String> attachments, ArrayList<String> hashtag){
