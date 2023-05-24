@@ -3,10 +3,11 @@ package server;
 import java.util.Arrays;
 
 public class Tools {
-    public static String jenkinsHash(String s1, String s2) {
+    public static String jenkinsHash(String s1, String s2, boolean sort) {
         // Sort the strings to ensure that the order of the arguments doesn't matter
         String[] sortedStrings = new String[]{s1, s2};
-        Arrays.sort(sortedStrings);
+        if(sort)
+            Arrays.sort(sortedStrings);
 
         // Compute the hash value using the Jenkins hash function
         int hash = jenkinsHashCode(sortedStrings[0], sortedStrings[1]);

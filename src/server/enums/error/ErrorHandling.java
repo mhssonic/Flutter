@@ -58,4 +58,9 @@ public class ErrorHandling {
         return ErrorType.SUCCESS;
     }
 
+    public static ErrorType validMessage(String message){
+        if(message.length() > 280)
+            return ErrorType.TOO_LONG_MESSAGE;
+        return ErrorType.SUCCESS;
+    }
 }

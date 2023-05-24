@@ -31,11 +31,11 @@ public class ProfileDB extends SQLDB {
         }
     }
 
-    public static String createProfile(String firstName, String lastName, String email, String phoneNumber, String country, LocalDate birthdate, String biography , String avatarPath , String headerPath) {
+    public static void createProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String country, LocalDate birthdate, String biography , String avatarPath , String headerPath) {
         try {
             LocalDateTime lastEdit = LocalDateTime.now();
 
-            preparedStatement = connection.prepareStatement("INSERT INTO profile (first_name, last_name, email, phone_number, country, birthdate, last_edit, bio, avatar, header) VALUES (?,?,?,?,?,?,?,?,?,?) returning id");
+            preparedStatement = connection.prepareStatement("INSERT INTO profile (first_name, last_name, email, phone_number, country, birthdate, last_edit, bio, avatar, header, id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             preparedStatement.setString(1, firstName);
             preparedStatement.setString(2, lastName);
             preparedStatement.setString(3, email);
@@ -46,10 +46,9 @@ public class ProfileDB extends SQLDB {
             preparedStatement.setString(8, biography);
             preparedStatement.setString(9, avatarPath);
             preparedStatement.setString(10, headerPath);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            String profileId = resultSet.getString("id");
-            return profileId;
+            preparedStatement.setString(11, userId);
+
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
@@ -20,17 +21,13 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-//        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
-//        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
-//        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
-        HashMap<String,Object> updatedData = new HashMap<>();
-        updatedData.put("first_name", "mahya");
-        updateUserProfile(updatedData,"pCFItAHCwMCX9TKG","V0DENgqBKfNA8Xsc");
+        createUserProfile("MH", "S", "mhs", "123123", "dafadsf", "", "usa", LocalDate.now(),"dfsf", "sdf", "");
     }
 
     public static void run() {
         try {
             creatConnection();
+            SQLScripRunner("sequences");
             SQLScripRunner("functions");
             SQLScripRunner("types");
             SQLScripRunner("tables");
@@ -166,8 +163,8 @@ public class SQLDB {
 
     //TODO let them add bio and etc at first
     public static void createUserProfile(String firstName, String lastName, String username, String password, String email, String phoneNumber, String country, LocalDate birthdate, String biography, String avatarPath, String headerPath) {
-        String profileId = ProfileDB.createProfile(firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
-        UserDB.createUser(username, password, profileId);
+        String userId = UserDB.createUser(username, password);
+        ProfileDB.createProfile(userId, firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
     }
 
     public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, String userId , String profileId) {
