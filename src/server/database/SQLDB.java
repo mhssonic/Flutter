@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
@@ -20,17 +21,13 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-//        appendToArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
-//        removeFromArrayField("users", "I44sUI10jHbXao7F", "follower", "sdfdsf");
-//        System.out.println(getFieldObject("users", "I44sUI10jHbXao7F", "follower"));
-        HashMap<String,Object> updatedData = new HashMap<>();
-        updatedData.put("first_name", "mahya");
-        updateUserProfile(updatedData,"pCFItAHCwMCX9TKG","V0DENgqBKfNA8Xsc");
+        createUserProfile("MH", "S", "mhs", "123123", "dafadsf", "", "usa", LocalDate.now(),"dfsf", "sdf", "");
     }
 
     public static void run() {
         try {
             creatConnection();
+            SQLScripRunner("sequences");
             SQLScripRunner("functions");
             SQLScripRunner("types");
             SQLScripRunner("tables");
@@ -71,7 +68,7 @@ public class SQLDB {
     }
 
     //check if table contain an object with filed = key
-    protected static boolean containFieldKey(String table, String field, Object key) {
+    public static boolean containFieldKey(String table, String field, Object key) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + field + " = ?");
             preparedStatement.setObject(1, key);
@@ -83,10 +80,10 @@ public class SQLDB {
     }
 
     //check if in table where id = "id" array(field) contain obj
-    protected static boolean containInArrayFieldObject(String table, String id, String field, Object obj) {
+    protected static boolean containInArrayFieldObject(String table, int id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ? AND ? = ANY(" + field + ")");
-            preparedStatement.setString(1, id);
+            preparedStatement.setInt(1, id);
             preparedStatement.setObject(2, obj);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -98,11 +95,11 @@ public class SQLDB {
 
 
     //push an obj to an array(field) of a row where id = "id" in table
-    protected static void appendToArrayField(String table, String id, String field, Object obj) {
+    protected static void appendToArrayField(String table, int id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("value " + table + " SET " + field + " = array_append(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setString(2, id);
+            preparedStatement.setInt(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -110,11 +107,11 @@ public class SQLDB {
         }
     }
 
-    protected static void removeFromArrayField(String table, String id, String field, Object obj) {
+    protected static void removeFromArrayField(String table, int id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("value " + table + " SET " + field + " = array_remove(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setString(2, id);
+            preparedStatement.setInt(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -123,7 +120,7 @@ public class SQLDB {
     }
 
     //value row based on HashMap<field, key>
-    protected static void updateFieldsKeys(String table, String id, HashMap<String, Object> fieldKeys) {
+    protected static void updateFieldsKeys(String table, int id, HashMap<String, Object> fieldKeys) {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("value ");
@@ -143,7 +140,7 @@ public class SQLDB {
                 preparedStatement.setObject(i, obj);
                 i++;
             }
-            preparedStatement.setString(i, id);
+            preparedStatement.setInt(i, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -151,10 +148,10 @@ public class SQLDB {
         }
     }
 
-    protected static Object getFieldObject(String table, String id, String field) {
+    protected static Object getFieldObject(String table, int id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ?");
-            preparedStatement.setString(1, id);
+            preparedStatement.setInt(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -166,11 +163,11 @@ public class SQLDB {
 
     //TODO let them add bio and etc at first
     public static void createUserProfile(String firstName, String lastName, String username, String password, String email, String phoneNumber, String country, LocalDate birthdate, String biography, String avatarPath, String headerPath) {
-        String profileId = ProfileDB.createProfile(firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
-        UserDB.createUser(username, password, profileId);
+        int userId = UserDB.createUser(username, password);
+        ProfileDB.createProfile(userId, firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
     }
 
-    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, String userId , String profileId) {
+    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId , int profileId) {
         HashMap<String, Object> userUpdate = new HashMap<>();
         HashMap<String, Object> profileUpdate = new HashMap<>();
         ErrorType output= null;

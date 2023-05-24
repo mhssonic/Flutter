@@ -28,15 +28,17 @@ public class UserDB extends SQLDB {
         }
     }
 
-    public static void createUser(String username, String password, String profileId) {
-        try {
-            preparedStatement = connection.prepareStatement("INSERT INTO users (profile_id , username , password) VALUES (?,?,?)");
-            preparedStatement.setString(1, profileId);
-            preparedStatement.setString(2, username);
-            preparedStatement.setString(3, password);
-            preparedStatement.executeUpdate();
 
-        } catch (SQLException e) {
+    public static int createUser(String username , String password){
+        try{
+            preparedStatement = connection.prepareStatement("INSERT INTO users (username , password) VALUES (?,?) returning id");
+            preparedStatement.setString(1,username);
+            preparedStatement.setString(2,password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("id");
+        }catch (SQLException e){
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -54,12 +56,12 @@ public class UserDB extends SQLDB {
         return containFieldKey("users", "phone-number", phoneNumber);
     }
 
-    public static void updateUser(HashMap<String, Object> userUpdate, String userId) {
+    public static void updateUser(HashMap<String, Object> userUpdate, int userId) {
         SQLDB.updateFieldsKeys("users", userId, userUpdate);
     }
 
     //TODO Int id , userId?;
-    public static ErrorType follow(String userId, String targetId) {
+    public static ErrorType follow(int userId, int targetId) {
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users", targetId, "blocked-user", userId)) return ErrorType.BLOCKED;
         //TODO check for reputation?
@@ -69,9 +71,10 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
-    public static void unFollow(String userId, String targetId) {
+    public static void unFollow(int userId, int targetId) {
         SQLDB.removeFromArrayField("users", userId, "following", targetId);
         SQLDB.removeFromArrayField("users", targetId, "follower", userId);
+
     }
 
 
