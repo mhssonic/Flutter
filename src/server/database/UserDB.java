@@ -14,7 +14,8 @@ public class UserDB extends SQLDB {
     public static void main(String[] args) {
         run();
 //        createUser("mhs1", "pash1maki", "211312");
-        createUserProfile("asdf", "asdf", "mhs2", "sdfsdf", "sdafasdf", "asdfasdf", "dsa", LocalDate.now(), "sdf", "asdf", "asdf");
+        follow(-2000000000, -1999999990);
+//        createUserProfile("asdf", "asdf", "mhs2", "sdfsdf", "sdafasdf", "asdfasdf", "dsa", LocalDate.now(), "sdf", "asdf", "asdf");
     }
 
     public static boolean matchUserPass(String username, String password) {
@@ -64,8 +65,9 @@ public class UserDB extends SQLDB {
     //TODO Int id , userId?;
     public static ErrorType follow(int userId, int targetId) {
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.ALREADY_EXIST;
-        if (SQLDB.containInArrayFieldObject("users", targetId, "blocked-user", userId)) return ErrorType.BLOCKED;
+        if (SQLDB.containInArrayFieldObject("users", targetId, "blocked", userId)) return ErrorType.BLOCKED;
         //TODO check for reputation?
+
 
         SQLDB.appendToArrayField("users", userId, "following", targetId);
         SQLDB.appendToArrayField("users", targetId, "follower", userId);

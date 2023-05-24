@@ -24,20 +24,20 @@ public class Tweet {
 
     public static void main(String[] args) {
         SQLDB.run();
-        tweet(-2000000000, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
+        tweet(-1999999990, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
     }
 
     public static ErrorType tweet(int userId, String context, Integer[] attachments, Integer[] hashtag){
         SQLDB.run();
         int tweetId = TweetDB.createTweet(userId, context, attachments, hashtag, LocalDateTime.now());
         try {
-            int[] follower = (int[])(UserDB.getFollower(userId).getArray());
+            Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());
             ErrorType errorType = ErrorHandling.validLength(context, MAX_LENGTH_TWEET);
             if (errorType != ErrorType.SUCCESS) {
                 return errorType;
             }
-            for(int targetUser: follower){
-                ChatBoxDB.appendMessage(Tools.jenkinsHash(targetUser, targetUser, false), tweetId);
+            for(Object targetUser: follower){
+                ChatBoxDB.appendMessage(Tools.jenkinsHash((int)targetUser, (int)targetUser, false), tweetId);
             }
             return ErrorType.SUCCESS;
         }catch (Exception e){

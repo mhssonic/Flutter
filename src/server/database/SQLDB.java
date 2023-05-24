@@ -21,7 +21,7 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
+//        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
     }
 
     public static void run() {
@@ -155,6 +155,7 @@ public class SQLDB {
             preparedStatement.setInt(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+
             resultSet.next();
             return resultSet.getObject(field);
         } catch (SQLException e) {
