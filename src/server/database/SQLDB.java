@@ -25,9 +25,11 @@ public class SQLDB {
     public static void main(String[] args) {
         run();
         Integer[] one = new Integer[10];
-////
-//        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
+
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
+//        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
+//        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
+//        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
         UserDB.follow(-1999999999, -2000000000 );
 //        ArrayList<Attachment> attachments = new ArrayList<>();
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
@@ -132,6 +134,19 @@ public class SQLDB {
         }
     }
 
+    protected static int sizeOfArrayField(String table, int id, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("SELECT ARRAY_LENGTH(" + field + ", 1) FROM " + table + " WHERE id = ?");
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("array_length");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
     //value row based on HashMap<field, key>
     protected static void updateFieldsKeys(String table, int id, HashMap<String, Object> fieldKeys) {
         try {
@@ -170,6 +185,20 @@ public class SQLDB {
 
             resultSet.next();
             return resultSet.getObject(field);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    protected static ArrayList<Object> getAllKeyOfField(String table, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("SELECT " + field + " FROM " + table);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ArrayList<Object> arrayResult = new ArrayList<>();
+            while(resultSet.next())
+                arrayResult.add(resultSet.getObject(field));
+            return arrayResult;
         } catch (SQLException e) {
             throw new RuntimeException(e);//TODO handle exception
         }

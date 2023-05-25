@@ -3,10 +3,8 @@ package server.database;
 import server.enums.error.ErrorType;
 
 import java.sql.Array;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -102,6 +100,7 @@ public class UserDB extends SQLDB {
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
     }
 
-
-
+    public static ArrayList<Object> getUsersId(){
+        return getAllKeyOfField("users", "id");
+    }
 }
