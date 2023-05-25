@@ -6,7 +6,6 @@ import server.database.PollDB;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Tweet.Tweet;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
