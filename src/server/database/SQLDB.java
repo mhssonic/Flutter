@@ -34,8 +34,9 @@ public class SQLDB {
 //        ArrayList<Attachment> attachments = new ArrayList<>();
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
 //        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
-        UserDB.block(-1999999999 ,  -2000000000);
+//        UserDB.block(-1999999999 ,  -2000000000);
 //        TweetDB.removeTweet(-1999999980);
+        System.out.println(getDirectMessageId());
 //
     }
 
@@ -277,5 +278,17 @@ public class SQLDB {
         if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,profileId);
 
         return ErrorType.SUCCESS;
+    }
+
+    public static int getDirectMessageId(){
+        try {
+            preparedStatement = connection.prepareStatement("select NEXTVAL('seq_message_id')  ");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("nextval");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
     }
 }
