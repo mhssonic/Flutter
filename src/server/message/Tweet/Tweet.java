@@ -22,28 +22,32 @@ public class Tweet {
     final static int MAX_LENGTH_TWEET = 160;
     final static int FAVESTAR_NUMBER = 10;
 
-    public static void main(String[] args) {
-        SQLDB.run();
-//        ArrayList<Attachment> attachments = new ArrayList<>();
-//        attachments.add(new Attachment("123" , FileType.VIDEO));
-//        tweet(-2000000000, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", attachments, new Integer[1]);
-//        like(-2000000000,-2000000000);
-//        like(-1999999999, -2000000000);
-//        removeLike(-1999999990,-1999999990);
-//        removeTweet(-2000000000,-2000000000);
-
-    }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
-
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
+        if (validTweet(context) == ErrorType.SUCCESS){
+            return shareTweetWithFollowers(userId,tweetId);
+        }
+        else return validTweet(context);
+    }
+
+
+    public static ErrorType validTweet(String context){
         try {
-            Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());
             ErrorType errorType = ErrorHandling.validLength(context, MAX_LENGTH_TWEET);
             if (errorType != ErrorType.SUCCESS) {
                 return errorType;
             }
+            return ErrorType.SUCCESS;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ErrorType.SUCCESS;
+        }
+    }
+    public static ErrorType shareTweetWithFollowers(int userId, int tweetId){
+        try {
+            Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());
             for(Object targetUser: follower){
                 ChatBoxDB.appendMessage(Tools.jenkinsHash((int)targetUser, (int)targetUser, false), tweetId);
             }

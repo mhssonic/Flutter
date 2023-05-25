@@ -24,7 +24,7 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-//        Integer[] one = new Integer[10];
+        Integer[] one = new Integer[10];
 
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
@@ -33,7 +33,8 @@ public class SQLDB {
 //        UserDB.follow(-1999999999, -2000000000 );
 //        ArrayList<Attachment> attachments = new ArrayList<>();
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
-//        Tweet.tweet(-1999999990, "hi,Im not that stupid",attachments , one);
+//        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
+        UserDB.block(-1999999999 ,  -2000000000);
 //        TweetDB.removeTweet(-1999999980);
 //
     }
