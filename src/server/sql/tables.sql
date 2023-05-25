@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS attachment (
     path VARCHAR(128)
 );
 CREATE TABLE IF NOT EXISTS quote (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_quote_tweet_id'),
     author INT,
     context VARCHAR(280),
     attachment INT array[8],
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS quote (
     quoted_message_id INT
 );
 CREATE TABLE IF NOT EXISTS poll (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_poll_tweet_id'),
     author INT,
     context VARCHAR(280),
     attachment INT array[8],
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS choice(
     voters INT Array[1024]
 );
 CREATE TABLE IF NOT EXISTS Retweet (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_retweet_id'),
     author INT,
     retweeted_message_id INT
 );
