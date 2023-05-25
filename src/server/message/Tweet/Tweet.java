@@ -20,6 +20,7 @@ public class Tweet {
     int retweetCount;
     Boolean faveStar;
     final static int MAX_LENGTH_TWEET = 160;
+    final static int FAVESTAR_NUMBER = 2;
 
     public static void main(String[] args) {
         SQLDB.run();
@@ -27,8 +28,9 @@ public class Tweet {
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
 //        tweet(-2000000000, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", attachments, new Integer[1]);
 //        like(-2000000000,-2000000000);
-//        removeLike(-2000000000,-2000000000);
-        removeTweet(-2000000000,-2000000000);
+//        like(-1999999999, -2000000000);
+//        removeLike(-1999999990,-1999999990);
+//        removeTweet(-2000000000,-2000000000);
 
     }
 
@@ -56,6 +58,8 @@ public class Tweet {
         if(TweetDB.likedBefore(userId, tweetId))
             return ErrorType.ALREADY_LIKED;
         TweetDB.like(tweetId, userId);
+        if(TweetDB.getNumberOfLikes(tweetId) >= FAVESTAR_NUMBER)
+            faveStar(tweetId);
         return ErrorType.SUCCESS;
     }
 
@@ -71,5 +75,16 @@ public class Tweet {
             return ErrorType.PERMISSION_DENIED;
         TweetDB.removeTweet(tweetId);
         return ErrorType.SUCCESS;
+    }
+
+    public static void faveStar(int tweetId){
+        TweetDB.setFaveStar(tweetId);
+        ArrayList<Object> users = UserDB.getUsersId();
+        for(Object objUserId : users){
+            try {
+                int userId = (int)objUserId;
+                ChatBoxDB.appendMessage(Tools.jenkinsHash(userId, userId, false),tweetId);
+            }catch (Exception e){}
+        }
     }
 }

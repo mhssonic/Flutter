@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class TweetDB extends SQLDB {
     public static int createTweet(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime) {
@@ -61,5 +62,15 @@ public class TweetDB extends SQLDB {
 
     public static boolean likedBefore(int userId, int tweetId){
         return SQLDB.containInArrayFieldObject("tweet", tweetId, "likes", userId);
+    }
+
+    public static int getNumberOfLikes(int tweetId){
+        return sizeOfArrayField("tweet", tweetId, "likes");
+    }
+
+    public static void setFaveStar(int tweetId){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("favestar", true);
+        updateFieldsKeys("tweet", tweetId, map);
     }
 }
