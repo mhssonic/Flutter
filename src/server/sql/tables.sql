@@ -40,3 +40,39 @@ CREATE TABLE IF NOT EXISTS attachment (
     type type_file,
     path VARCHAR(128)
 );
+CREATE TABLE IF NOT EXISTS quote (
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_quote_tweet_id'),
+    author INT,
+    context VARCHAR(280),
+    attachment INT array[8],
+    retweet smallint default 0,
+    likes INT array[1024],
+    favestar bool,
+    comments INT Array[1024],
+    hashtag INT array[16],
+    postingTime timestamp,
+    quoted_message_id INT
+);
+CREATE TABLE IF NOT EXISTS poll (
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_poll_tweet_id'),
+    author INT,
+    context VARCHAR(280),
+    attachment INT array[8],
+    retweet smallint default 0,
+    likes INT array[1024],
+    favestar bool,
+    comments INT Array[1024],
+    hashtag INT array[16],
+    postingTime timestamp,
+    choiceId INT Array[16]
+);
+CREATE TABLE IF NOT EXISTS choice(
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_choice_id'),
+    context VARCHAR(280),
+    voters INT Array[1024]
+);
+CREATE TABLE IF NOT EXISTS Retweet (
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_retweet_id'),
+    author INT,
+    retweeted_message_id INT
+);

@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AttachmentDB extends SQLDB {
-    ArrayList<Attachment> attachments = new ArrayList<>();
-
 
     public static int createAttachment(Attachment attachment) {
         try {
