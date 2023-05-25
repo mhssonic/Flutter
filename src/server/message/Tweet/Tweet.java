@@ -20,7 +20,7 @@ public class Tweet {
     int retweetCount;
     Boolean faveStar;
     final static int MAX_LENGTH_TWEET = 160;
-    final static int FAVESTAR_NUMBER = 2;
+    final static int FAVESTAR_NUMBER = 10;
 
     public static void main(String[] args) {
         SQLDB.run();
