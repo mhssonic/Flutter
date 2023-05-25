@@ -14,7 +14,7 @@ public class PollDB extends SQLDB{
             Array hashtags = connection.createArrayOf("INT", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             Array choices = connection.createArrayOf("INT", choiceId);
-            preparedStatement = connection.prepareStatement("INSERT INTO poll (author ,favestar, hashtag, attachment , postingtime, context , choiceid) VALUES (?,?,?,?,?,?,?) returning id");
+            preparedStatement = connection.prepareStatement("INSERT INTO poll (author ,favestar, hashtag, attachment , postingtime, context , choice) VALUES (?,?,?,?,?,?,?) returning id");
             preparedStatement.setInt(1, authorId);
             preparedStatement.setBoolean(2, false);
             preparedStatement.setArray(3, hashtags);

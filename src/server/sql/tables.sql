@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS poll (
     comments INT Array[1024],
     hashtag INT array[16],
     postingTime timestamp,
-    choiceId INT Array[16]
+    choice INT Array[16]
 );
 CREATE TABLE IF NOT EXISTS choice(
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_choice_id'),
