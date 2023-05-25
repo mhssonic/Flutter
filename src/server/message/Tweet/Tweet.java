@@ -6,6 +6,7 @@ import server.enums.FileType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
+import server.message.Message;
 import server.user.User;
 
 import java.sql.Array;
@@ -13,14 +14,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Tweet {
+public class Tweet extends Message{
     HashSet<User> like = new HashSet<>();
     HashSet<String> comment;
     ArrayList<String> hashtag;
     int retweetCount;
     Boolean faveStar;
-    final static int MAX_LENGTH_TWEET = 160;
     final static int FAVESTAR_NUMBER = 10;
+
+    public Tweet(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
+        super(messageId, authorId, text, postingTime, attachmentId);
+    }
 
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
@@ -34,17 +38,10 @@ public class Tweet {
 
 
     public static ErrorType validTweet(String context){
-        try {
-            ErrorType errorType = ErrorHandling.validLength(context, MAX_LENGTH_TWEET);
-            if (errorType != ErrorType.SUCCESS) {
-                return errorType;
-            }
-            return ErrorType.SUCCESS;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return ErrorType.SUCCESS;
-        }
+        //TODO override maybe?
+        return validMessage(context);
     }
+
     public static ErrorType shareTweetWithFollowers(int userId, int tweetId){
         try {
             Object[] follower = (Object[])(UserDB.getFollower(userId).getArray());

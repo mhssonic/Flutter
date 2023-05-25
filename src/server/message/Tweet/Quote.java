@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class Quote extends Tweet{
     private int quotedMessageID;
 
+    public Quote(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
+        super(messageId, authorId, text, postingTime, attachmentId);
+    }
+
     public static ErrorType Quote(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , int quotedMessageID){
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int quoteId = QuoteDB.createQuote(userId, context, attachmentId, hashtag, LocalDateTime.now(),quotedMessageID);
