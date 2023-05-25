@@ -17,6 +17,7 @@ public class Quote extends Tweet{
     }
 
     public static ErrorType Quote(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , int quotedMessageID){
+      
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int quoteId = QuoteDB.createQuote(userId, context, attachmentId, hashtag, LocalDateTime.now(),quotedMessageID);
         if (validTweet(context) == ErrorType.SUCCESS){

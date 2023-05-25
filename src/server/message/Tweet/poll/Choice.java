@@ -7,20 +7,17 @@ public class Choice {
     private String text;
     private ArrayList<String> voters;
 
+    public Choice(String text) {
+        this.text = text;
+    }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
 
     public ArrayList<String> getVoters() {
         return voters;
     }
 
-    public void setVoters(ArrayList<String> voters) {
-        this.voters = voters;
-    }
 }
