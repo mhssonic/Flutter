@@ -5,12 +5,18 @@ import server.Tools;
 import server.database.ChatBoxDB;
 import server.database.DirectMessageDB;
 import server.database.SQLDB;
+import server.database.UserDB;
 import server.enums.error.ErrorType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DirectMessage extends Message{
+    public static void main(String[] args) {
+        SQLDB.run();
+        DirectMessageDB.run();
+//        sendDirectMessage()
+    }
     int reply;
 
     public static Document messageToDoc(int id , int user , String context, int reply, LocalDateTime dateTime, ArrayList<Integer> attachmentId){
@@ -29,12 +35,15 @@ public class DirectMessage extends Message{
         this.reply = reply;
     }
 
-    public ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Integer> attachmentId){
+    public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Integer> attachmentId){
         ErrorType errorType = validMessage(context);
         if(errorType != ErrorType.SUCCESS)
             return errorType;
-        int id = SQLDB.getDirectMessageId();
-        DirectMessageDB.createDirectMessage(id, user, context, reply, attachmentId);
+        if(UserDB.isBlocked(user, targetUser))
+            return ErrorType.BLOCKED;
+
+        int messageId = SQLDB.getDirectMessageId();
+        DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachmentId);
 
         int chatBoxId = Tools.jenkinsHash(user, targetUser, true);
         if(!ChatBoxDB.containChatBox(chatBoxId))//TODO handle it better
