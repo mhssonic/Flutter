@@ -28,10 +28,10 @@ public class SQLDB {
 ////
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
-//        UserDB.follow(-2000000000, -1999999999 );
-        ArrayList<Attachment> attachments = new ArrayList<>();
-        attachments.add(new Attachment("123" , FileType.VIDEO));
-        Tweet.tweet(-1999999990, "hi,Im not that stupid",attachments , one);
+        UserDB.follow(-1999999999, -2000000000 );
+//        ArrayList<Attachment> attachments = new ArrayList<>();
+//        attachments.add(new Attachment("123" , FileType.VIDEO));
+//        Tweet.tweet(-1999999990, "hi,Im not that stupid",attachments , one);
 //        TweetDB.removeTweet(-1999999980);
 //
     }

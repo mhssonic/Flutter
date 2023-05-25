@@ -2,6 +2,7 @@ package server.message.Tweet;
 
 import server.Tools;
 import server.database.*;
+import server.enums.FileType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
@@ -22,8 +23,10 @@ public class Tweet {
 
     public static void main(String[] args) {
         SQLDB.run();
-//        tweet(-1999999990, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", null, null);
-        like(-2000000000,-2000000000);
+//        ArrayList<Attachment> attachments = new ArrayList<>();
+//        attachments.add(new Attachment("123" , FileType.VIDEO));
+//        tweet(-2000000000, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", attachments, new Integer[1]);
+//        like(-2000000000,-2000000000);
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){

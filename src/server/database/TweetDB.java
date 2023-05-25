@@ -5,8 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Locale;
 
 public class TweetDB extends SQLDB {
     public static int createTweet(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime) {
@@ -42,14 +40,14 @@ public class TweetDB extends SQLDB {
     }
 
     public static void like(int tweetId, int userId) {
-        SQLDB.appendToArrayField("tweet", tweetId, "like", userId);
+        SQLDB.appendToArrayField("tweet", tweetId, "likes", userId);
     }
 
     public static void removeLike(int tweetId, int userId) {
-        SQLDB.removeFromArrayField("tweet", tweetId, "like", userId);
+        SQLDB.removeFromArrayField("tweet", tweetId, "likes", userId);
     }
 
     public static boolean likedBefore(int userId, int tweetId){
-        return SQLDB.containInArrayFieldObject("tweet", tweetId, "like", userId);
+        return SQLDB.containInArrayFieldObject("tweet", tweetId, "likes", userId);
     }
 }
