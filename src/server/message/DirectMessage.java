@@ -15,7 +15,9 @@ public class DirectMessage extends Message{
     public static void main(String[] args) {
         SQLDB.run();
         DirectMessageDB.run();
-//        sendDirectMessage()
+        ArrayList<Integer> attachment = new ArrayList<>();
+        attachment.add(123);
+        sendDirectMessage(-2000000000, -1999999999, "hey whats up", 0, attachment);
     }
     int reply;
 
