@@ -27,6 +27,9 @@ public class Tweet {
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
 //        tweet(-2000000000, "hi flutter its me your dad :) and your god :| i can do whatever i want with you and you can't do shit. from Bible Gateway 1 Corinthians 1", attachments, new Integer[1]);
 //        like(-2000000000,-2000000000);
+//        removeLike(-2000000000,-2000000000);
+        removeTweet(-2000000000,-2000000000);
+
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
@@ -60,6 +63,13 @@ public class Tweet {
         if(!TweetDB.likedBefore(userId, tweetId))
             return ErrorType.HAVE_NOT_LIKED;
         TweetDB.removeLike(tweetId, userId);
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType removeTweet(int userId, int tweetId){
+        if(!TweetDB.hasAccessToTweet(userId, tweetId))
+            return ErrorType.PERMISSION_DENIED;
+        TweetDB.removeTweet(tweetId);
         return ErrorType.SUCCESS;
     }
 }

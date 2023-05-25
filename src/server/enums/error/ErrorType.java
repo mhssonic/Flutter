@@ -16,4 +16,5 @@ public enum ErrorType {
     ALREADY_EXIST,
     ALREADY_LIKED,
     HAVE_NOT_LIKED,
+    PERMISSION_DENIED,
 }

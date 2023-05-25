@@ -28,6 +28,18 @@ public class TweetDB extends SQLDB {
         }
     }
 
+    public static boolean hasAccessToTweet(int userId, int tweetId){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM tweet WHERE id = ? and author = ?");
+            preparedStatement.setInt(1, tweetId);
+            preparedStatement.setInt(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void removeTweet(int messageId) {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM tweet WHERE id = ?");
