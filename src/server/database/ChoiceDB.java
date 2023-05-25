@@ -8,15 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ChoiceDB extends SQLDB{
+public class ChoiceDB extends SQLDB {
 
-    public static int createChoice(Choice choice) {
+    public static int createChoice(String choice) {
         try {
-            Integer[] votersId = new Integer[choice.getVoters().size()];
-            Array voters = connection.createArrayOf("INT" , votersId);
-            preparedStatement = connection.prepareStatement("INSERT INTO choice(context , voters) VALUES (?,?) returning id" );
-            preparedStatement.setString(1, choice.getText());
-            preparedStatement.setArray(2,voters);
+            preparedStatement = connection.prepareStatement("INSERT INTO choice(context ) VALUES (?) returning id");
+            preparedStatement.setString(1, choice);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt("id");
@@ -25,10 +22,10 @@ public class ChoiceDB extends SQLDB{
         }
     }
 
-    public static Integer[] creatChoices(ArrayList<Choice> choices){
+    public static Integer[] creatChoices(ArrayList<String> choices) {
         Integer[] choiceId = new Integer[choices.size()];
         int i = 0;
-        for ( Choice choice : choices) {
+        for (String choice : choices) {
             choiceId[i] = ChoiceDB.createChoice(choice);
             i++;
         }
