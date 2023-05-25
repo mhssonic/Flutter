@@ -29,7 +29,6 @@ public class SQLDB {
     public static void main(String[] args) {
         run();
         Integer[] one = new Integer[10];
-
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
@@ -44,8 +43,13 @@ public class SQLDB {
 //        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
         Quote.quote(-2000000000, "hi,I like the fact that you want to be added",attachments , one , -1999999990);
 //        UserDB.unBlock(-1999999999 ,  -2000000000);
-
+//        UserDB.follow(-1999999999, -2000000000 );
+//        ArrayList<Attachment> attachments = new ArrayList<>();
+//        attachments.add(new Attachment("123" , FileType.VIDEO));
+//        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
+//        UserDB.block(-1999999999 ,  -2000000000);
 //        TweetDB.removeTweet(-1999999980);
+//        System.out.println(getDirectMessageId());
 //
     }
 
@@ -287,5 +291,17 @@ public class SQLDB {
         if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,profileId);
 
         return ErrorType.SUCCESS;
+    }
+
+    public static int getDirectMessageId(){
+        try {
+            preparedStatement = connection.prepareStatement("select NEXTVAL('seq_message_id')  ");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("nextval");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
     }
 }

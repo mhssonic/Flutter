@@ -12,7 +12,11 @@ import java.util.ArrayList;
 public class Poll extends Tweet {
     private ArrayList<String> choiceId;
 
-    public static ErrorType poll(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , ArrayList<String> choices){
+    public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
+        super(messageId, authorId, text, postingTime, attachmentId);
+    }
+
+    public static ErrorType poll(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , ArrayList<Choice> choices){
         Integer[] choiceId = ChoiceDB.creatChoices(choices);
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
 

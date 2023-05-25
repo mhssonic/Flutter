@@ -16,6 +16,10 @@ public class ChatBoxDB extends SQLDB{
     }
 
     public static void appendMessage(int chatBox , int messageId){
-        SQLDB.appendToArrayField("chat_box" , chatBox , "message_id", messageId);
+        appendToArrayField("chat_box" , chatBox , "message_id", messageId);
+    }
+
+    public static boolean containChatBox(int id){
+        return containFieldKey("chat_box", "id", id);
     }
 }

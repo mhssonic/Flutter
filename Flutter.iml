@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="postgresql" level="application" />
+    <orderEntry type="library" name="mongodb.driver.sync" level="application" />
   </component>
 </module>

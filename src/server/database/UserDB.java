@@ -87,7 +87,7 @@ public class UserDB extends SQLDB {
     }
 
     public static ErrorType block(int userId, int targetId) {
-        if (SQLDB.containInArrayFieldObject("users", targetId, "blocked", userId)) return ErrorType.ALREADY_EXIST;
+        if (isBlocked(targetId, userId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users" , userId , "following" , targetId)){
             SQLDB.removeFromArrayField("users", userId, "following", targetId);
             SQLDB.removeFromArrayField("users", targetId, "follower", userId);
@@ -98,6 +98,10 @@ public class UserDB extends SQLDB {
 
     public static void unBlock (int userId, int targetId) {
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
+    }
+
+    public static boolean isBlocked(int userId, int targetId){
+        return containInArrayFieldObject("users", userId, "blocked", targetId);
     }
 
     public static ArrayList<Object> getUsersId(){
