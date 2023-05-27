@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class QuoteDB extends SQLDB{
+public class QuoteDB extends TweetDB{
     public static int createQuote(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime , int quotedMessageID) {
         try {
             Array hashtags = connection.createArrayOf("INT", hashtag);
@@ -28,5 +28,4 @@ public class QuoteDB extends SQLDB{
             throw new RuntimeException(e);
         }
     }
-
 }

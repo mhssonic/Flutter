@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import static server.database.SQLDB.connection;
 
-public class PollDB extends SQLDB{
+public class PollDB extends TweetDB{
     public static int createPoll(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
         try {
             Array hashtags = connection.createArrayOf("INT", hashtag);
@@ -31,4 +31,5 @@ public class PollDB extends SQLDB{
             throw new RuntimeException(e);
         }
     }
+
 }

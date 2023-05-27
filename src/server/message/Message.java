@@ -10,7 +10,7 @@ public abstract class Message {
     protected int authorId;
     protected String text;
     protected LocalDateTime postingTime;
-    protected final static int MAX_LENGTH_MESSAGE = 160;
+    protected final static int MAX_LENGTH_MESSAGE = 280;
 
     Object[] attachmentId;
 

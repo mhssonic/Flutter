@@ -147,7 +147,7 @@ public class SQLDB {
     protected static int sizeOfArrayField(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT ARRAY_LENGTH(" + field + ", 1) FROM " + table + " WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -189,7 +189,7 @@ public class SQLDB {
     protected static Object getFieldObject(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -302,8 +302,8 @@ public class SQLDB {
 
     public static ResultSet getResultSet(String table , Object messageId){
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM tweet where id=?");
-            preparedStatement.setInt(1, messageId);
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " where id=?");
+            preparedStatement.setObject(1, messageId);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet;
         } catch (SQLException e) {
