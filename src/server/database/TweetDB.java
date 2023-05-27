@@ -105,10 +105,18 @@ public class TweetDB extends SQLDB {
         return 0;
     }
 
-    public static void setFaveStar(int tweetId) {
+    public static void setFaveStarToTable(String table, int tweetId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("favestar", true);
-        updateFieldsKeys("tweet", tweetId, map);
+        updateFieldsKeys(table, tweetId, map);
+    }
+
+    public static void setFaveStar(int tweetId){
+        if(tweetId % TweetType.count == TweetType.TWEET.getMod()) setFaveStarToTable("tweet", tweetId);
+        else if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) setFaveStarToTable("retweet", tweetId);
+        else if(tweetId % TweetType.count == TweetType.COMMENT.getMod()) setFaveStarToTable("comment", tweetId);
+        else if(tweetId % TweetType.count == TweetType.QUOTE_TWEET.getMod()) setFaveStarToTable("quote", tweetId);
+        else if(tweetId % TweetType.count == TweetType.POLL.getMod()) setFaveStarToTable("poll", tweetId);
     }
 
     public static Tweet getTweet(Object messageId) {
