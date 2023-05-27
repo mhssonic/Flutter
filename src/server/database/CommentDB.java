@@ -12,7 +12,7 @@ public class CommentDB extends TweetDB{
             Array hashtags = connection.createArrayOf("VARCHAR(50)", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             //TODO attachment and id
-            preparedStatement = connection.prepareStatement("INSERT INTO tweet (author ,favestar, hashtag, attachment , postingtime, context, reply) VALUES (?,?,?,?,?,?,?) returning id");
+            preparedStatement = connection.prepareStatement("INSERT INTO comment (author ,favestar, hashtag, attachment , postingtime, context, reply) VALUES (?,?,?,?,?,?,?) returning id");
             preparedStatement.setInt(1, authorId);
             preparedStatement.setBoolean(2, false);
             preparedStatement.setArray(3, hashtags);

@@ -23,7 +23,8 @@ public class ChatBoxDB extends SQLDB {
     }
 
     public static void appendMessage(int chatBox, int messageId) {
-        appendToArrayField("chat_box", chatBox, "message_id", messageId);}
+        appendToArrayField("chat_box", chatBox, "message_id", messageId);
+    }
 
     public static boolean containChatBox(int id) {
         return containFieldKey("chat_box", "id", id);
@@ -35,15 +36,29 @@ public class ChatBoxDB extends SQLDB {
 
     public static void getMessage(int start, int finish, Object[] messageIds) {
         try {
+            Message message;
             ArrayList<Message> messages = new ArrayList<>();
             for (Object messageId : messageIds) {
                 int type = (int) messageId % (TweetType.count);
-                switch (type){
+                switch (type) {
 
-                case 0:
-                   messages.add(TweetDB.getTweet((int)messageId));
-                   break;
+                    case 0:
+                        message = TweetDB.getTweet((int) messageId);
+                        if (!(message == null)) {
+                            messages.add(message);
+                        }
+                        break;
                     case 1:
+                        message = CommentDB.getTweet((int) messageId);
+                        if (!(message == null)) {
+                            messages.add(message);
+                        }
+                        break;
+                    case 2:
+                        message = RetweetDB.getTweet((int) messageId);
+                        if (!(message == null)) {
+                            messages.add(message);
+                        }
                         break;
                 }
             }
@@ -53,4 +68,4 @@ public class ChatBoxDB extends SQLDB {
 
     }
 }
-}
+

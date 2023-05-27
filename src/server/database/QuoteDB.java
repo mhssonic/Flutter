@@ -1,5 +1,7 @@
 package server.database;
 
+import server.message.tweet.Tweet;
+
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,4 +30,28 @@ public class QuoteDB extends TweetDB{
             throw new RuntimeException(e);
         }
     }
+
+    public static Tweet getTweet(Object messageId) {
+
+        try {
+            ResultSet resultSet = getResultSet("tweet" , messageId);
+            if (!resultSet.next()) return null;
+
+            int author = resultSet.getInt("author");
+            String context = resultSet.getString("context");
+            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
+//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+            int retweet = resultSet.getInt("retweet");
+            int likes = sizeOfArrayField("tweet", messageId, "likes");
+            Object[] commentId = (Object[]) (resultSet.getArray("comments").getArray());
+//            Comment[] comments = CommentDB.getComments(Object[]commentId);
+            Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
+            return tweet;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
