@@ -6,7 +6,7 @@ public enum TweetType {
     RETWEET(2),
     POLL(3),
     QUOTE_TWEET(4),
-    MESSAGE(5);
+    DIRECT_MESSAGE(5);
     private final int mod;
     public final static int count = 6;
     TweetType(int mod){

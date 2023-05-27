@@ -40,7 +40,7 @@ public class ChatBoxDB extends SQLDB {
                 int type = (int) messageId % (TweetType.count);
                 switch (type){
 
-                case 0:
+                    case 0:
                    messages.add(TweetDB.getTweet((int)messageId));
                    break;
                     case 1:
@@ -50,7 +50,5 @@ public class ChatBoxDB extends SQLDB {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
-}
 }

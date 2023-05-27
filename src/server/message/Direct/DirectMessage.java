@@ -33,7 +33,7 @@ public class DirectMessage extends Message {
         return message;
     }
 
-    public DirectMessage(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId, int reply) {
+    public DirectMessage(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int reply) {
         super(messageId, authorId, text, postingTime, attachmentId);
         this.reply = reply;
     }

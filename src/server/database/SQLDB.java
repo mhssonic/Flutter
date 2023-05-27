@@ -6,6 +6,7 @@ import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.tweet.Quote;
+import server.message.tweet.Tweet;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -28,15 +29,15 @@ public class SQLDB {
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
 //        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
-        UserDB.follow(-1999999999, -2000000000 );
+//        UserDB.follow(-1999999999, -2000000000 );
         ArrayList<Attachment> attachments = new ArrayList<>();
         attachments.add(new Attachment("123" , FileType.VIDEO));
-        ArrayList<String> choices = new ArrayList<>();
-        choices.add("stupid");
-        choices.add("not stupid");
+//        ArrayList<String> choices = new ArrayList<>();
+//        choices.add("stupid");
+//        choices.add("not stupid");
 //        Poll.poll(-2000000000 ,"Am i stupid?" , attachments , one ,choices);
 //        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
-        Quote.quote(-2000000000, "hi,I like the fact that you want to be added",attachments , one , -1999999990);
+//        Quote.quote(-2000000000, "hi,I like the fact that you want to be added",attachments , one , -1999999990);
 //        UserDB.unBlock(-1999999999 ,  -2000000000);
 //        UserDB.follow(-1999999999, -2000000000 );
 //        ArrayList<Attachment> attachments = new ArrayList<>();
@@ -45,7 +46,7 @@ public class SQLDB {
 //        UserDB.block(-1999999999 ,  -2000000000);
 //        TweetDB.removeTweet(-1999999980);
 //        System.out.println(getDirectMessageId());
-//
+        increaseFieldKeyByOne("tweet", -2000000000, "retweet");
     }
 
     public static void run() {
@@ -308,6 +309,27 @@ public class SQLDB {
             return resultSet;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+    protected static void increaseFieldKeyByOne(String table, int id, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "+ 1 WHERE id = ?");
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    protected static void decreaseFieldKeyByOne(String table, int id, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "- 1 WHERE id = ?");
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
         }
     }
 }
