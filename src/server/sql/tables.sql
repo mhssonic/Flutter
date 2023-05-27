@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tweet (
     hashtag INT Array[16],
     postingTime timestamp
 );
-CREATE TABLE IF NOT EXISTS tweet (
+CREATE TABLE IF NOT EXISTS comment (
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_comment_id'),
     author INT,
     context VARCHAR(280),
