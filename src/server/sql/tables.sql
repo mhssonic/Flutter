@@ -2,12 +2,12 @@ CREATE TABLE IF NOT EXISTS tweet (
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id'),
     author INT,
     context VARCHAR(280),
-    attachment INT array[8],
+    attachment INT Array[8],
     retweet smallint default 0,
-    likes INT array[1024],
+    likes INT Array[1024],
     favestar bool,
     comments INT Array[1024],
-    hashtag INT array[16],
+    hashtag INT Array[16],
     postingTime timestamp
 );
 CREATE TABLE IF NOT EXISTS profile (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS users (
     follower INT array[1024],
     blocked INT array[1024]
 );
-CREATE TABLE IF NOT EXISTS attachment (
+CREATE TABLE IF NOT EXISTS attachment(
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_attachment_id'),
     type type_file,
     path VARCHAR(128)

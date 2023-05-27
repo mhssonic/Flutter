@@ -6,7 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
-import server.message.DirectMessage;
+import server.message.Direct.DirectMessage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

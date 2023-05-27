@@ -1,11 +1,11 @@
-package server.message.Tweet.poll;
+package server.message.tweet.poll;
 
 import server.database.AttachmentDB;
 import server.database.ChoiceDB;
 import server.database.PollDB;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
-import server.message.Tweet.Tweet;
+import server.message.tweet.Tweet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 

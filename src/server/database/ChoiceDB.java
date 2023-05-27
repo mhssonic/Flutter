@@ -1,9 +1,5 @@
 package server.database;
 
-import server.message.Attachment;
-import server.message.Tweet.poll.Choice;
-
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

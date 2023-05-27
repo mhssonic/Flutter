@@ -1,22 +1,17 @@
 package server.database;
 
-import org.checkerframework.checker.units.qual.A;
 import server.Tools;
 import server.enums.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
-import server.message.Tweet.Quote;
-import server.message.Tweet.Tweet;
-import server.message.Tweet.poll.Choice;
-import server.message.Tweet.poll.Poll;
+import server.message.tweet.Quote;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -149,7 +144,7 @@ public class SQLDB {
         }
     }
 
-    protected static int sizeOfArrayField(String table, int id, String field) {
+    protected static int sizeOfArrayField(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT ARRAY_LENGTH(" + field + ", 1) FROM " + table + " WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -191,7 +186,7 @@ public class SQLDB {
         }
     }
 
-    protected static Object getFieldObject(String table, int id, String field) {
+    protected static Object getFieldObject(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -302,6 +297,17 @@ public class SQLDB {
             return resultSet.getInt("nextval");
         } catch (SQLException e) {
             throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    public static ResultSet getResultSet(String table , Object messageId){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM tweet where id=?");
+            preparedStatement.setInt(1, messageId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

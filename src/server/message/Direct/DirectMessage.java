@@ -1,4 +1,4 @@
-package server.message;
+package server.message.Direct;
 
 import org.bson.Document;
 import server.Tools;
@@ -7,11 +7,12 @@ import server.database.DirectMessageDB;
 import server.database.SQLDB;
 import server.database.UserDB;
 import server.enums.error.ErrorType;
+import server.message.Message;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class DirectMessage extends Message{
+public class DirectMessage extends Message {
     public static void main(String[] args) {
         SQLDB.run();
         DirectMessageDB.run();

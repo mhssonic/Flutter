@@ -1,5 +1,7 @@
 package server.database;
 
+import server.message.tweet.Tweet;
+
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ public class TweetDB extends SQLDB {
         }
     }
 
-    public static boolean hasAccessToTweet(int userId, int tweetId){
+    public static boolean hasAccessToTweet(int userId, int tweetId) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM tweet WHERE id = ? and author = ?");
             preparedStatement.setInt(1, tweetId);
@@ -60,17 +62,42 @@ public class TweetDB extends SQLDB {
         SQLDB.removeFromArrayField("tweet", tweetId, "likes", userId);
     }
 
-    public static boolean likedBefore(int userId, int tweetId){
+    public static boolean likedBefore(int userId, int tweetId) {
         return SQLDB.containInArrayFieldObject("tweet", tweetId, "likes", userId);
     }
 
-    public static int getNumberOfLikes(int tweetId){
+    public static int getNumberOfLikes(int tweetId) {
         return sizeOfArrayField("tweet", tweetId, "likes");
     }
 
-    public static void setFaveStar(int tweetId){
+    public static void setFaveStar(int tweetId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("favestar", true);
         updateFieldsKeys("tweet", tweetId, map);
+    }
+
+    public static Tweet getTweet(Object messageId) {
+
+        try {
+            ResultSet resultSet = getResultSet("tweet" , messageId)
+            if (!resultSet.next()) return null;
+
+            int author = resultSet.getInt("author");
+            String context = resultSet.getString("context");
+            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
+//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+            int retweet = resultSet.getInt("retweet");
+            int likes = sizeOfArrayField("tweet", messageId, "likes");
+            Object[] commentId = (Object[]) (resultSet.getArray("comments").getArray());
+//            Comment[] comments = CommentDB.getComments(Object[]commentId);
+            Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
+            return tweet;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
