@@ -304,4 +304,21 @@ public class SQLDB {
             throw new RuntimeException(e);//TODO handle exception
         }
     }
+
+    //get all Objects from a table where a field = key
+    public static ArrayList<Object> getObjects(String table, String filed, Object key){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE " + filed + "= ?");
+            preparedStatement.setObject(1, key);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ArrayList<Object> output = new ArrayList<>();
+            while(resultSet.next())
+                output.add(resultSet.getObject(filed));
+            return output;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
 }

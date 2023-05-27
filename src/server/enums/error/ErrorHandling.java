@@ -60,4 +60,8 @@ public class ErrorHandling {
         if (str.length() > maxLen) return ErrorType.TOO_LONG;
         return ErrorType.SUCCESS;
     }
+
+    public static ErrorType validCountry(String str){
+        if ()
+    }
 }

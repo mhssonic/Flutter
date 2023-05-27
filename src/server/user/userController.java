@@ -4,9 +4,11 @@ import server.database.SQLDB;
 import server.database.UserDB;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.message.Message;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class userController {
     public static String signIn(String username, String password) {
@@ -33,6 +35,10 @@ public class userController {
         output = ErrorHandling.validPhoneNumber(phoneNumber);
         if (output != ErrorType.SUCCESS) return output;
 
+        output = ErrorHandling.validCountry(country);
+        if (output != ErrorType.SUCCESS) return output;
+
+
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
 
@@ -44,4 +50,7 @@ public class userController {
         return ErrorType.SUCCESS;
     }
 
+//    public static ArrayList<Message> searchTag(String tag){
+//
+//    }
 }
