@@ -36,7 +36,7 @@ public class ChatBoxDB extends SQLDB {
 
     public static void getMessage(int start, int finish, Object[] messageIds) {
         try {
-            Message message;
+            Message message = null;
             ArrayList<Message> messages = new ArrayList<>();
             for (Object messageId : messageIds) {
                 int type = (int) messageId % (TweetType.count);
@@ -44,24 +44,30 @@ public class ChatBoxDB extends SQLDB {
 
                     case 0:
                         message = TweetDB.getTweet((int) messageId);
-                        if (!(message == null)) {
-                            messages.add(message);
-                        }
                         break;
                     case 1:
                         message = CommentDB.getTweet((int) messageId);
-                        if (!(message == null)) {
-                            messages.add(message);
-                        }
                         break;
                     case 2:
                         message = RetweetDB.getTweet((int) messageId);
-                        if (!(message == null)) {
-                            messages.add(message);
-                        }
+                        break;
+                    case 3:
+                        message = PollDB.getTweet((int) messageId);
+                        break;
+                    case 4:
+                        message = QuoteDB.getTweet((int) messageId);
+                        break;
+                    case 5:
+//                        message = DirectMessageDB.getDirect((int) messageId);
                         break;
                 }
+                if (!(message == null)) {
+                    messages.add(message);
+                }
+
             }
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

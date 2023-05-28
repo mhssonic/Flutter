@@ -1,6 +1,7 @@
 package server.database;
 
 import server.message.tweet.Tweet;
+import server.message.tweet.poll.Poll;
 
 import java.sql.Array;
 import java.sql.ResultSet;
@@ -34,10 +35,10 @@ public class PollDB extends TweetDB{
         }
     }
 
-    public static Tweet getTweet(Object messageId) {
+    public static Tweet getTweet(int messageId) {
 
         try {
-            ResultSet resultSet = getResultSet("tweet" , messageId);
+            ResultSet resultSet = getResultSet("poll" , messageId);
             if (!resultSet.next()) return null;
 
             int author = resultSet.getInt("author");
@@ -46,12 +47,16 @@ public class PollDB extends TweetDB{
 //            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comments").getArray());
+            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
 //            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
-            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
-            return tweet;
+            Object[] choiceId = (Object[]) (resultSet.getArray("choiceId")).getArray();
+//            Choice[] choice = ChoiceDB.getChoice(Object[]choiceId);
+
+
+            Poll poll = new Poll(messageId , author , context , postingTime , attachmentId ,  likes  , choiceId);
+            return poll;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

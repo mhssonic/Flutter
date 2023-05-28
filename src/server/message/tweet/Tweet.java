@@ -27,6 +27,30 @@ public class Tweet extends Message{
     }
 
 
+    public HashSet<User> getLike() {
+        return like;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public HashSet<String> getComment() {
+        return comment;
+    }
+
+    public ArrayList<String> getHashtag() {
+        return hashtag;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public Boolean getFaveStar() {
+        return faveStar;
+    }
+
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag ){
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());

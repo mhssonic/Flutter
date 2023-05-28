@@ -80,7 +80,7 @@ public class UserDB extends SQLDB {
 
 
     public static Array getFollower(int userId) {
-        return (Array) SQLDB.getFieldObject("users", userId, "follower");
+        return (Array) getFieldObject("users", userId, "follower");
     }
     public static Array getFollowing(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "following");

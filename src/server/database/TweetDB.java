@@ -119,21 +119,21 @@ public class TweetDB extends SQLDB {
         else if(tweetId % TweetType.count == TweetType.POLL.getMod()) setFaveStarToTable("poll", tweetId);
     }
 
-    public static Tweet getTweet(Object messageId) {
+    public static Tweet getTweet(int messageId) {
 
-        try {
+        try{
             ResultSet resultSet = getResultSet("tweet" , messageId);
             if (!resultSet.next()) return null;
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
             Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId); //TODO add to constructor?
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comments").getArray());
+            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
 //            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
             Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
             return tweet;

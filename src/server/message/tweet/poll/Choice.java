@@ -5,10 +5,11 @@ import java.util.ArrayList;
 public class Choice {
     private int choiceId;
     private String text;
-    private ArrayList<String> voters;
+    private Object[] voters;
 
-    public Choice(String text) {
+    public Choice(String text, Object[] voters) {
         this.text = text;
+        this.voters = voters;
     }
 
     public String getText() {
@@ -16,7 +17,7 @@ public class Choice {
     }
 
 
-    public ArrayList<String> getVoters() {
+    public Object[] getVoters() {
         return voters;
     }
 

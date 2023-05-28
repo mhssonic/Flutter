@@ -35,4 +35,24 @@ public abstract class Message {
         }
         return ErrorType.SUCCESS;
     }
+
+    public Object getMessageId() {
+        return messageId;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public LocalDateTime getPostingTime() {
+        return postingTime;
+    }
+
+    public Object[] getAttachmentId() {
+        return attachmentId;
+    }
 }

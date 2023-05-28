@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS choice(
     context VARCHAR(280),
     voters INT Array[1024]
 );
-CREATE TABLE IF NOT EXISTS Retweet (
+CREATE TABLE IF NOT EXISTS retweet (
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_retweet_id'),
     author INT,
     retweeted_message_id INT

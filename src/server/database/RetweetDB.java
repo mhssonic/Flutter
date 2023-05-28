@@ -1,5 +1,8 @@
 package server.database;
 
+import server.message.tweet.Retweet;
+import server.message.tweet.Tweet;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -19,4 +22,24 @@ public class RetweetDB extends TweetDB {
         }
     }
 
+    public static Tweet getTweet(int messageId){
+        ResultSet resultSet = getResultSet("retweet" , messageId);
+
+        try {
+            if (!resultSet.next()) return null;
+
+            int retweetId = resultSet.getInt("id");
+            int author = resultSet.getInt("author");
+            int retweetedMessageId = resultSet.getInt("retweeted_message_id");
+
+            Tweet tweet = TweetDB.getTweet(retweetedMessageId);
+            Retweet retweet = new Retweet(retweetedMessageId , tweet.getAuthorId() , tweet.getText() , tweet.getPostingTime() , tweet.getAttachmentId() , tweet.getLikes() , retweetId , author );
+            return  retweet;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }
