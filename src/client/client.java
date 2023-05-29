@@ -9,13 +9,13 @@ public class client {
     public static void main(String[] args) {
         try {
             // Create URL object
-            URL url = new URL("http://localhost:5050/sign-up");
+            URL url = new URL("http://localhost:5050/sign-in");
 
             // Open connection
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             // Set request method
-            con.setRequestMethod("GET");
+            con.setRequestMethod("POST");
 
             // Set request headers (optional)
             con.setRequestProperty("User-Agent", "Mozilla/5.0");

@@ -13,7 +13,7 @@ public class FlutterHttpServer {
 
             InetSocketAddress socket = new InetSocketAddress(5050);
             HttpServer httpServer = HttpServer.create(socket,50);
-            
+
             httpServer.createContext("/sign-up", new FlutterHttpHandler(UserHandler::signUpHandler));
             httpServer.createContext("/sign-in", new FlutterHttpHandler(UserHandler::signInHandler));
             httpServer.createContext("/block", new FlutterHttpHandler(UserHandler::blockHandler));
@@ -34,7 +34,6 @@ public class FlutterHttpServer {
     public static void sendNotOkResponse(HttpExchange exchange, int responseCode){
         try {
             exchange.sendResponseHeaders(responseCode, -1);
-
         }
         catch (Exception e){}
     }

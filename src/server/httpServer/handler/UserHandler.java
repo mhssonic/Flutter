@@ -4,7 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class UserHandler {
     public static void signInHandler(HttpExchange exchange){
-
+        System.out.println("hello");
     }
 
     public static void signUpHandler(HttpExchange exchange){

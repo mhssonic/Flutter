@@ -15,8 +15,10 @@ public class FlutterHttpHandler implements HttpHandler {
     }
 
     public void handle(HttpExchange exchange) throws IOException {
-        if(exchange.getRequestMethod() != "POST")
+        if(! exchange.getRequestMethod().equals("POST")){
             FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_METHOD);
+            return;
+        }
 
         handler.handle(exchange);
     }
