@@ -1,6 +1,7 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,6 +20,14 @@ public class client {
 
             // Set request headers (optional)
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            String jsonInputString = "{\"username\": \"John\", \"password\": 30}";
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.writeBytes(jsonInputString);
+            out.flush();
+            out.close();
+
 
             // Read response
             BufferedReader in = new BufferedReader(

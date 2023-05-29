@@ -4,19 +4,20 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import server.httpServer.handler.FlutterHttpHandler;
 import server.httpServer.handler.MessageHandler;
+import server.httpServer.handler.UserAuthHandler;
 import server.httpServer.handler.UserHandler;
 
 import java.net.InetSocketAddress;
 
 public class FlutterHttpServer {
-    public static void main(String[] args) {
+    public static void run(){
         try {
 
             InetSocketAddress socket = new InetSocketAddress(5050);
             HttpServer httpServer = HttpServer.create(socket,50);
 
-            httpServer.createContext("/sign-up", new FlutterHttpHandler(UserHandler::signUpHandler));
-            httpServer.createContext("/sign-in", new FlutterHttpHandler(UserHandler::signInHandler));
+            httpServer.createContext("/sign-up", new FlutterHttpHandler(UserAuthHandler::signUpHandler));
+            httpServer.createContext("/sign-in", new FlutterHttpHandler(UserAuthHandler::signInHandler));
             httpServer.createContext("/block", new FlutterHttpHandler(UserHandler::blockHandler));
             httpServer.createContext("/unblock", new FlutterHttpHandler(UserHandler::unBlockHandler));
             httpServer.createContext("/follow", new FlutterHttpHandler(UserHandler::followHandler));

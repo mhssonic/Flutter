@@ -1,16 +1,15 @@
 package server.httpServer.handler;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
+import server.Tools;
+import server.database.UserDB;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 public class UserHandler {
-    public static void signInHandler(HttpExchange exchange){
-        System.out.println("hello");
-    }
-
-    public static void signUpHandler(HttpExchange exchange){
-
-    }
-
     public static void updateProfileHandler(HttpExchange exchange){
 
     }
