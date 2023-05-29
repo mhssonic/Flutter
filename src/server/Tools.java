@@ -19,7 +19,7 @@ public class Tools {
     public static void main(String[] args) {
         String secret = "my very very very very secret key";
         LocalDate localDate = LocalDate.of(2026, 8, 19);
-        String jwt = creatJWT("myId", Date.from((LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant())), Date.from((localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())),  secret);
+        String jwt = creatJWT("myId", LocalDate.now(), localDate,  secret);
         Claims claims = decodeJWT(jwt, secret);
         System.out.println(claims.getId());
     }
@@ -100,13 +100,13 @@ public class Tools {
         return hash;
     }
 
-    public static String creatJWT(String id, Date createdAt, Date expiration, String key){
+    public static String creatJWT(String id, LocalDate createdAt, LocalDate expiration, String key){
 
         //Let's set the JWT Claims
         JwtBuilder builder = Jwts.builder().setId(id)
-                .setIssuedAt(createdAt)
+                .setIssuedAt(Date.from(createdAt.atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .signWith(SignatureAlgorithm.HS256, key.getBytes())
-                .setExpiration(expiration);
+                .setExpiration(Date.from(expiration.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         return builder.compact();
     }

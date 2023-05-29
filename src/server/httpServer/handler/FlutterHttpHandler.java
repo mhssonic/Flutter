@@ -20,6 +20,11 @@ public class FlutterHttpHandler implements HttpHandler {
             return;
         }
 
+        if(! exchange.getRequestHeaders().get("Content-Type").contains("application/json")){
+            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+            return;
+        }
+
         handler.handle(exchange);
     }
 }
