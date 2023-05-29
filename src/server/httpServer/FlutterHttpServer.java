@@ -3,6 +3,7 @@ package server.httpServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import server.httpServer.handler.FlutterHttpHandler;
+import server.httpServer.handler.MessageHandler;
 import server.httpServer.handler.UserHandler;
 
 import java.net.InetSocketAddress;
@@ -24,6 +25,17 @@ public class FlutterHttpServer {
             httpServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
             httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
             httpServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
+
+            httpServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
+            httpServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));
+            httpServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
+            httpServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));//TODO we haven't done it
+            httpServer.createContext("/directMessageHandler", new FlutterHttpHandler(MessageHandler::directMessageHandler));
+            httpServer.createContext("/commentHandler", new FlutterHttpHandler(MessageHandler::commentHandler));
+            httpServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
+            httpServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
+            httpServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
+            httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));
 
             httpServer.start();
         }catch (Exception e){
