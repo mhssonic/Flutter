@@ -24,12 +24,11 @@ public class UserAuthHandler {
             String jwt = userController.signIn(username, password);
 
             if(jwt == null){
-                FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
-                //TODO return something
+                FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
             }
-            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);//TODO ummm im not sure that java can handle cookies like that (test it its not that hard and you know it)
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
+            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
 //            throw new RuntimeException(e);
@@ -37,6 +36,5 @@ public class UserAuthHandler {
     }
 
     public static void signUpHandler(HttpExchange exchange){
-
     }
 }
