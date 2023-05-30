@@ -15,15 +15,15 @@ public class FlutterHttpHandler implements HttpHandler {
     }
 
     public void handle(HttpExchange exchange) throws IOException {
-        if(! exchange.getRequestMethod().equals("POST")){
-            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_METHOD);
-            return;
-        }
-
-        if(! exchange.getRequestHeaders().get("Content-Type").contains("application/json")){
-            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-            return;
-        }
+//        if(! exchange.getRequestMethod().equals("POST")){
+//            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_METHOD);
+//            return;
+//        }
+//
+//        if(! exchange.getRequestHeaders().get("Content-Type").contains("application/json")){
+//            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+//            return;
+//        }
 
         handler.handle(exchange);
     }

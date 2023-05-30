@@ -19,7 +19,7 @@ public class UserAuthHandler {
         try {
             JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
             String username = jsonNode.get("username").asText();
-            String password = jsonNode.get("password").toString();
+            String password = jsonNode.get("password").asText();
 
             String jwt = userController.signIn(username, password);
 
@@ -28,6 +28,7 @@ public class UserAuthHandler {
                 return;
             }
             exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
+
             FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());

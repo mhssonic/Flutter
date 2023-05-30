@@ -47,6 +47,8 @@ public class userController {
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
 
+        //TODO check country
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);
 
