@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
+import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.user.SignUpForm;
 import server.user.userController;
@@ -18,14 +19,13 @@ public class UserAuthHandler {
     public static void signInHandler(HttpExchange exchange) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-//            JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
-//            String username = jsonNode.get("username").asText();
-//            String password = jsonNode.get("password").toString();
-//
-//            String id = UserDB.matchUserPass(username, password);
-//
-            String jwt = Tools.creatJWT("id", LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
+            JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
+            String username = jsonNode.get("username").asText();
+            String password = jsonNode.get("password").asText();
 
+            String id = UserDB.matchUserPass(username, password);
+//            userController.signIn(username, password);
+            String jwt = Tools.creatJWT( id , LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
             exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);//TODO ummm im not sure that java can handle cookies like that (test it its not that hard and you know it)
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 

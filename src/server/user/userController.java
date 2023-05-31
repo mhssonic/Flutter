@@ -22,9 +22,6 @@ public class userController {
             PublicKey publicKey = pair.getPublic();
             PrivateKey privateKey = pair.getPrivate();
 
-
-
-
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
