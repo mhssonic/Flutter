@@ -106,10 +106,10 @@ public class SQLDB {
     }
 
     //check if in table where id = "id" array(field) contain obj
-    protected static boolean containInArrayFieldObject(String table, int id, String field, Object obj) {
+    protected static boolean containInArrayFieldObject(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ? AND ? = ANY(" + field + ")");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, obj);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -121,11 +121,11 @@ public class SQLDB {
 
 
     //push an obj to an array(field) of a row where id = "id" in table
-    protected static void appendToArrayField(String table, int id, String field, Object obj) {
+    protected static void appendToArrayField(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_append(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setObject(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -133,11 +133,11 @@ public class SQLDB {
         }
     }
 
-    protected static void removeFromArrayField(String table, int id, String field, Object obj) {
+    protected static void removeFromArrayField(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_remove(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setObject(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -159,7 +159,7 @@ public class SQLDB {
     }
 
     //value row based on HashMap<field, key>
-    protected static void updateFieldsKeys(String table, int id, HashMap<String, Object> fieldKeys) {
+    protected static void updateFieldsKeys(String table, Object id, HashMap<String, Object> fieldKeys) {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ");
@@ -179,7 +179,7 @@ public class SQLDB {
                 preparedStatement.setObject(i, obj);
                 i++;
             }
-            preparedStatement.setInt(i, id);
+            preparedStatement.setObject(i, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -311,10 +311,10 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
-    protected static void increaseFieldKeyByOne(String table, int id, String field) {
+    protected static void increaseFieldKeyByOne(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "+ 1 WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -322,10 +322,10 @@ public class SQLDB {
         }
     }
 
-    protected static void decreaseFieldKeyByOne(String table, int id, String field) {
+    protected static void decreaseFieldKeyByOne(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "- 1 WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
