@@ -4,6 +4,7 @@ import server.database.RetweetDB;
 import server.enums.error.ErrorType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Retweet extends Tweet {
     private int retweetId;//TODO ?

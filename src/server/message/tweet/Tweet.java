@@ -59,7 +59,7 @@ public class Tweet extends Message{
         }
         else return validTweet(context);
     }
-
+  
     public static ErrorType validTweet(String context){
         //TODO override maybe?
         return validMessage(context);
@@ -81,13 +81,8 @@ public class Tweet extends Message{
     public static ErrorType like(int userId, int tweetId){
         if(TweetDB.likedBefore(userId, tweetId))
             return ErrorType.ALREADY_LIKED;
-
-        if(tweetId % TweetType.count == TweetType.TWEET.getMod()) TweetDB.like(tweetId, userId);
-        if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) RetweetDB.like(tweetId, userId);
-        if(tweetId % TweetType.count == TweetType.COMMENT.getMod()) CommentDB.like(tweetId, userId);
-        if(tweetId % TweetType.count == TweetType.QUOTE_TWEET.getMod()) QuoteDB.like(tweetId, userId);
-        if(tweetId % TweetType.count == TweetType.POLL.getMod()) PollDB.like(tweetId, userId);
-
+      
+        TweetDB.like(tweetId, userId);
         if(TweetDB.getNumberOfLikes(tweetId) >= FAVESTAR_NUMBER)
             faveStar(tweetId);
         return ErrorType.SUCCESS;
@@ -117,7 +112,6 @@ public class Tweet extends Message{
             }catch (Exception e){}
         }
     }
-
     public static void showTweet(int userId , int start , int finish){
         int chatBoxId = Tools.jenkinsHash(userId, userId, false);
         showMessage(start , finish , chatBoxId);
