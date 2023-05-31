@@ -9,7 +9,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="postgresql" level="application" />
     <orderEntry type="library" name="mongodb.driver.sync" level="application" />
-    <orderEntry type="library" name="io.jsonwebtoken.jjwt" level="application" />
     <orderEntry type="library" name="javax.xml.bind.jaxb.api" level="application" />
+    <orderEntry type="library" name="io.jsonwebtoken.jjwt" level="application" />
+    <orderEntry type="library" name="fasterxml.jackson.core.annotations" level="application" />
+    <orderEntry type="library" name="fasterxml.jackson.core.databind" level="application" />
+    <orderEntry type="library" name="google.code.gson" level="application" />
   </component>
 </module>
