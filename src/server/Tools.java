@@ -1,9 +1,21 @@
 package server;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import server.database.SecretKeyDB;
+
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.Date;
 
 public class Tools {
-
     public static int jenkinsHash(int a, int b, boolean sort) {
         if (sort && a < b){
             int c = a;
@@ -78,5 +90,31 @@ public class Tools {
         hash += (hash << 7);
         hash ^= (hash >>> 12);
         return hash;
+    }
+
+    public static String creatJWT(String id, LocalDate createdAt, LocalDate expiration){
+        String key = SecretKeyDB.getSecretKey();
+
+        //Let's set the JWT Claims
+        JwtBuilder builder = Jwts.builder().setId(id)
+                .setIssuedAt(Date.from(createdAt.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                .signWith(SignatureAlgorithm.HS256, key.getBytes())
+                .setExpiration(Date.from(expiration.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        return builder.compact();
+    }
+
+    public static Claims decodeJWT(String jwt, String key) {
+        //This line will throw an exception if it is not a signed JWS (as expected)
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key.getBytes())
+                    .parseClaimsJws(jwt).getBody();
+            return claims;
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

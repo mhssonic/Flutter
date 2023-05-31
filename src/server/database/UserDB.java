@@ -16,13 +16,18 @@ public class UserDB extends SQLDB {
 //        createUserProfile("asdf", "asdf", "mhs2", "sdfsdf", "sdafasdf", "asdfasdf", "dsa", LocalDate.now(), "sdf", "asdf", "asdf");
     }
 
-    public static boolean matchUserPass(String username, String password) {
+    public static String matchUserPass(String username, String password) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE username = ? and password = ?");
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
+            if(resultSet.next()){
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.append(resultSet.getInt("id"));
+                return stringBuffer.toString();
+            }
+            return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
