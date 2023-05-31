@@ -43,7 +43,7 @@ public class FlutterHttpServer {
         }
     }
 
-    public static void sendNotOkResponse(HttpExchange exchange, int responseCode){
+    public static void sendWithoutBodyResponse(HttpExchange exchange, int responseCode){
         try {
             exchange.sendResponseHeaders(responseCode, -1);
         }

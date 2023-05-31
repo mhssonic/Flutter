@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
-import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.user.SignUpForm;
 import server.httpServer.FlutterHttpServer;
@@ -25,12 +24,12 @@ public class UserAuthHandler {
             String jwt = userController.signIn(username, password);
 
             if(jwt == null){
-                FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
+                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
             }
             exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
 
-            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);

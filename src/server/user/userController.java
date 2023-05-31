@@ -7,7 +7,6 @@ import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.httpServer.handler.UserAuthHandler;
 
-import java.security.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
