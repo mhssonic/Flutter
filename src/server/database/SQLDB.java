@@ -1,14 +1,11 @@
 package server.database;
 
-import org.checkerframework.checker.units.qual.A;
 import server.Tools;
-import server.enums.*;
+import server.enums.FileType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Tweet.Quote;
-import server.message.Tweet.Tweet;
-import server.message.Tweet.poll.Choice;
 import server.message.Tweet.poll.Poll;
 
 import java.io.BufferedReader;
@@ -16,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,7 +222,7 @@ public class SQLDB {
         ChatBoxDB.creatChatBox(Tools.jenkinsHash(userId, userId, false));
     }
 
-    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId , int profileId) {
+    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId ) {
         HashMap<String, Object> userUpdate = new HashMap<>();
         HashMap<String, Object> profileUpdate = new HashMap<>();
         ErrorType output= null;
@@ -288,7 +284,7 @@ public class SQLDB {
             }
         }
         if (!userUpdate.isEmpty()) UserDB.updateUser(userUpdate , userId);
-        if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,profileId);
+        if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,userId);
 
         return ErrorType.SUCCESS;
     }

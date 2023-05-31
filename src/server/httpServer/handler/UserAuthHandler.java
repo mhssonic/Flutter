@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
 import server.database.UserDB;
+import server.enums.error.ErrorType;
+import server.user.SignUpForm;
 import server.httpServer.FlutterHttpServer;
 import server.user.userController;
 
@@ -20,7 +22,6 @@ public class UserAuthHandler {
             JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
             String username = jsonNode.get("username").asText();
             String password = jsonNode.get("password").asText();
-
             String jwt = userController.signIn(username, password);
 
             if(jwt == null){
@@ -32,10 +33,28 @@ public class UserAuthHandler {
             FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
+    public static void signUpHandler(HttpExchange exchange)  {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
 
-    public static void signUpHandler(HttpExchange exchange){
+            SignUpForm signUpForm = objectMapper.treeToValue(jsonNode, SignUpForm.class);
+            ErrorType errorType = userController.signUp(signUpForm.getFirstName(), signUpForm.getLastName(), signUpForm.getUserName(), signUpForm.getPassword(), signUpForm.getConfirmPassword(), signUpForm.getEmail(), signUpForm.getPhoneNumber(), signUpForm.getCountry(), signUpForm.getBirthdate(), signUpForm.getBiography(), signUpForm.getAvatarPath(), signUpForm.getHeaderPath());
+            if ( errorType != ErrorType.SUCCESS){
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200 , response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+                return;
+            }
+            String jwt = Tools.creatJWT(signUpForm.getUserName(), LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
+            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

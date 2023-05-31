@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
 public class FlutterHttpServer {
     public static void run(){
         try {
-
             InetSocketAddress socket = new InetSocketAddress(5050);
             HttpServer httpServer = HttpServer.create(socket,50);
 

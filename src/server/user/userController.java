@@ -16,7 +16,7 @@ public class userController {
         String id = UserDB.matchUserPass(username, password);
         if (id == null)
             return null;
-
+      
         String jwt = Tools.creatJWT(id, LocalDate.now(), LocalDate.now().plusDays(UserAuthHandler.VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
         return jwt;
     }
