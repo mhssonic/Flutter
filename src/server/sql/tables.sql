@@ -76,3 +76,24 @@ CREATE TABLE IF NOT EXISTS Retweet (
     author INT,
     retweeted_message_id INT
 );
+DO
+$$
+BEGIN
+IF NOT EXISTS (
+    SELECT FROM
+        pg_tables
+    WHERE
+        schemaname = 'public' AND
+        tablename  = 'secret_key'
+    )
+Then
+CREATE TABLE secret_key (
+    key VARCHAR(50),
+    value VARCHAR(200)
+);
+INSERT INTO secret_key (key, value) values('token', 'ba esm ramz pashmak');
+
+end if;
+
+END;
+$$;

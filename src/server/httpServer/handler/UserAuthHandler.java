@@ -49,8 +49,7 @@ public class UserAuthHandler {
                 exchange.getResponseBody().close();
                 return;
             }
-            String jwt = Tools.creatJWT(signUpForm.getUserName(), LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
-            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
+            String jwt = Tools.creatJWT(signUpForm.getUserName(), LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN));
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
         } catch (IOException e) {
             System.out.println(e.getMessage());

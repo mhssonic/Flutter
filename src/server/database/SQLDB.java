@@ -187,10 +187,10 @@ public class SQLDB {
         }
     }
 
-    protected static Object getFieldObject(String table, int id, String field) {
+    protected static Object getFieldObject(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
