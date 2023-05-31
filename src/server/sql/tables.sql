@@ -2,14 +2,27 @@ CREATE TABLE IF NOT EXISTS tweet (
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id'),
     author INT,
     context VARCHAR(280),
-    attachment INT array[8],
+    attachment INT Array[8],
     retweet smallint default 0,
-    likes INT array[1024],
+    likes INT Array[1024],
     favestar bool,
-    comments INT Array[1024],
-    hashtag INT array[16],
+    comments VARCHAR(50) Array[1024],
+    hashtag INT Array[16],
     postingTime timestamp
 );
+CREATE TABLE IF NOT EXISTS comment (
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_comment_id'),
+    author INT,
+    context VARCHAR(280),
+    attachment INT Array[8],
+    retweet smallint default 0,
+    likes INT Array[1024],
+    favestar bool,
+    comments VARCHAR(50) Array[1024],
+    hashtag INT Array[16],
+    postingTime timestamp,
+    reply INT
+    );
 CREATE TABLE IF NOT EXISTS profile (
     id INT PRIMARY KEY,
     first_name VARCHAR(50),
@@ -35,7 +48,7 @@ CREATE TABLE IF NOT EXISTS users (
     follower INT array[1024],
     blocked INT array[1024]
 );
-CREATE TABLE IF NOT EXISTS attachment (
+CREATE TABLE IF NOT EXISTS attachment(
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_attachment_id'),
     type type_file,
     path VARCHAR(128)
@@ -48,7 +61,7 @@ CREATE TABLE IF NOT EXISTS quote (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments INT Array[1024],
+    comments VARCHAR(50) Array[1024],
     hashtag INT array[16],
     postingTime timestamp,
     quoted_message_id INT
@@ -61,7 +74,7 @@ CREATE TABLE IF NOT EXISTS poll (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments INT Array[1024],
+    comments VARCHAR(50) Array[1024],
     hashtag INT array[16],
     postingTime timestamp,
     choice INT Array[16]
@@ -71,7 +84,7 @@ CREATE TABLE IF NOT EXISTS choice(
     context VARCHAR(280),
     voters INT Array[1024]
 );
-CREATE TABLE IF NOT EXISTS Retweet (
+CREATE TABLE IF NOT EXISTS retweet (
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_retweet_id'),
     author INT,
     retweeted_message_id INT

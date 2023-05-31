@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class Quote extends Tweet{
     private int quotedMessageID;
 
-    public Quote(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
-        super(messageId, authorId, text, postingTime, attachmentId);
+    public Quote(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId , int likes , int quotedMessageID) {
+        super(messageId, authorId, text, postingTime, attachmentId , likes);
+        this.quotedMessageID = quotedMessageID;
     }
 
     public static ErrorType quote(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , int quotedMessageID){

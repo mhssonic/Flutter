@@ -2,6 +2,7 @@ package server.message.tweet;
 
 import server.Tools;
 import server.database.*;
+import server.enums.TweetType;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Message;
@@ -13,18 +14,44 @@ import java.util.HashSet;
 
 public class Tweet extends Message{
     HashSet<User> like = new HashSet<>();
+    int likes;
     HashSet<String> comment;
     ArrayList<String> hashtag;
     int retweetCount;
     Boolean faveStar;
     final static int FAVESTAR_NUMBER = 10;
 
-    public Tweet(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
+    public Tweet(Object messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int likes) {
         super(messageId, authorId, text, postingTime, attachmentId);
+        this.likes = likes;
     }
 
 
-    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag){
+    public HashSet<User> getLike() {
+        return like;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public HashSet<String> getComment() {
+        return comment;
+    }
+
+    public ArrayList<String> getHashtag() {
+        return hashtag;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public Boolean getFaveStar() {
+        return faveStar;
+    }
+
+    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag ){
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
@@ -32,8 +59,7 @@ public class Tweet extends Message{
         }
         else return validTweet(context);
     }
-
-
+  
     public static ErrorType validTweet(String context){
         //TODO override maybe?
         return validMessage(context);
@@ -55,6 +81,7 @@ public class Tweet extends Message{
     public static ErrorType like(int userId, int tweetId){
         if(TweetDB.likedBefore(userId, tweetId))
             return ErrorType.ALREADY_LIKED;
+      
         TweetDB.like(tweetId, userId);
         if(TweetDB.getNumberOfLikes(tweetId) >= FAVESTAR_NUMBER)
             faveStar(tweetId);
@@ -84,5 +111,9 @@ public class Tweet extends Message{
                 ChatBoxDB.appendMessage(Tools.jenkinsHash(userId, userId, false),tweetId);
             }catch (Exception e){}
         }
+    }
+    public static void showTweet(int userId , int start , int finish){
+        int chatBoxId = Tools.jenkinsHash(userId, userId, false);
+        showMessage(start , finish , chatBoxId);
     }
 }

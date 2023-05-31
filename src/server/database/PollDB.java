@@ -1,5 +1,8 @@
 package server.database;
 
+import server.message.tweet.Tweet;
+import server.message.tweet.poll.Poll;
+
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +11,7 @@ import java.time.LocalDateTime;
 
 import static server.database.SQLDB.connection;
 
-public class PollDB extends SQLDB{
+public class PollDB extends TweetDB{
     public static int createPoll(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
         try {
             Array hashtags = connection.createArrayOf("INT", hashtag);
@@ -31,4 +34,33 @@ public class PollDB extends SQLDB{
             throw new RuntimeException(e);
         }
     }
+
+    public static Tweet getTweet(int messageId) {
+
+        try {
+            ResultSet resultSet = getResultSet("poll" , messageId);
+            if (!resultSet.next()) return null;
+
+            int author = resultSet.getInt("author");
+            String context = resultSet.getString("context");
+            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
+//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+            int retweet = resultSet.getInt("retweet");
+            int likes = sizeOfArrayField("tweet", messageId, "likes");
+            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
+//            Comment[] comments = CommentDB.getComments(Object[]commentId);
+            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
+            LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
+            Object[] choiceId = (Object[]) (resultSet.getArray("choiceId")).getArray();
+//            Choice[] choice = ChoiceDB.getChoice(Object[]choiceId);
+
+
+            Poll poll = new Poll(messageId , author , context , postingTime , attachmentId ,  likes  , choiceId);
+            return poll;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

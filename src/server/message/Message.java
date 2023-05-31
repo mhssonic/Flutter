@@ -4,18 +4,23 @@ import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public abstract class Message {
-    protected int messageId;
+    protected Object messageId;
     protected int authorId;
     protected String text;
     protected LocalDateTime postingTime;
-    protected final static int MAX_LENGTH_MESSAGE = 160;
+    protected final static int MAX_LENGTH_MESSAGE = 280;
 
-    ArrayList<String> attachmentId;
+    Object[] attachmentId;
 
-    public Message(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<String> attachmentId) {
+
+
+    public static void showMessage(int start , int finish , int chatBoxId){
+
+    }
+
+    public Message(Object messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId) {
         this.messageId = messageId;
         this.authorId = authorId;
         this.text = text;
@@ -29,5 +34,25 @@ public abstract class Message {
             return errorType;
         }
         return ErrorType.SUCCESS;
+    }
+
+    public Object getMessageId() {
+        return messageId;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public LocalDateTime getPostingTime() {
+        return postingTime;
+    }
+
+    public Object[] getAttachmentId() {
+        return attachmentId;
     }
 }

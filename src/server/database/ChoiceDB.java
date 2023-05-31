@@ -1,5 +1,8 @@
 package server.database;
 
+import server.message.Attachment;
+import server.message.tweet.poll.Choice;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,5 +29,25 @@ public class ChoiceDB extends SQLDB {
             i++;
         }
         return choiceId;
+    }
+
+    public static ArrayList<Choice> getChoice(int[] choiceIds) {
+        ResultSet resultSet;
+        ArrayList<Choice> choices = new ArrayList<>();
+        for (int choiceId : choiceIds) {
+            resultSet = getResultSet("choice", choiceId);
+            try {
+                if (resultSet.next()) {
+                    String context = resultSet.getString("context");
+                    Object[] voters = (Object[]) (resultSet.getArray("voters").getArray());
+
+                    Choice choice = new Choice(context, voters);
+                    choices.add(choice);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return choices;
     }
 }

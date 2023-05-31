@@ -6,7 +6,6 @@ import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

@@ -1,6 +1,9 @@
 package server.database;
 
+import server.enums.FileType;
 import server.message.Attachment;
+
+import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,5 +31,25 @@ public class AttachmentDB extends SQLDB {
             i++;
         }
         return attachmentId;
+    }
+
+    public static ArrayList<Attachment> getAttachment(int[]attachmentIds){
+        ResultSet resultSet;
+        ArrayList<Attachment> attachments = new ArrayList<>();
+        for (int attachmentId : attachmentIds) {
+            resultSet = getResultSet("attachment" , attachmentId);
+
+            try {
+                if (resultSet.next()){
+                    FileType type = (FileType) resultSet.getObject("type");
+                    String path = resultSet.getString("path");
+                    attachments.add(new Attachment(path , type));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return attachments;
     }
 }
