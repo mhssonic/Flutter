@@ -5,26 +5,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
 import server.database.UserDB;
+import server.httpServer.FlutterHttpServer;
+import server.user.userController;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.time.LocalDate;
 
 public class UserAuthHandler {
-    final static int VALID_TOKEN = 30;
+    public final static int VALID_TOKEN = 30;
     public static void signInHandler(HttpExchange exchange){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
             String username = jsonNode.get("username").asText();
-            String password = jsonNode.get("password").toString();
+            String password = jsonNode.get("password").asText();
 
-            String id = UserDB.matchUserPass(username, password);
+            String jwt = userController.signIn(username, password);
 
-            String jwt = Tools.creatJWT(id, LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
-            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);//TODO ummm im not sure that java can handle cookies like that (test it its not that hard and you know it)
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+            if(jwt == null){
+                FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
+                return;
+            }
+            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
+
+            FlutterHttpServer.sendNotOkResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
 //            throw new RuntimeException(e);
@@ -32,6 +37,5 @@ public class UserAuthHandler {
     }
 
     public static void signUpHandler(HttpExchange exchange){
-
     }
 }

@@ -1,9 +1,11 @@
 package server.user;
 
+import server.Tools;
 import server.database.SQLDB;
 import server.database.UserDB;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.httpServer.handler.UserAuthHandler;
 
 import java.security.*;
 import java.time.LocalDate;
@@ -11,25 +13,12 @@ import java.time.format.DateTimeFormatter;
 
 public class userController {
     public static String signIn(String username, String password) {
-        if (UserDB.matchUserPass(username, password) == null) {
+        String id = UserDB.matchUserPass(username, password);
+        if (id == null)
             return null;
-        }
-        try {
-            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(2048);
-            KeyPair pair = generator.generateKeyPair();
 
-            PublicKey publicKey = pair.getPublic();
-            PrivateKey privateKey = pair.getPrivate();
-
-
-
-
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-
-        return null;
+        String jwt = Tools.creatJWT(id, LocalDate.now(), LocalDate.now().plusDays(UserAuthHandler.VALID_TOKEN), "hiiiiiiiiish be kasi nago ino");//TODO move key to database
+        return jwt;
     }
 
 //    fos.write(publicKey.getEncoded());
@@ -57,6 +46,8 @@ public class userController {
 
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
+
+        //TODO check country
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);
