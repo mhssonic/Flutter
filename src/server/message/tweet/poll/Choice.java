@@ -1,4 +1,4 @@
-package server.message.Tweet.poll;
+package server.message.tweet.poll;
 
 import java.util.ArrayList;
 

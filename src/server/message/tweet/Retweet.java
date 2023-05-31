@@ -1,4 +1,4 @@
-package server.message.Tweet;
+package server.message.tweet;
 
 import server.database.RetweetDB;
 import server.enums.error.ErrorType;

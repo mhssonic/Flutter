@@ -1,8 +1,7 @@
-package server.message.Tweet;
+package server.message.tweet;
 
 import server.database.AttachmentDB;
 import server.database.QuoteDB;
-import server.database.TweetDB;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 

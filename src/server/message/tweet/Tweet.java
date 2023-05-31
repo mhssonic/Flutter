@@ -1,15 +1,12 @@
-package server.message.Tweet;
+package server.message.tweet;
 
 import server.Tools;
 import server.database.*;
-import server.enums.FileType;
-import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Message;
 import server.user.User;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
