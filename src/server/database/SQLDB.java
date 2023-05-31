@@ -5,8 +5,6 @@ import server.enums.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
-import server.message.tweet.Quote;
-import server.message.tweet.Tweet;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
