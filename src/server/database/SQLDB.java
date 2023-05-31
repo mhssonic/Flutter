@@ -1,12 +1,11 @@
 package server.database;
 
 import server.Tools;
-import server.enums.FileType;
+import server.enums.*;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
-import server.message.Tweet.Quote;
-import server.message.Tweet.poll.Poll;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,19 +24,19 @@ public class SQLDB {
     public static void main(String[] args) {
         run();
         Integer[] one = new Integer[10];
-        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
-        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
-        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
-        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
-        UserDB.follow(-1999999999, -2000000000 );
+//        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
+//        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
+//        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
+//        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
+//        UserDB.follow(-1999999999, -2000000000 );
         ArrayList<Attachment> attachments = new ArrayList<>();
         attachments.add(new Attachment("123" , FileType.VIDEO));
-        ArrayList<String> choices = new ArrayList<>();
-        choices.add("stupid");
-        choices.add("not stupid");
-        Poll.poll(-2000000000 ,"Am i stupid?" , attachments , one ,choices);
+//        ArrayList<String> choices = new ArrayList<>();
+//        choices.add("stupid");
+//        choices.add("not stupid");
+//        Poll.poll(-2000000000 ,"Am i stupid?" , attachments , one ,choices);
 //        Tweet.tweet(-2000000000, "hi,I want to be added to chatBox",attachments , one);
-        Quote.quote(-2000000000, "hi,I like the fact that you want to be added",attachments , one , -1999999990);
+//        Quote.quote(-2000000000, "hi,I like the fact that you want to be added",attachments , one , -1999999990);
 //        UserDB.unBlock(-1999999999 ,  -2000000000);
 //        UserDB.follow(-1999999999, -2000000000 );
 //        ArrayList<Attachment> attachments = new ArrayList<>();
@@ -46,7 +45,7 @@ public class SQLDB {
 //        UserDB.block(-1999999999 ,  -2000000000);
 //        TweetDB.removeTweet(-1999999980);
 //        System.out.println(getDirectMessageId());
-//
+        increaseFieldKeyByOne("tweet", -2000000000, "retweet");
     }
 
     public static void run() {
@@ -106,10 +105,10 @@ public class SQLDB {
     }
 
     //check if in table where id = "id" array(field) contain obj
-    protected static boolean containInArrayFieldObject(String table, int id, String field, Object obj) {
+    protected static boolean containInArrayFieldObject(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ? AND ? = ANY(" + field + ")");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, obj);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -121,11 +120,11 @@ public class SQLDB {
 
 
     //push an obj to an array(field) of a row where id = "id" in table
-    protected static void appendToArrayField(String table, int id, String field, Object obj) {
+    protected static void appendToArrayField(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_append(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setObject(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -133,11 +132,11 @@ public class SQLDB {
         }
     }
 
-    protected static void removeFromArrayField(String table, int id, String field, Object obj) {
+    protected static void removeFromArrayField(String table, Object id, String field, Object obj) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = array_remove(" + field + ",?) WHERE id = ?");
             preparedStatement.setObject(1, obj);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setObject(2, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -145,10 +144,10 @@ public class SQLDB {
         }
     }
 
-    protected static int sizeOfArrayField(String table, int id, String field) {
+    protected static int sizeOfArrayField(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("SELECT ARRAY_LENGTH(" + field + ", 1) FROM " + table + " WHERE id = ?");
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -159,7 +158,7 @@ public class SQLDB {
     }
 
     //value row based on HashMap<field, key>
-    protected static void updateFieldsKeys(String table, int id, HashMap<String, Object> fieldKeys) {
+    protected static void updateFieldsKeys(String table, Object id, HashMap<String, Object> fieldKeys) {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ");
@@ -179,7 +178,7 @@ public class SQLDB {
                 preparedStatement.setObject(i, obj);
                 i++;
             }
-            preparedStatement.setInt(i, id);
+            preparedStatement.setObject(i, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -222,7 +221,7 @@ public class SQLDB {
         ChatBoxDB.creatChatBox(Tools.jenkinsHash(userId, userId, false));
     }
 
-    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId ) {
+    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId , int profileId) {
         HashMap<String, Object> userUpdate = new HashMap<>();
         HashMap<String, Object> profileUpdate = new HashMap<>();
         ErrorType output= null;
@@ -284,7 +283,7 @@ public class SQLDB {
             }
         }
         if (!userUpdate.isEmpty()) UserDB.updateUser(userUpdate , userId);
-        if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,userId);
+        if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,profileId);
 
         return ErrorType.SUCCESS;
     }
@@ -296,6 +295,38 @@ public class SQLDB {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt("nextval");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    public static ResultSet getResultSet(String table , Object messageId){
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " where id=?");
+            preparedStatement.setObject(1, messageId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    protected static void increaseFieldKeyByOne(String table, Object id, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "+ 1 WHERE id = ?");
+            preparedStatement.setObject(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    protected static void decreaseFieldKeyByOne(String table, Object id, String field) {
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "- 1 WHERE id = ?");
+            preparedStatement.setObject(1, id);
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);//TODO handle exception
         }
