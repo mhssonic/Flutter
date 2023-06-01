@@ -20,6 +20,20 @@ public class SignUpForm {
     private String confirmPassword;
 
 
+    public SignUpForm(User user , Profile profile) {
+        this.firstName = profile.getFirstName();
+        this.lastName = profile.getLastName();
+        this.email = profile.getEmail();
+        this.phoneNumber = profile.getPhoneNumber();
+        this.country = profile.getCountry();
+        this.birthdate = profile.getBirthdate();
+        this.biography = profile.getBiography();
+        this.avatarPath = profile.getAvatarPath();
+        this.headerPath = profile.getHeaderPath();
+        this.userName = user.getUserName();
+        this.password = user.getPassword();
+    }
+
     public String getConfirmPassword() {
         return confirmPassword;
     }

@@ -3,6 +3,9 @@ package server.database;
 import server.Tools;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.user.Profile;
+import server.user.SignUpForm;
+import server.user.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -203,7 +206,7 @@ public class SQLDB {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             ArrayList<Object> arrayResult = new ArrayList<>();
-            while(resultSet.next())
+            while (resultSet.next())
                 arrayResult.add(resultSet.getObject(field));
             return arrayResult;
         } catch (SQLException e) {
@@ -221,19 +224,19 @@ public class SQLDB {
     public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId) {
         HashMap<String, Object> userUpdate = new HashMap<>();
         HashMap<String, Object> profileUpdate = new HashMap<>();
-        ErrorType output= null;
+        ErrorType output = null;
 
         for (String key : updatedData.keySet()) {
             String value = (String) updatedData.get(key);
             switch (key) {
                 case "first_name":
                 case "last_name":
-                    output = ErrorHandling.validLength(value , 50);
+                    output = ErrorHandling.validLength(value, 50);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
                 case "username":
-                    output = ErrorHandling.validLength(value , 32);
+                    output = ErrorHandling.validLength(value, 32);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validUsername(value);
                     if (output != ErrorType.SUCCESS) return output;
@@ -247,14 +250,14 @@ public class SQLDB {
                     userUpdate.put(key, value);
                     break;
                 case "email":
-                    output = ErrorHandling.validLength(value , 64);
+                    output = ErrorHandling.validLength(value, 64);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validEmail(value);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
                 case "phone_number":
-                    output = ErrorHandling.validLength(value , 13);
+                    output = ErrorHandling.validLength(value, 13);
                     if (output != ErrorType.SUCCESS) return output;
                     output = ErrorHandling.validPhoneNumber(value);
                     if (output != ErrorType.SUCCESS) return output;
@@ -268,7 +271,7 @@ public class SQLDB {
                     profileUpdate.put(key, value);
                     break;
                 case "bio":
-                    output = ErrorHandling.validLength(value , 160);
+                    output = ErrorHandling.validLength(value, 160);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
@@ -279,13 +282,13 @@ public class SQLDB {
                     break;
             }
         }
-        if (!userUpdate.isEmpty()) UserDB.updateUser(userUpdate , userId);
-        if (!profileUpdate.isEmpty()) ProfileDB.updateProfile(profileUpdate,userId);
+        if (!userUpdate.isEmpty()) UserDB.updateUser(userUpdate, userId);
+        if (!profileUpdate.isEmpty()) ProfileDB.updateProfile(profileUpdate, userId);
 
         return ErrorType.SUCCESS;
     }
 
-    public static int getDirectMessageId(){
+    public static int getDirectMessageId() {
         try {
             preparedStatement = connection.prepareStatement("select NEXTVAL('seq_message_id')  ");
 
@@ -297,7 +300,7 @@ public class SQLDB {
         }
     }
 
-    public static ResultSet getResultSet(String table , Object messageId){
+    public static ResultSet getResultSet(String table, Object messageId) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " where id=?");
             preparedStatement.setObject(1, messageId);
@@ -307,6 +310,7 @@ public class SQLDB {
             throw new RuntimeException(e);
         }
     }
+
     protected static void increaseFieldKeyByOne(String table, Object id, String field) {
         try {
             preparedStatement = connection.prepareStatement("UPDATE " + table + " SET " + field + " = " + field + "+ 1 WHERE id = ?");
@@ -328,4 +332,24 @@ public class SQLDB {
             throw new RuntimeException(e);//TODO handle exception
         }
     }
+
+    public static SignUpForm getUserProfile( String targetUsername) {
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM  users WHERE username = ?");
+            preparedStatement.setObject(1, targetUsername);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()){
+                return null; //TODO USERNAME OR ID?
+            }
+            int targetId = resultSet.getInt("id");
+
+            User user = UserDB.getUser(targetId);
+            Profile profile = ProfileDB.getProfile(targetId);
+            SignUpForm signUpForm = new SignUpForm(user , profile);
+            return signUpForm;
+    }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
 }

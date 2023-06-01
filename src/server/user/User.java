@@ -8,9 +8,15 @@ public class User {
     private String userName;
     private String password;
 
-    HashSet<User> following = new HashSet<>();
-    HashSet<User> follower = new HashSet<>();
-    HashSet<User> blocked = new HashSet<>();
+    HashSet<Integer> following = new HashSet<>();
+    HashSet<Integer> follower = new HashSet<>();
+    HashSet<Integer> blocked = new HashSet<>();
+
+    public User(String userName, HashSet<Integer> following, HashSet<Integer> follower) {
+        this.userName = userName;
+        this.following = following;
+        this.follower = follower;
+    }
 
     public String getUserId() {
         return userId;
@@ -44,27 +50,27 @@ public class User {
         this.password = password;
     }
 
-    public HashSet<User> getFollowing() {
+    public HashSet<Integer> getFollowing() {
         return following;
     }
 
-    public void setFollowing(HashSet<User> following) {
+    public void setFollowing(HashSet<Integer> following) {
         this.following = following;
     }
 
-    public HashSet<User> getFollower() {
+    public HashSet<Integer> getFollower() {
         return follower;
     }
 
-    public void setFollower(HashSet<User> follower) {
+    public void setFollower(HashSet<Integer> follower) {
         this.follower = follower;
     }
 
-    public HashSet<User> getBlocked() {
+    public HashSet<Integer> getBlocked() {
         return blocked;
     }
 
-    public void setBlocked(HashSet<User> blocked) {
+    public void setBlocked(HashSet<Integer> blocked) {
         this.blocked = blocked;
     }
 }

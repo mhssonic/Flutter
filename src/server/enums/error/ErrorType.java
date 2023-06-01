@@ -3,7 +3,10 @@ package server.enums.error;
 public enum ErrorType {
     SUCCESS,
     REQUIRED_FIELD_EMPTY,
+
+    DOESNT_EXIST,
     DUPLICATED_USERNAME,
+    ALREADY_VOTED,
     INVALID_PASS,
     MISMATCH,
     DUPLICATED_EMAIL,

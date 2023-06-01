@@ -15,8 +15,9 @@ public class Quote extends Tweet{
         super(messageId, authorId, text, postingTime, attachmentId , likes);
         this.quotedMessageID = quotedMessageID;
     }
+    public Quote(){}
 
-    public static ErrorType quote(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , int quotedMessageID){
+    public static ErrorType quote(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , int quotedMessageID){
       
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int quoteId = QuoteDB.createQuote(userId, context, attachmentId, hashtag, LocalDateTime.now(),quotedMessageID);
