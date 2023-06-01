@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
+import server.message.tweet.Quote;
 import server.message.tweet.Tweet;
 
 import java.net.HttpURLConnection;
@@ -33,7 +34,20 @@ public class MessageHandler {
     }
 
     public static void quoteHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
-
+        try {
+            Quote quote = objectMapper.treeToValue(jsonNode, Quote.class);
+            ErrorType errorType = Quote.quote(id , quote.getText() , quote.getAttachments() , new ArrayList[]{quote.getHashtag()} , Integer.parseInt(quote.getMessageId().toString())); //TODO HASHTAG?
+            if ( errorType != ErrorType.SUCCESS){
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200 , response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
     }
 
     public static void commentHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){

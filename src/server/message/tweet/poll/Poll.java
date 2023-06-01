@@ -6,6 +6,7 @@ import server.database.PollDB;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.tweet.Tweet;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -27,6 +28,10 @@ public class Poll extends Tweet {
         }
         else return validTweet(context);
 
+    }
+
+    public static void Vote(int userId , int choiceId ){
+        ChoiceDB.addVoters(userId ,choiceId);
     }
 
 }

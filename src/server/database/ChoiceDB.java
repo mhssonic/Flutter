@@ -1,6 +1,5 @@
 package server.database;
 
-import server.message.Attachment;
 import server.message.tweet.poll.Choice;
 
 import java.sql.ResultSet;
@@ -49,5 +48,9 @@ public class ChoiceDB extends SQLDB {
             }
         }
         return choices;
+    }
+
+    public static void addVoters(int userId , int choiceId){
+        appendToArrayField("choice" , choiceId , "voters" , userId );
     }
 }

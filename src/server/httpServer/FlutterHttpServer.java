@@ -20,8 +20,8 @@ public class FlutterHttpServer {
             httpServer.createContext("/unfollow", new FlutterHttpHandler(UserHandler::unFollowHandler));
             httpServer.createContext("/show-direct", new FlutterHttpHandler(UserHandler::showDirectHandler));
             httpServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
-            httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
             httpServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
+            httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
 
             httpServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
             httpServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));

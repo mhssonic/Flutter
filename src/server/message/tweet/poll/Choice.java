@@ -1,7 +1,5 @@
 package server.message.tweet.poll;
 
-import java.util.ArrayList;
-
 public class Choice {
     private int choiceId;
     private String text;
@@ -16,9 +14,10 @@ public class Choice {
         return text;
     }
 
-
     public Object[] getVoters() {
         return voters;
     }
+
+
 
 }
