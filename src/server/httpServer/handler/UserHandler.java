@@ -33,7 +33,6 @@ public class UserHandler {
     }
 
     public static void followHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
-
     }
 
     public static void unFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){

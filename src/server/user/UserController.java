@@ -10,7 +10,7 @@ import server.httpServer.handler.UserAuthHandler;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class userController {
+public class UserController {
     public static String signIn(String username, String password) {
         String id = UserDB.matchUserPass(username, password);
         if (id == null)
