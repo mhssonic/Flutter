@@ -139,7 +139,6 @@ public class MessageHandler {
     }
 
     public static void likeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
-        int i;
         try {
             int messageId = jsonNode.get("messageId").asInt();
 
@@ -158,6 +157,20 @@ public class MessageHandler {
     }
 
     public static void unlikeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int messageId = jsonNode.get("messageId").asInt();
 
+            ErrorType errorType = Tweet.removeLike(id, messageId);
+            if (errorType != ErrorType.SUCCESS) {
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
     }
 }
