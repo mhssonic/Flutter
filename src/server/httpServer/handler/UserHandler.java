@@ -18,14 +18,13 @@ import java.util.Map;
 
 public class UserHandler {
 
-    static int userId;
 
     public static void updateProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Map<String, Object> data = objectMapper.convertValue(jsonNode, new TypeReference<Map<String, Object>>() {
             });
             HashMap<String, Object> updatedData = (HashMap<String, Object>) data;
-            SQLDB.updateUserProfile(updatedData, userId);
+            SQLDB.updateUserProfile(updatedData, id);
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
         } catch (IOException e) {
             System.out.println(e.getMessage());
