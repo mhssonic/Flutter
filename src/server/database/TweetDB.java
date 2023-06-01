@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 public class TweetDB extends SQLDB {
-    public static int createTweet(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime) {
+    public static int createTweet(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime) {
         try {
-            Array hashtags = connection.createArrayOf("INT", hashtag);
+            Array hashtags = connection.createArrayOf("VARCHAR", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             //TODO attachment and id
             preparedStatement = connection.prepareStatement("INSERT INTO tweet (author ,favestar, hashtag, attachment , postingtime, context) VALUES (?,?,?,?,?,?) returning id");

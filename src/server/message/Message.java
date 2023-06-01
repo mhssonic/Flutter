@@ -1,5 +1,6 @@
 package server.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 public abstract class Message {
     protected Object messageId;
+    @JsonProperty("author-id")
     protected int authorId;
 
     @JsonProperty("text")

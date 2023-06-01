@@ -276,6 +276,7 @@ public class SQLDB {
                     profileUpdate.put(key, value);
                     break;
                 case "country":
+                    //TODO add some condition
                 case "header":
                 case "avatar":
                     profileUpdate.put(key, value);

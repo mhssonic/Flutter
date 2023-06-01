@@ -20,7 +20,7 @@ public class MessageHandler {
     public static void tweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Tweet tweet = objectMapper.treeToValue(jsonNode, Tweet.class);
-            ErrorType errorType = Tweet.tweet(id, tweet.getText(), tweet.getAttachments(), new ArrayList[]{tweet.getHashtag()}); //TODO HASHTAG?
+            ErrorType errorType = Tweet.tweet(id, tweet.getText(), tweet.getAttachments(), tweet.getHashtag()); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -54,7 +54,7 @@ public class MessageHandler {
     public static void quoteHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Quote quote = objectMapper.treeToValue(jsonNode, Quote.class);
-            ErrorType errorType = Quote.quote(id, quote.getText(), quote.getAttachments(), new ArrayList[]{quote.getHashtag()}, Integer.parseInt(quote.getMessageId().toString())); //TODO HASHTAG?
+            ErrorType errorType = Quote.quote(id, quote.getText(), quote.getAttachments(), quote.getHashtag(), Integer.parseInt(quote.getMessageId().toString())); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -71,7 +71,7 @@ public class MessageHandler {
     public static void commentHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Comment comment = objectMapper.treeToValue(jsonNode, Comment.class);
-            ErrorType errorType = Comment.comment(id, comment.getText(), comment.getAttachments(), new ArrayList[]{comment.getHashtag()}, comment.getReplyFrom()); //TODO HASHTAG?
+            ErrorType errorType = Comment.comment(id, comment.getText(), comment.getAttachments(), comment.getHashtag(), comment.getReplyFrom()); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -101,7 +101,7 @@ public class MessageHandler {
 
             Integer[] choiceId = ChoiceDB.creatChoices(choices);
 
-            ErrorType errorType = Poll.poll(id, poll.getText(), poll.getAttachments(), new ArrayList[]{poll.getHashtag()}, choiceId); //TODO HASHTAG?
+            ErrorType errorType = Poll.poll(id, poll.getText(), poll.getAttachments(), poll.getHashtag(), choiceId); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -120,7 +120,7 @@ public class MessageHandler {
     }
 
     public static void voteHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
-        int choiceId = jsonNode.get("choiceId").asInt();
+        int choiceId = jsonNode.get("choice-id").asInt();
 
         ErrorType errorType = ChoiceDB.addVoters(id, choiceId);
         if (errorType != ErrorType.SUCCESS) {
@@ -140,7 +140,7 @@ public class MessageHandler {
 
     public static void likeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            int messageId = jsonNode.get("messageId").asInt();
+            int messageId = jsonNode.get("message-id").asInt();
 
             ErrorType errorType = Tweet.like(id, messageId);
             if (errorType != ErrorType.SUCCESS) {
@@ -158,7 +158,7 @@ public class MessageHandler {
 
     public static void unlikeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            int messageId = jsonNode.get("messageId").asInt();
+            int messageId = jsonNode.get("message-id").asInt();
 
             ErrorType errorType = Tweet.removeLike(id, messageId);
             if (errorType != ErrorType.SUCCESS) {

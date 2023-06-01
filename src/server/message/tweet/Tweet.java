@@ -1,5 +1,7 @@
 package server.message.tweet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import server.Tools;
 import server.database.AttachmentDB;
 import server.database.ChatBoxDB;
@@ -18,7 +20,8 @@ public class Tweet extends Message{
     HashSet<User> like = new HashSet<>();
     int likes;
     HashSet<String> comment;
-    ArrayList<String> hashtag;
+    String[] hashtag;
+    @JsonProperty("retweet-count")
     int retweetCount;
     Boolean faveStar;
     final static int FAVESTAR_NUMBER = 10;
@@ -44,7 +47,7 @@ public class Tweet extends Message{
         return comment;
     }
 
-    public ArrayList<String> getHashtag() {
+    public String[] getHashtag() {
         return hashtag;
     }
 
@@ -56,7 +59,7 @@ public class Tweet extends Message{
         return faveStar;
     }
 
-    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag ){
+    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, String[] hashtag ){
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
@@ -134,7 +137,7 @@ public class Tweet extends Message{
         this.comment = comment;
     }
 
-    public void setHashtag(ArrayList<String> hashtag) {
+    public void setHashtag(String[] hashtag) {
         this.hashtag = hashtag;
     }
 
