@@ -84,7 +84,7 @@ public class Tweet extends Message{
     }
 
     public static ErrorType like(int userId, int tweetId){
-        if(TweetDB.likedBefore(userId, tweetId))
+        if(TweetDB.likedBefore(tweetId, userId))
             return ErrorType.ALREADY_LIKED;
       
         TweetDB.like(tweetId, userId);
@@ -94,7 +94,7 @@ public class Tweet extends Message{
     }
 
     public static ErrorType removeLike(int userId, int tweetId){
-        if(!TweetDB.likedBefore(userId, tweetId))
+        if(!TweetDB.likedBefore(tweetId, userId))
             return ErrorType.HAVE_NOT_LIKED;
         TweetDB.removeLike(tweetId, userId);
         return ErrorType.SUCCESS;

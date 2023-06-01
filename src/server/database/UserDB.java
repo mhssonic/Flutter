@@ -68,11 +68,10 @@ public class UserDB extends SQLDB {
         SQLDB.updateFieldsKeys("users", userId, userUpdate);
     }
 
-    //TODO Int id , userId?;
     public static ErrorType follow(int userId, int targetId) {
+        if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users", targetId, "blocked", userId)) return ErrorType.BLOCKED;
-        //TODO check for reputation?
 
 
         SQLDB.appendToArrayField("users", userId, "following", targetId);
@@ -80,10 +79,13 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
-    public static void unFollow(int userId, int targetId) {
+    public static ErrorType unFollow(int userId, int targetId) {
+        if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
+        if (!SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.HAVE_NOT_FOLLOWED;
         SQLDB.removeFromArrayField("users", userId, "following", targetId);
         SQLDB.removeFromArrayField("users", targetId, "follower", userId);
 
+        return ErrorType.SUCCESS;
     }
 
 
@@ -96,7 +98,8 @@ public class UserDB extends SQLDB {
     }
 
     public static ErrorType block(int userId, int targetId) {
-        if (isBlocked(targetId, userId)) return ErrorType.ALREADY_EXIST;
+        if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
+        if (isBlocked(userId, targetId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) {
             SQLDB.removeFromArrayField("users", userId, "following", targetId);
             SQLDB.removeFromArrayField("users", targetId, "follower", userId);
@@ -105,8 +108,11 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
-    public static void unBlock(int userId, int targetId) {
+    public static ErrorType unBlock(int userId, int targetId) {
+        if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
+        if (!SQLDB.containInArrayFieldObject("users", userId, "blocked", targetId)) return ErrorType.HAVE_NOT_BLOCKED;
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
+        return ErrorType.SUCCESS;
     }
 
     public static boolean isBlocked(int userId, int targetId) {

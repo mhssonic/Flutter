@@ -62,7 +62,7 @@ public class TweetDB extends SQLDB {
         SQLDB.removeFromArrayField(table, tweetId, "likes", userId);
     }
 
-    public static boolean likedBeforeFromTable(String table, int userId, int tweetId) {
+    public static boolean likedBeforeFromTable(String table, int tweetId, int userId) {
         return SQLDB.containInArrayFieldObject(table, tweetId, "likes", userId);
     }
 
@@ -86,7 +86,7 @@ public class TweetDB extends SQLDB {
         else if(tweetId % TweetType.count == TweetType.POLL.getMod()) removeLikeFromTable("poll", tweetId, userId);
     }
 
-    public static boolean likedBefore(int userId, int tweetId) {
+    public static boolean likedBefore(int tweetId, int userId) {
         if(tweetId % TweetType.count == TweetType.TWEET.getMod()) return likedBeforeFromTable("tweet", tweetId, userId);
         if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) return likedBeforeFromTable("retweet", tweetId, userId);
         if(tweetId % TweetType.count == TweetType.COMMENT.getMod()) return likedBeforeFromTable("comment", tweetId, userId);

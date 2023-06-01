@@ -21,4 +21,6 @@ public enum ErrorType {
     ALREADY_LIKED,
     HAVE_NOT_LIKED,
     PERMISSION_DENIED,
+    HAVE_NOT_FOLLOWED,
+    HAVE_NOT_BLOCKED,
 }

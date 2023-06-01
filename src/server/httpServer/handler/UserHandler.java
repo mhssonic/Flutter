@@ -54,11 +54,9 @@ public class UserHandler {
         try {
             int targetId = jsonNode.get("target-id").asInt();
             ErrorType error = UserDB.follow(id, targetId);
-            if (error == ErrorType.SUCCESS) {
-                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
-                return;
-            }
-            String response = objectMapper.writeValueAsString(error);
+
+            String response = error.toString();
+
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
             exchange.getResponseBody().write(response.getBytes());
             exchange.getResponseBody().close();
@@ -70,15 +68,54 @@ public class UserHandler {
     }
 
     public static void unFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int targetId = jsonNode.get("target-id").asInt();
+            ErrorType error = UserDB.unFollow(id, targetId);
 
+            String response = error.toString();
+
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (NullPointerException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void blockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int targetId = jsonNode.get("target-id").asInt();
+            ErrorType error = UserDB.block(id, targetId);
 
+            String response = error.toString();
+
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (NullPointerException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void unBlockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int targetId = jsonNode.get("target-id").asInt();
+            ErrorType error = UserDB.unBlock(id, targetId);
 
+            String response = error.toString();
+
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (NullPointerException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void showTimelineHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
