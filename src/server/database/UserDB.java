@@ -123,18 +123,23 @@ public class UserDB extends SQLDB {
             if (!resultSet.next()) return null;
 
             String username = resultSet.getString("username");
-            Object[] followerId = (Object[]) (resultSet.getArray("follower").getArray());
-            Object[] followingId = (Object[]) (resultSet.getArray("following").getArray());
-
+            Object[] followerId = null;
+            Object[] followingId = null;
             HashSet<Integer> follower = new HashSet<>();
             HashSet<Integer> following = new HashSet<>();
 
-            for (Object tmp : followerId) {
-                follower.add((int) tmp);
+            if (resultSet.getArray("follower" )!= null){
+                followerId = (Object[]) (resultSet.getArray("follower").getArray());
+                for (Object tmp : followerId) {
+                    follower.add((int) tmp);
+                }
             }
+            if (resultSet.getArray("following") != null){
+                followingId = (Object[]) (resultSet.getArray("following").getArray());
+                for (Object tmp : followingId) {
+                    following.add((int) tmp);
+                }
 
-            for (Object tmp : followingId) {
-                following.add((int) tmp);
             }
 
             User user = new User(username, following, follower);

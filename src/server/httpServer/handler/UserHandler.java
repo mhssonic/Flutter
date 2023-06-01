@@ -35,10 +35,9 @@ public class UserHandler {
 
     public static void showProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            jsonNode = objectMapper.readTree(exchange.getRequestBody());
-            String targetUserName = jsonNode.get("username").asText();
+            String targetUsername = jsonNode.get("username").asText();
 
-            SignUpForm signUpForm = SQLDB.getUserProfile(targetUserName);
+            SignUpForm signUpForm = SQLDB.getUserProfile(targetUsername);
             if (signUpForm == null){
                 String response = ErrorType.DOESNT_EXIST.toString();
                 exchange.sendResponseHeaders(200 , response.getBytes().length);
