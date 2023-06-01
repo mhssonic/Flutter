@@ -1,6 +1,5 @@
 package server.database;
 
-import server.message.Attachment;
 import server.message.tweet.Comment;
 import server.message.tweet.Tweet;
 
@@ -12,9 +11,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CommentDB extends TweetDB {
-    public static int createComment(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime, int reply) {
+    public static int createComment(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime, int reply) {
         try {
-            Array hashtags = connection.createArrayOf("VARCHAR(50)", hashtag);
+            Array hashtags = connection.createArrayOf("INT", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             //TODO attachment and id
             preparedStatement = connection.prepareStatement("INSERT INTO comment (author ,favestar, hashtag, attachment , postingtime, context, reply) VALUES (?,?,?,?,?,?,?) returning id");

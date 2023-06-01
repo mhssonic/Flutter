@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import server.database.ChoiceDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
+import server.message.tweet.Comment;
 import server.message.tweet.Quote;
 import server.message.tweet.Retweet;
 import server.message.tweet.Tweet;
@@ -68,6 +69,20 @@ public class MessageHandler {
     }
 
     public static void commentHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            Comment comment = objectMapper.treeToValue(jsonNode, Comment.class);
+            ErrorType errorType = Comment.comment(id, comment.getText(), comment.getAttachments(), new ArrayList[]{comment.getHashtag()}, comment.getReplyFrom()); //TODO HASHTAG?
+            if (errorType != ErrorType.SUCCESS) {
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
 
     }
 
@@ -111,20 +126,35 @@ public class MessageHandler {
         if (errorType != ErrorType.SUCCESS) {
             String response = errorType.toString();
             try {
-                exchange.sendResponseHeaders(200 , response.getBytes().length);
+                exchange.sendResponseHeaders(200, response.getBytes().length);
 
-            exchange.getResponseBody().write(response.getBytes());
-            exchange.getResponseBody().close();}
-            catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
 
     }
 
     public static void likeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        int i;
+        try {
+            int messageId = jsonNode.get("messageId").asInt();
 
+            ErrorType errorType = Tweet.like(id, messageId);
+            if (errorType != ErrorType.SUCCESS) {
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
     }
 
     public static void unlikeHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
