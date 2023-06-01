@@ -36,24 +36,22 @@ public class UserHandler {
     }
 
     public static void followHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
-        String targetId = jsonNode.get("target-id").asText();
-        if(targetId == null){
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-            return;
-        }
-        int target = Integer.parseInt(targetId);
-        ErrorType error = UserDB.follow(id, target);
-        if (error == ErrorType.SUCCESS){
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
-            return;
-        }
         try {
+            int targetId = jsonNode.get("target-id").asInt();
+            ErrorType error = UserDB.follow(id, targetId);
+            if (error == ErrorType.SUCCESS){
+                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+                return;
+            }
             String response = objectMapper.writeValueAsString(error);
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK , response.getBytes().length);
             exchange.getResponseBody().write(response.getBytes());
             exchange.getResponseBody().close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        }
+        catch (NullPointerException e){
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }catch (IOException e) {
+        System.out.println(e.getMessage());
         }
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import io.jsonwebtoken.Claims;
 import server.Tools;
 import server.httpServer.FlutterHttpServer;
 
@@ -30,13 +31,19 @@ public class FlutterHttpHandler implements HttpHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
 
-        String jwt = exchange.getRequestHeaders().get("token").get(0);
-        String strId = Tools.decodeJWT(jwt).getId();
-        if(strId != null) {
-            int id = Integer.parseInt(strId);
-            handler.handle(exchange, objectMapper,  jsonNode, id);
-        }
-        else {
+        try {
+            String strCookies = exchange.getRequestHeaders().get("Cookie").get(0);
+            String[] cookies = strCookies.split("token=", 2);
+
+            String strId = Tools.decodeJWT(cookies[1]).getId();
+            if(strId != null) {
+                int id = Integer.parseInt(strId);
+                handler.handle(exchange, objectMapper,  jsonNode, id);
+            }
+            else {
+                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
+            }
+        }catch (Exception e){
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
         }
     }
