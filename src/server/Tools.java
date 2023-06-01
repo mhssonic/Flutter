@@ -104,7 +104,8 @@ public class Tools {
         return builder.compact();
     }
 
-    public static Claims decodeJWT(String jwt, String key) {
+    public static Claims decodeJWT(String jwt) {
+        String key = SecretKeyDB.getSecretKey();
         //This line will throw an exception if it is not a signed JWS (as expected)
         try {
             Claims claims = Jwts.parser()

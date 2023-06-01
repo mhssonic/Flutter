@@ -220,7 +220,7 @@ public class SQLDB {
         ChatBoxDB.creatChatBox(Tools.jenkinsHash(userId, userId, false));
     }
 
-    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId , int profileId) {
+    public static ErrorType updateUserProfile(HashMap<String, Object> updatedData, int userId) {
         HashMap<String, Object> userUpdate = new HashMap<>();
         HashMap<String, Object> profileUpdate = new HashMap<>();
         ErrorType output= null;
@@ -282,7 +282,7 @@ public class SQLDB {
             }
         }
         if (!userUpdate.isEmpty()) UserDB.updateUser(userUpdate , userId);
-        if (!profileUpdate.isEmpty())ProfileDB.updateProfile(profileUpdate,profileId);
+        if (!profileUpdate.isEmpty()) ProfileDB.updateProfile(profileUpdate,userId);
 
         return ErrorType.SUCCESS;
     }

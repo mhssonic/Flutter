@@ -27,8 +27,8 @@ public class UserAuthHandler {
                 FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
             }
-            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
 
+            exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -49,8 +49,6 @@ public class UserAuthHandler {
                 exchange.getResponseBody().close();
                 return;
             }
-            String jwt = Tools.creatJWT(signUpForm.getUserName(), LocalDate.now(), LocalDate.now().plusDays(VALID_TOKEN));
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

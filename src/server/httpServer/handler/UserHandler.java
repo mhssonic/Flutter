@@ -16,10 +16,8 @@ public class UserHandler {
 
     static int userId;
 
-    public static void updateProfileHandler(HttpExchange exchange){
-        ObjectMapper objectMapper = new ObjectMapper();
+    public static void updateProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
         try {
-            JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
             Map<String , Object> data = objectMapper.convertValue(jsonNode, new TypeReference<Map<String, Object>>(){});
             HashMap<String, Object> updatedData = (HashMap<String, Object>) data;
             SQLDB.updateUserProfile(updatedData , userId);
@@ -30,31 +28,31 @@ public class UserHandler {
         }
     }
 
-    public static void showProfileHandler(HttpExchange exchange){
+    public static void showProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void followHandler(HttpExchange exchange){
+    public static void followHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void unFollowHandler(HttpExchange exchange){
+    public static void unFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void blockHandler(HttpExchange exchange){
+    public static void blockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void unBlockHandler(HttpExchange exchange){
+    public static void unBlockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void showTimelineHandler(HttpExchange exchange){
+    public static void showTimelineHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 
-    public static void showDirectHandler(HttpExchange exchange){
+    public static void showDirectHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
 
     }
 }

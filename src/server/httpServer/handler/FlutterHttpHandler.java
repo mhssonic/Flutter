@@ -1,16 +1,19 @@
 package server.httpServer.handler;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import server.Tools;
 import server.httpServer.FlutterHttpServer;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
 public class FlutterHttpHandler implements HttpHandler {
-    HttpHandler handler;
+    FlutterHandle handler;
 
-    public FlutterHttpHandler(HttpHandler handler) {
+    public FlutterHttpHandler(FlutterHandle handler) {
         this.handler = handler;
     }
 
@@ -24,7 +27,17 @@ public class FlutterHttpHandler implements HttpHandler {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             return;
         }
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
 
-        handler.handle(exchange);
+        String jwt = exchange.getRequestHeaders().get("Token").get(0);
+        String strId = Tools.decodeJWT(jwt).getId();
+        if(strId != null) {
+            int id = Integer.parseInt(strId);
+            handler.handle(exchange, objectMapper,  jsonNode, id);
+        }
+        else {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
+        }
     }
 }
