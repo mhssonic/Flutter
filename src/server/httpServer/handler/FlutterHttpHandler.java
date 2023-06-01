@@ -30,7 +30,7 @@ public class FlutterHttpHandler implements HttpHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
 
-        String jwt = exchange.getRequestHeaders().get("Token").get(0);
+        String jwt = exchange.getRequestHeaders().get("token").get(0);
         String strId = Tools.decodeJWT(jwt).getId();
         if(strId != null) {
             int id = Integer.parseInt(strId);
