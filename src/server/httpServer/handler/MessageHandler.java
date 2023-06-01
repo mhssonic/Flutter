@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class MessageHandler {
     public static void tweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id){
         try {
-            jsonNode = objectMapper.readTree(exchange.getRequestBody());
             Tweet tweet = objectMapper.treeToValue(jsonNode, Tweet.class);
             ErrorType errorType = Tweet.tweet(id , tweet.getText() , tweet.getAttachments() , new ArrayList[]{tweet.getHashtag()}); //TODO HASHTAG?
             if ( errorType != ErrorType.SUCCESS){

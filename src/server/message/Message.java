@@ -1,5 +1,6 @@
 package server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 public abstract class Message {
     protected Object messageId;
     protected int authorId;
+
+    @JsonProperty("text")
     protected String text;
     protected LocalDateTime postingTime;
     protected final static int MAX_LENGTH_MESSAGE = 280;
@@ -29,6 +32,7 @@ public abstract class Message {
         this.postingTime = postingTime;
         this.attachmentId = attachmentId;
     }
+    public Message(){}
 
     public static ErrorType validMessage(String context){
         ErrorType errorType = ErrorHandling.validLength(context, MAX_LENGTH_MESSAGE);

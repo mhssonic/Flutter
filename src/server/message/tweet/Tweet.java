@@ -27,6 +27,9 @@ public class Tweet extends Message{
         super(messageId, authorId, text, postingTime, attachmentId);
         this.likes = likes;
     }
+    public Tweet(){
+        super();
+    }
 
 
     public HashSet<User> getLike() {
