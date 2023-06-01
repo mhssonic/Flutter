@@ -1,12 +1,14 @@
 package server.database;
 
 import server.enums.error.ErrorType;
+import server.user.User;
 
 import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class UserDB extends SQLDB {
     public static void main(String[] args) {
@@ -22,7 +24,7 @@ public class UserDB extends SQLDB {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(resultSet.getInt("id"));
                 return stringBuffer.toString();
@@ -35,16 +37,16 @@ public class UserDB extends SQLDB {
     }
 
 
-    public static int createUser(String username , String password){
-        try{
+    public static int createUser(String username, String password) {
+        try {
             preparedStatement = connection.prepareStatement("INSERT INTO users (username , password) VALUES (?,?) returning id");
-            preparedStatement.setString(1,username);
-            preparedStatement.setString(2,password);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt("id");
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -88,13 +90,14 @@ public class UserDB extends SQLDB {
     public static Array getFollower(int userId) {
         return (Array) getFieldObject("users", userId, "follower");
     }
+
     public static Array getFollowing(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "following");
     }
 
     public static ErrorType block(int userId, int targetId) {
         if (isBlocked(targetId, userId)) return ErrorType.ALREADY_EXIST;
-        if (SQLDB.containInArrayFieldObject("users" , userId , "following" , targetId)){
+        if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) {
             SQLDB.removeFromArrayField("users", userId, "following", targetId);
             SQLDB.removeFromArrayField("users", targetId, "follower", userId);
         }
@@ -102,15 +105,44 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
-    public static void unBlock (int userId, int targetId) {
+    public static void unBlock(int userId, int targetId) {
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
     }
 
-    public static boolean isBlocked(int userId, int targetId){
+    public static boolean isBlocked(int userId, int targetId) {
         return containInArrayFieldObject("users", userId, "blocked", targetId);
     }
 
-    public static ArrayList<Object> getUsersId(){
+    public static ArrayList<Object> getUsersId() {
         return getAllKeyOfField("users", "id");
     }
+
+    public static User getUser(int targetId) {
+        try {
+            ResultSet resultSet = getResultSet("users", targetId);
+            if (!resultSet.next()) return null;
+
+            String username = resultSet.getString("username");
+            Object[] followerId = (Object[]) (resultSet.getArray("follower").getArray());
+            Object[] followingId = (Object[]) (resultSet.getArray("following").getArray());
+
+            HashSet<Integer> follower = new HashSet<>();
+            HashSet<Integer> following = new HashSet<>();
+
+            for (Object tmp : followerId) {
+                follower.add((int) tmp);
+            }
+
+            for (Object tmp : followingId) {
+                following.add((int) tmp);
+            }
+
+            User user = new User(username, following, follower);
+            return user;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

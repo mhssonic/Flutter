@@ -1,6 +1,6 @@
 package server.database;
 
-import server.enums.error.ErrorType;
+import server.user.Profile;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -38,6 +38,31 @@ public class ProfileDB extends SQLDB {
     //TODO PROFILE ID?
     public static void updateProfile(HashMap<String,Object> profileUpdate , int profileId){
         SQLDB.updateFieldsKeys("profile" , profileId , profileUpdate);
+    }
+
+
+    public static Profile getProfile(int targetId){
+        try{
+            ResultSet resultSet = getResultSet("profile" , targetId);
+            if (!resultSet.next()) return null;
+
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String email = resultSet.getString("email");
+            String phoneNumber = resultSet.getString("phone_number");
+            String country = resultSet.getString("country");
+            String birthdate = resultSet.getDate("birthdate").toString();//TODO
+            String bio = resultSet.getString("bio");
+            String avatar = resultSet.getString("avatar");
+            String header = resultSet.getString("header");
+
+
+
+            Profile profile = new Profile(firstName , lastName , email , phoneNumber , country , birthdate , bio , avatar , header);
+            return profile;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
