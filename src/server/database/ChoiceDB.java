@@ -1,5 +1,6 @@
 package server.database;
 
+import server.enums.error.ErrorType;
 import server.message.tweet.poll.Choice;
 
 import java.sql.ResultSet;
@@ -50,7 +51,11 @@ public class ChoiceDB extends SQLDB {
         return choices;
     }
 
-    public static void addVoters(int userId , int choiceId){
+    public static ErrorType addVoters(int userId , int choiceId){
+        if(containInArrayFieldObject("choice" , choiceId , "voters" , userId)){
+            return ErrorType.ALREADY_VOTED;
+        }
         appendToArrayField("choice" , choiceId , "voters" , userId );
+        return ErrorType.SUCCESS;
     }
 }

@@ -6,6 +6,7 @@ public enum ErrorType {
 
     DOESNT_EXIST,
     DUPLICATED_USERNAME,
+    ALREADY_VOTED,
     INVALID_PASS,
     MISMATCH,
     DUPLICATED_EMAIL,
