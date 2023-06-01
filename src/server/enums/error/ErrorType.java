@@ -2,6 +2,7 @@ package server.enums.error;
 
 public enum ErrorType {
     SUCCESS,
+    REQUIRED_FIELD_EMPTY,
     DUPLICATED_USERNAME,
     INVALID_PASS,
     MISMATCH,

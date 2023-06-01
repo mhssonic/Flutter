@@ -37,11 +37,18 @@ public class UserController {
         output = ErrorHandling.validConfirm(password, confirmPassword);
         if (output != ErrorType.SUCCESS) return output;
 
-        output = ErrorHandling.validEmail(email);
-        if (output != ErrorType.SUCCESS) return output;
+        if( email != null){
+            output = ErrorHandling.validEmail(email);
+            if (output != ErrorType.SUCCESS) return output;
+        }
+        else if (phoneNumber != null){
+            output = ErrorHandling.validPhoneNumber(phoneNumber);
+            if (output != ErrorType.SUCCESS) return output;
+        }
+        else {
+            return ErrorType.REQUIRED_FIELD_EMPTY;
+        }
 
-        output = ErrorHandling.validPhoneNumber(phoneNumber);
-        if (output != ErrorType.SUCCESS) return output;
 
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;

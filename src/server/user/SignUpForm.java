@@ -1,6 +1,11 @@
 package server.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 public class SignUpForm {
+
+    @JsonProperty("firstName")
     private String firstName;
     private String lastName;
     private String email;
@@ -13,6 +18,7 @@ public class SignUpForm {
     private String userName;
     private String password;
     private String confirmPassword;
+
 
     public String getConfirmPassword() {
         return confirmPassword;

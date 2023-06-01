@@ -45,6 +45,7 @@ public class UserAuthHandler {
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
             }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
