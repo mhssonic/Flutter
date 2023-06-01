@@ -12,13 +12,15 @@ import java.util.ArrayList;
 
 public class Poll extends Tweet {
     private Object[] choiceId;
+    private  Object[] choices;
 
     public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int likes ,Object[] choiceId ) {
         super(messageId, authorId, text, postingTime, attachmentId, likes);
         this.choiceId = choiceId;
     }
 
-    public static ErrorType poll(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag , Object[] choices){
+    public Poll(){}
+    public static ErrorType poll(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , Object[] choices){
         Integer[] choiceId = (Integer[]) choices;
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
 
@@ -34,4 +36,19 @@ public class Poll extends Tweet {
         ChoiceDB.addVoters(userId ,choiceId);
     }
 
+    public Object[] getChoiceId() {
+        return choiceId;
+    }
+
+    public Object[] getChoices() {
+        return choices;
+    }
+
+    public void setChoices(Object[] choices) {
+        this.choices = choices;
+    }
+
+    public void setChoiceId(Object[] choiceId) {
+        this.choiceId = choiceId;
+    }
 }

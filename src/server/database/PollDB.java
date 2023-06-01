@@ -9,10 +9,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import static server.database.SQLDB.connection;
-
 public class PollDB extends TweetDB{
-    public static int createPoll(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
+    public static int createPoll(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
         try {
             Array hashtags = connection.createArrayOf("INT", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
