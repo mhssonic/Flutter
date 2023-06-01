@@ -20,7 +20,6 @@ public class UserAuthHandler {
             String username = jsonNode.get("username").asText();
             String password = jsonNode.get("password").asText();
             String jwt = UserController.signIn(username, password);
-
             if(jwt == null){
                 FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_UNAUTHORIZED);
                 return;
@@ -28,9 +27,9 @@ public class UserAuthHandler {
 
             exchange.getResponseHeaders().add("Set-Cookie", "token=" + jwt);
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new RuntimeException(e);
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         }
     }
     public static void signUpHandler(HttpExchange exchange)  {
@@ -45,10 +44,10 @@ public class UserAuthHandler {
                 exchange.sendResponseHeaders(200 , response.getBytes().length);
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
-                return;
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         }
     }
 }

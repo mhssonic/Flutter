@@ -29,7 +29,8 @@ public class UserDB extends SQLDB {
             }
             return null;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 

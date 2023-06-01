@@ -101,10 +101,10 @@ IF NOT EXISTS (
     )
 Then
 CREATE TABLE secret_key (
-    key VARCHAR(50),
+    id VARCHAR(50),
     value VARCHAR(200)
 );
-INSERT INTO secret_key (key, value) values('token', 'ba esm ramz pashmak');
+INSERT INTO secret_key (id, value) values('token', 'ba esm ramz pashmak');
 
 end if;
 
