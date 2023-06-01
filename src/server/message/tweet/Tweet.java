@@ -1,8 +1,10 @@
 package server.message.tweet;
 
 import server.Tools;
-import server.database.*;
-import server.enums.TweetType;
+import server.database.AttachmentDB;
+import server.database.ChatBoxDB;
+import server.database.TweetDB;
+import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Message;
@@ -51,7 +53,7 @@ public class Tweet extends Message{
         return faveStar;
     }
 
-    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Integer[] hashtag ){
+    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag ){
         Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
@@ -115,5 +117,29 @@ public class Tweet extends Message{
     public static void showTweet(int userId , int start , int finish){
         int chatBoxId = Tools.jenkinsHash(userId, userId, false);
         showMessage(start , finish , chatBoxId);
+    }
+
+    public void setLike(HashSet<User> like) {
+        this.like = like;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setComment(HashSet<String> comment) {
+        this.comment = comment;
+    }
+
+    public void setHashtag(ArrayList<String> hashtag) {
+        this.hashtag = hashtag;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setFaveStar(Boolean faveStar) {
+        this.faveStar = faveStar;
     }
 }
