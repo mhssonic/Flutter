@@ -7,6 +7,7 @@ import server.database.ChoiceDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
 import server.message.tweet.Quote;
+import server.message.tweet.Retweet;
 import server.message.tweet.Tweet;
 import server.message.tweet.poll.Poll;
 
@@ -33,7 +34,20 @@ public class MessageHandler {
     }
 
     public static void retweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
-
+        try {
+            Retweet retweet = objectMapper.treeToValue(jsonNode, Retweet.class);
+            ErrorType errorType = Retweet.retweet(retweet.getRetweetedMessageId(), id); //TODO HASHTAG?
+            if (errorType != ErrorType.SUCCESS) {
+                String response = errorType.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
     }
 
     public static void quoteHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
