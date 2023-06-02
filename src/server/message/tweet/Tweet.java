@@ -1,6 +1,5 @@
 package server.message.tweet;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.Tools;
 import server.database.AttachmentDB;
@@ -60,7 +59,7 @@ public class Tweet extends Message{
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, String[] hashtag ){
-        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
+        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
         int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,tweetId);

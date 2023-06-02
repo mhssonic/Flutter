@@ -42,16 +42,17 @@ public class DirectMessage extends Message {
 
     public DirectMessage(){}
 
-    public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Attachment> attachments){
+    public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Integer> attachments){
         ErrorType errorType = validMessage(context);
         if(errorType != ErrorType.SUCCESS)
             return errorType;
         if(UserDB.isBlocked(user, targetUser))
             return ErrorType.BLOCKED;
+        if(!AttachmentDB.checkAttachments(attachments))
+            return ErrorType.DOESNT_EXIST;
 
-        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int messageId = SQLDB.getDirectMessageId();
-        DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachmentId);
+        DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachments);
 
         int chatBoxId = Tools.jenkinsHash(user, targetUser, true);
         if(!ChatBoxDB.containChatBox(chatBoxId))//TODO handle it better

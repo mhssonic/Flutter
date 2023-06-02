@@ -3,7 +3,6 @@ package server.database;
 import server.enums.FileType;
 import server.message.Attachment;
 
-import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,14 +22,8 @@ public class AttachmentDB extends SQLDB {
         }
     }
 
-    public static Integer[] creatAttachments(ArrayList<Attachment> attachments){
-        Integer[] attachmentId = new Integer[attachments.size()];
-        int i = 0;
-        for ( Attachment attachment : attachments) {
-            attachmentId[i] = AttachmentDB.createAttachment(attachment);
-            i++;
-        }
-        return attachmentId;
+    public static boolean checkAttachments(ArrayList<Integer> attachments){
+        return containIdsInTable("attachment", attachments);
     }
 
     public static ArrayList<Attachment> getAttachment(int[]attachmentIds){

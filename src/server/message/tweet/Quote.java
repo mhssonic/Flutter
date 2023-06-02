@@ -19,7 +19,7 @@ public class Quote extends Tweet{
 
     public static ErrorType quote(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , int quotedMessageID){
       
-        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
+        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
         int quoteId = QuoteDB.createQuote(userId, context, attachmentId, hashtag, LocalDateTime.now(),quotedMessageID);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,quoteId);

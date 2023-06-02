@@ -18,7 +18,7 @@ public class Comment extends Tweet{
     public Comment(){}
 
     public static ErrorType comment(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , int replyFrom){
-        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
+        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
         int commentId = CommentDB.createComment(userId, context, attachmentId, hashtag, LocalDateTime.now(),replyFrom);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,replyFrom);

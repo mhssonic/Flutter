@@ -20,11 +20,11 @@ public class Poll extends Tweet {
     }
 
     public Poll(){}
-    public static ErrorType poll(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , Object[] choices){
+    public static ErrorType poll(int userId, String context, ArrayList<Integer> attachments, Object[] hashtag , Object[] choices){
         Integer[] choiceId = (Integer[]) choices;
-        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
-
-        int pollId = PollDB.createPoll(userId, context, attachmentId, hashtag, LocalDateTime.now() , choiceId);
+        if(!AttachmentDB.checkAttachments(attachments))
+            return ErrorType.DOESNT_EXIST;
+        int pollId = PollDB.createPoll(userId, context, attachments, hashtag, LocalDateTime.now() , choiceId);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,pollId);
         }

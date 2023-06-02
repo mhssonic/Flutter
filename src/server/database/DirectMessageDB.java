@@ -10,6 +10,7 @@ import server.message.Direct.DirectMessage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DirectMessageDB {
     static MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
@@ -24,10 +25,11 @@ public class DirectMessageDB {
         }
     }
 
-    public static void createDirectMessage(int id, int user, String context, int reply, Integer[] attachments){
+    public static void createDirectMessage(int id, int user, String context, int reply, ArrayList<Integer> attachments){
         MongoCollection messageCollection = database.getCollection("direct_message");
-
-        Document direct = DirectMessage.messageToDoc(id, user, context, reply, LocalDateTime.now(), attachments);
+        Integer[] attachmentsId = attachments.toArray(new Integer[attachments.size()]);
+        //TODO fix above shit
+        Document direct = DirectMessage.messageToDoc(id, user, context, reply, LocalDateTime.now(), attachmentsId);
         messageCollection.insertOne(direct);
     }
 
