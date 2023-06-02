@@ -23,10 +23,11 @@ public class SQLDB {
 
     public static void main(String[] args) {
         run();
-        Integer[] one = new Integer[10];
-        ArrayList<Object> array = new ArrayList<>();
-        array.add(-199);
-        System.out.println(containArrayInArrayFieldObject("users", -2000000000, "following", array));
+//        Integer[] one = new Integer[10];
+//        ArrayList<Integer> array = new ArrayList<>();
+//        array.add(-2000000000);
+//        array.add(-199999998);
+//        System.out.println(containIdsInTable("users", array));
 //        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
 //        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
 //        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
@@ -144,6 +145,24 @@ public class SQLDB {
         }
     }
 
+    protected static boolean containIdsInTable(String table, ArrayList<Integer> ids) {
+        StringBuilder arrayString = new StringBuilder("(\'{");
+        for(Integer id : ids)
+            arrayString.append(id).append(',');
+        arrayString.setCharAt(arrayString.length() - 1, '}');
+        arrayString.append("\')");
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = Any" + arrayString);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            int size = 0;
+            while (resultSet.next())
+                size++;
+            return size == ids.size();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
 
     //push an obj to an array(field) of a row where id = "id" in table
     protected static void appendToArrayField(String table, Object id, String field, Object obj) {
