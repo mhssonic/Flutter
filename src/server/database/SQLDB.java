@@ -24,10 +24,13 @@ public class SQLDB {
     public static void main(String[] args) {
         run();
         Integer[] one = new Integer[10];
-        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
-        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
-        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
-        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
+        ArrayList<Object> array = new ArrayList<>();
+        array.add(-199);
+        System.out.println(containArrayInArrayFieldObject("users", -2000000000, "following", array));
+//        createUserProfile("Mohammad hadi", "setak", "mhs", "a powerful password", "email", "", "CA", LocalDate.of(2004, 3, 11), "", "", "");
+//        createUserProfile("mahya", "be", "coco", "Cotton_candy", "beheshtimahya11@gmail.com", "", "Ir", LocalDate.now(), "", "", "");
+//        createUserProfile("random guy", "random family", "random", "r@ndom", "email", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
+//        createUserProfile("random guy2", "random family2", "random2", "r@ndom", "email2", "", "CA", LocalDate.of(2004, 9, 11), "", "", "");
 //        UserDB.follow(-1999999999, -2000000000 );
 //        ArrayList<Attachment> attachments = new ArrayList<>();
 //        attachments.add(new Attachment("123" , FileType.VIDEO));
@@ -110,6 +113,29 @@ public class SQLDB {
             preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE id = ? AND ? = ANY(" + field + ")");
             preparedStatement.setObject(1, id);
             preparedStatement.setObject(2, obj);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
+
+    protected static boolean containArrayInArrayFieldObject(String table, Object id, String field, ArrayList<Object> arrayObject) {
+        try {
+            StringBuilder query = new StringBuilder("SELECT * FROM " + table + " WHERE id = ? AND Array[");
+            for(int i = 0; i < arrayObject.size(); i++)
+                query.append("?,");
+            query.setCharAt(query.length() - 1, ']');
+            query.append(" <@ ").append(field);
+
+            preparedStatement = connection.prepareStatement(query.toString());
+            preparedStatement.setObject(1, id);
+            int i = 2;
+            for (Object obj : arrayObject){
+                preparedStatement.setObject(i, obj);
+                i++;
+            }
 
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
