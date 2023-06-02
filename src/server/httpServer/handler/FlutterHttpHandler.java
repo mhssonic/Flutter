@@ -34,8 +34,9 @@ public class FlutterHttpHandler implements HttpHandler {
         try {
             String strCookies = exchange.getRequestHeaders().get("Cookie").get(0);
             String[] cookies = strCookies.split("token=", 2);
+            String[] token = cookies[1].split(";", 2);
 
-            String strId = Tools.decodeJWT(cookies[1]).getId();
+            String strId = Tools.decodeJWT(token[0]).getId();
             if(strId != null) {
                 int id = Integer.parseInt(strId);
                 handler.handle(exchange, objectMapper,  jsonNode, id);

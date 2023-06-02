@@ -27,7 +27,7 @@ public class FlutterHttpServer {
             httpServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));
             httpServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
             httpServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
-            httpServer.createContext("/directMessageHandler", new FlutterHttpHandler(MessageHandler::directMessageHandler));
+            httpServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
             httpServer.createContext("/commentHandler", new FlutterHttpHandler(MessageHandler::commentHandler));
             httpServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
             httpServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));

@@ -1,28 +1,22 @@
 package server.message.Direct;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.Document;
 import server.Tools;
-import server.database.ChatBoxDB;
-import server.database.DirectMessageDB;
-import server.database.SQLDB;
-import server.database.UserDB;
+import server.database.*;
 import server.enums.error.ErrorType;
+import server.message.Attachment;
 import server.message.Message;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DirectMessage extends Message {
-    public static void main(String[] args) {
-        SQLDB.run();
-        DirectMessageDB.run();
-        ArrayList<Integer> attachment = new ArrayList<>();
-        attachment.add(123);
-        sendDirectMessage(-2000000000, -1999999999, "hey whats up", 0, attachment);
-    }
     int reply;
+    @JsonProperty("target-id")
+    int targetUser;
 
-    public static Document messageToDoc(int id , int user , String context, int reply, LocalDateTime dateTime, ArrayList<Integer> attachmentId){
+    public static Document messageToDoc(int id , int user , String context, int reply, LocalDateTime dateTime, Integer[] attachmentId){
         Document message = new Document();
         message.put("_id", id);
         message.put("author", user);
@@ -33,18 +27,29 @@ public class DirectMessage extends Message {
         return message;
     }
 
+    public void setReply(int reply) {
+        this.reply = reply;
+    }
+
+    public void setTargetUser(int targetUser) {
+        this.targetUser = targetUser;
+    }
+
     public DirectMessage(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int reply) {
         super(messageId, authorId, text, postingTime, attachmentId);
         this.reply = reply;
     }
 
-    public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Integer> attachmentId){
+    public DirectMessage(){}
+
+    public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Attachment> attachments){
         ErrorType errorType = validMessage(context);
         if(errorType != ErrorType.SUCCESS)
             return errorType;
         if(UserDB.isBlocked(user, targetUser))
             return ErrorType.BLOCKED;
 
+        Integer[] attachmentId = AttachmentDB.creatAttachments(attachments);
         int messageId = SQLDB.getDirectMessageId();
         DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachmentId);
 
@@ -53,5 +58,13 @@ public class DirectMessage extends Message {
             ChatBoxDB.creatChatBox(chatBoxId);
         ChatBoxDB.appendMessage(chatBoxId, messageId);
         return ErrorType.SUCCESS;
+    }
+
+    public int getReply() {
+        return reply;
+    }
+
+    public int getTargetUser() {
+        return targetUser;
     }
 }

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import server.database.ChoiceDB;
+import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
+import server.message.Direct.DirectMessage;
 import server.message.tweet.Comment;
 import server.message.tweet.Quote;
 import server.message.tweet.Retweet;
@@ -87,7 +89,25 @@ public class MessageHandler {
     }
 
     public static void directMessageHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            DirectMessage directMessage = objectMapper.treeToValue(jsonNode, DirectMessage.class);
+            ErrorType error = DirectMessage.sendDirectMessage(id, directMessage.getTargetUser(), directMessage.getText(),directMessage.getReply() , directMessage.getAttachmentId());
 
+            String response = error.toString();
+
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (NullPointerException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+            System.out.println(e.getMessage());
+        }
+        catch (Exception e) {
+        FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR);
+        System.out.println(e.getMessage());
+        }
     }
 
     public static void pollHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {

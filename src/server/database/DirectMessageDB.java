@@ -15,15 +15,6 @@ public class DirectMessageDB {
     static MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
     static MongoDatabase database = mongoClient.getDatabase("flutter");
 
-    public static void main(String[] args) {
-        run();
-        SQLDB.run();
-        ArrayList<Integer> attachment = new ArrayList<>();
-        attachment.add(123);
-        createDirectMessage(-20001, -111, "hi",  0, attachment);
-        DirectMessage directMessage = getMessage(-20001);
-    }
-
     public static void run(){
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("flutter");
@@ -33,7 +24,7 @@ public class DirectMessageDB {
         }
     }
 
-    public static void createDirectMessage(int id, int user, String context, int reply, ArrayList<Integer> attachments){
+    public static void createDirectMessage(int id, int user, String context, int reply, Integer[] attachments){
         MongoCollection messageCollection = database.getCollection("direct_message");
 
         Document direct = DirectMessage.messageToDoc(id, user, context, reply, LocalDateTime.now(), attachments);

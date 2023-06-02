@@ -63,6 +63,7 @@ public class UserHandler {
         } catch (NullPointerException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
         }
     }
@@ -80,6 +81,7 @@ public class UserHandler {
         } catch (NullPointerException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
         }
     }
@@ -97,6 +99,7 @@ public class UserHandler {
         } catch (NullPointerException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
         }
     }
@@ -114,6 +117,7 @@ public class UserHandler {
         } catch (NullPointerException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
         }
     }
