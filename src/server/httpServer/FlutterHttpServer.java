@@ -5,12 +5,16 @@ import com.sun.net.httpserver.HttpServer;
 import server.httpServer.handler.*;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FlutterHttpServer {
     public static void run(){
         try {
             InetSocketAddress socket = new InetSocketAddress(5050);
-            HttpServer httpServer = HttpServer.create(socket,50);
+            HttpServer httpServer = HttpServer.create(socket,10);
+            ExecutorService executorService = Executors.newFixedThreadPool(50);
 
             httpServer.createContext("/sign-up", new FlutterAuthHandler(UserAuthHandler::signUpHandler));
             httpServer.createContext("/sign-in", new FlutterAuthHandler(UserAuthHandler::signInHandler));
@@ -34,6 +38,7 @@ public class FlutterHttpServer {
             httpServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
             httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
 
+            httpServer.setExecutor(executorService);
             httpServer.start();
         }catch (Exception e){
             System.out.println(e.getMessage());

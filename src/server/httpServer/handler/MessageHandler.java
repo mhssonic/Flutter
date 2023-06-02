@@ -23,12 +23,11 @@ public class MessageHandler {
         try {
             Tweet tweet = objectMapper.treeToValue(jsonNode, Tweet.class);
             ErrorType errorType = Tweet.tweet(id, tweet.getText(), tweet.getAttachments(), tweet.getHashtag()); //TODO HASHTAG?
-            if (errorType != ErrorType.SUCCESS) {
-                String response = errorType.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
-                exchange.getResponseBody().close();
-            }
+
+            String response = errorType.toString();
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -89,25 +88,25 @@ public class MessageHandler {
     }
 
     public static void directMessageHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
-        try {
-            DirectMessage directMessage = objectMapper.treeToValue(jsonNode, DirectMessage.class);
-            ErrorType error = DirectMessage.sendDirectMessage(id, directMessage.getTargetUser(), directMessage.getText(),directMessage.getReply() , directMessage.getAttachmentId());
-
-            String response = error.toString();
-
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
-            exchange.getResponseBody().write(response.getBytes());
-            exchange.getResponseBody().close();
-        } catch (NullPointerException e) {
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-        } catch (IOException e) {
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-            System.out.println(e.getMessage());
-        }
-        catch (Exception e) {
-        FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR);
-        System.out.println(e.getMessage());
-        }
+//        try {
+//            DirectMessage directMessage = objectMapper.treeToValue(jsonNode, DirectMessage.class);
+//            ErrorType error = DirectMessage.sendDirectMessage(id, directMessage.getTargetUser(), directMessage.getText(),directMessage.getReply() , directMessage.getAttachmentId());
+//
+//            String response = error.toString();
+//
+//            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+//            exchange.getResponseBody().write(response.getBytes());
+//            exchange.getResponseBody().close();
+//        } catch (NullPointerException e) {
+//            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+//        } catch (IOException e) {
+//            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+//            System.out.println(e.getMessage());
+//        }
+//        catch (Exception e) {
+//        FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR);
+//        System.out.println(e.getMessage());
+//        }
     }
 
     public static void pollHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
