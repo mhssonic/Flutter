@@ -52,7 +52,10 @@ public class CommentDB extends TweetDB {
                     LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
                     int replyFrom = resultSet.getInt("reply");
 
-                    Comment comment = new Comment(commentId, author, context, postingTime, attachmentId, likes, replyFrom);
+                    ArrayList<Integer> attachments  = new ArrayList<>();
+                    for(Object obj : attachmentId)
+                        attachments.add((Integer) obj);
+                    Comment comment = new Comment(commentId, author, context, postingTime, attachments, likes, replyFrom);
                     comments.add(comment);
                 }
             } catch (SQLException e) {
@@ -80,7 +83,10 @@ public class CommentDB extends TweetDB {
                 LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
                 int replyFrom = resultSet.getInt("reply");
 
-                Comment comment = new Comment(messageId, author, context, postingTime, attachmentId, likes, replyFrom);
+            ArrayList<Integer> attachments  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachments.add((Integer) obj);
+                Comment comment = new Comment(messageId, author, context, postingTime, attachments, likes, replyFrom);
                 return comment;
         } catch (SQLException e) {
             throw new RuntimeException(e);

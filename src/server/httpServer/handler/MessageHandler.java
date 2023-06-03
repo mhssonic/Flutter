@@ -55,7 +55,7 @@ public class MessageHandler {
     public static void quoteHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Quote quote = objectMapper.treeToValue(jsonNode, Quote.class);
-            ErrorType errorType = Quote.quote(id, quote.getText(), quote.getAttachments(), quote.getHashtag(), Integer.parseInt(quote.getMessageId().toString())); //TODO HASHTAG?
+            ErrorType errorType = Quote.quote(id, quote.getText(), quote.getAttachmentId(), quote.getHashtag(), Integer.parseInt(quote.getMessageId().toString())); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -72,7 +72,7 @@ public class MessageHandler {
     public static void commentHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Comment comment = objectMapper.treeToValue(jsonNode, Comment.class);
-            ErrorType errorType = Comment.comment(id, comment.getText(), comment.getAttachments(), comment.getHashtag(), comment.getReplyFrom()); //TODO HASHTAG?
+            ErrorType errorType = Comment.comment(id, comment.getText(), comment.getAttachmentId(), comment.getHashtag(), comment.getReplyFrom()); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);

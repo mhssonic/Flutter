@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class QuoteDB extends TweetDB {
     public static int createQuote(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime, int quotedMessageID) {
@@ -50,7 +51,10 @@ public class QuoteDB extends TweetDB {
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
             int quotedMessageId = resultSet.getInt("quoted_message_id");
 
-            Quote quote = new Quote(messageId, author, context, postingTime, attachmentId, likes, quotedMessageId);
+            ArrayList<Integer> attachments  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachments.add((Integer) obj);
+            Quote quote = new Quote(messageId, author, context, postingTime, attachments, likes, quotedMessageId);
             return quote;
         } catch (SQLException e) {
             throw new RuntimeException(e);

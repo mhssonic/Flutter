@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class PollDB extends TweetDB{
     public static int createPoll(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
@@ -52,8 +53,10 @@ public class PollDB extends TweetDB{
             Object[] choiceId = (Object[]) (resultSet.getArray("choiceId")).getArray();
 //            Choice[] choice = ChoiceDB.getChoice(Object[]choiceId);
 
-
-            Poll poll = new Poll(messageId , author , context , postingTime , attachmentId ,  likes  , choiceId);
+            ArrayList<Integer> attachments  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachments.add((Integer) obj);
+            Poll poll = new Poll(messageId , author , context , postingTime , attachments ,  likes  , choiceId);
             return poll;
         } catch (SQLException e) {
             throw new RuntimeException(e);

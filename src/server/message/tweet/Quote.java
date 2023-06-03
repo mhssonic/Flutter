@@ -11,16 +11,17 @@ import java.util.ArrayList;
 public class Quote extends Tweet{
     private int quotedMessageID;
 
-    public Quote(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId , int likes , int quotedMessageID) {
+    public Quote(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId , int likes , int quotedMessageID) {
         super(messageId, authorId, text, postingTime, attachmentId , likes);
         this.quotedMessageID = quotedMessageID;
     }
     public Quote(){}
 
-    public static ErrorType quote(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , int quotedMessageID){
+    public static ErrorType quote(int userId, String context, ArrayList<Integer> attachments, Object[] hashtag , int quotedMessageID){
       
-        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
-        int quoteId = QuoteDB.createQuote(userId, context, attachmentId, hashtag, LocalDateTime.now(),quotedMessageID);
+        if(!AttachmentDB.checkAttachments(attachments))
+            return ErrorType.DOESNT_EXIST;
+        int quoteId = QuoteDB.createQuote(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now(),quotedMessageID);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,quoteId);
         }

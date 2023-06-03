@@ -11,15 +11,16 @@ import java.util.ArrayList;
 public class Comment extends Tweet{
 
     int replyFrom;
-    public Comment(Object messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int likes, int replyFrom) {
+    public Comment(Object messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes, int replyFrom) {
         super(messageId, authorId, text, postingTime, attachmentId, likes);
     }
 
     public Comment(){}
 
-    public static ErrorType comment(int userId, String context, ArrayList<Attachment> attachments, Object[] hashtag , int replyFrom){
-        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
-        int commentId = CommentDB.createComment(userId, context, attachmentId, hashtag, LocalDateTime.now(),replyFrom);
+    public static ErrorType comment(int userId, String context, ArrayList<Integer> attachments, Object[] hashtag , int replyFrom){
+        if(!AttachmentDB.checkAttachments(attachments))
+            return ErrorType.DOESNT_EXIST;
+        int commentId = CommentDB.createComment(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now(),replyFrom);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,replyFrom);
         }

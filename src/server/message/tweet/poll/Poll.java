@@ -14,7 +14,7 @@ public class Poll extends Tweet {
     private Object[] choiceId;
     private  Object[] choices;
 
-    public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int likes ,Object[] choiceId ) {
+    public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes ,Object[] choiceId ) {
         super(messageId, authorId, text, postingTime, attachmentId, likes);
         this.choiceId = choiceId;
     }
