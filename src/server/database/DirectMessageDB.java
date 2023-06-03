@@ -27,9 +27,7 @@ public class DirectMessageDB {
 
     public static void createDirectMessage(int id, int user, String context, int reply, ArrayList<Integer> attachments){
         MongoCollection messageCollection = database.getCollection("direct_message");
-        Integer[] attachmentsId = attachments.toArray(new Integer[attachments.size()]);
-        //TODO fix above shit
-        Document direct = DirectMessage.messageToDoc(id, user, context, reply, LocalDateTime.now(), attachmentsId);
+        Document direct = DirectMessage.messageToDoc(id, user, context, reply, LocalDateTime.now(), attachments);
         messageCollection.insertOne(direct);
     }
 
@@ -37,7 +35,7 @@ public class DirectMessageDB {
         MongoCollection messageCollection = database.getCollection("direct_message");
         Document doc = (Document) messageCollection.find(Filters.eq("_id", messageId)).first();
 
-        DirectMessage directMessage = new DirectMessage(messageId, (int) doc.get("author"), (String) doc.get("context"), (LocalDateTime) doc.get("time"), (Object[]) doc.get("attachment"), (int) doc.get("reply"));
+        DirectMessage directMessage = new DirectMessage(messageId, (int) doc.get("author"), (String) doc.get("context"), (LocalDateTime) doc.get("time"), (ArrayList<Integer>) doc.get("attachment"), (int) doc.get("reply"));
         return directMessage;
     }
 }

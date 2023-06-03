@@ -16,7 +16,7 @@ public class DirectMessage extends Message {
     @JsonProperty("target-id")
     int targetUser;
 
-    public static Document messageToDoc(int id , int user , String context, int reply, LocalDateTime dateTime, Integer[] attachmentId){
+    public static Document messageToDoc(int id , int user , String context, int reply, LocalDateTime dateTime, ArrayList<Integer> attachmentId){
         Document message = new Document();
         message.put("_id", id);
         message.put("author", user);
@@ -35,7 +35,7 @@ public class DirectMessage extends Message {
         this.targetUser = targetUser;
     }
 
-    public DirectMessage(int messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int reply) {
+    public DirectMessage(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int reply) {
         super(messageId, authorId, text, postingTime, attachmentId);
         this.reply = reply;
     }

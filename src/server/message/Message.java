@@ -17,7 +17,7 @@ public abstract class Message {
     protected String text;
     protected LocalDateTime postingTime;
     protected final static int MAX_LENGTH_MESSAGE = 280;
-
+    @JsonProperty("attachment-id")
     ArrayList<Integer> attachmentId;
     @JsonIgnore
     ArrayList<Attachment> attachments = new ArrayList<>();

@@ -146,6 +146,8 @@ public class SQLDB {
     }
 
     protected static boolean containIdsInTable(String table, ArrayList<Integer> ids) {
+        if (ids.size() == 0)
+            return true;
         StringBuilder arrayString = new StringBuilder("(\'{");
         for(Integer id : ids)
             arrayString.append(id).append(',');
