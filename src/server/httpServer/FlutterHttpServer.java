@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpServer;
 import server.httpServer.handler.*;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,6 +36,8 @@ public class FlutterHttpServer {
             httpServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
             httpServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
             httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
+
+            httpServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
 
             httpServer.setExecutor(executorService);
             httpServer.start();

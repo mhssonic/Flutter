@@ -45,4 +45,16 @@ public class AttachmentDB extends SQLDB {
 
         return attachments;
     }
+
+    public static String getRandomPath(){
+        try {
+            preparedStatement = connection.prepareStatement("select NEXTVAL('seq_file_path')");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return Integer.toString(resultSet.getInt("nextval"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
+    }
 }
