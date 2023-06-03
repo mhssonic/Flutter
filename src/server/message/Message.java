@@ -2,6 +2,8 @@ package server.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import server.database.*;
+import server.enums.TweetType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
 
@@ -91,5 +93,38 @@ public abstract class Message {
 
     public void setAttachments(ArrayList<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public static void getMessages(int start, int finish, Object[] messageIds) {
+        try {
+            Message message = null;
+            ArrayList<Message> messages = new ArrayList<>();
+            for (Object messageId : messageIds) {
+                message = getMessage((int)messageId);
+                if (!(message == null)) {
+                    messages.add(message);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
+        }
+    }
+
+    public static Message getMessage(int  messageId) {
+        int type = messageId % (TweetType.count);
+        Message message = null;
+        switch (type) {
+            case 0: return TweetDB.getTweet(messageId);
+            case 1: return CommentDB.getTweet(messageId);
+            case 2: return RetweetDB.getTweet(messageId);
+            case 3: return PollDB.getTweet(messageId);
+            case 4: return QuoteDB.getTweet(messageId);
+            case 5:
+//                        message = DirectMessageDB.getDirect((int) messageId);
+                break;
+        }
+        return null;
     }
 }
