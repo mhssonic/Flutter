@@ -25,7 +25,7 @@ public class Tweet extends Message{
     Boolean faveStar;
     final static int FAVESTAR_NUMBER = 10;
 
-    public Tweet(Object messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId, int likes) {
+    public Tweet(Object messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes) {
         super(messageId, authorId, text, postingTime, attachmentId);
         this.likes = likes;
     }
@@ -58,9 +58,10 @@ public class Tweet extends Message{
         return faveStar;
     }
 
-    public static ErrorType tweet(int userId, String context, ArrayList<Attachment> attachments, String[] hashtag ){
-        Integer[] attachmentId = AttachmentDB.checkAttachments(attachments);
-        int tweetId = TweetDB.createTweet(userId, context, attachmentId, hashtag, LocalDateTime.now());
+    public static ErrorType tweet(int userId, String context, ArrayList<Integer> attachments, String[] hashtag ){
+        if (!AttachmentDB.checkAttachments(attachments))
+            return ErrorType.DOESNT_EXIST;
+        int tweetId = TweetDB.createTweet(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,tweetId);
         }

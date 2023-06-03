@@ -22,7 +22,7 @@ public class MessageHandler {
     public static void tweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Tweet tweet = objectMapper.treeToValue(jsonNode, Tweet.class);
-            ErrorType errorType = Tweet.tweet(id, tweet.getText(), tweet.getAttachments(), tweet.getHashtag()); //TODO HASHTAG?
+            ErrorType errorType = Tweet.tweet(id, tweet.getText(), tweet.getAttachmentId(), tweet.getHashtag()); //TODO HASHTAG?
 
             String response = errorType.toString();
             exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -120,7 +120,7 @@ public class MessageHandler {
 
             Integer[] choiceId = ChoiceDB.creatChoices(choices);
 
-            ErrorType errorType = Poll.poll(id, poll.getText(), poll.getAttachments(), poll.getHashtag(), choiceId); //TODO HASHTAG?
+            ErrorType errorType = Poll.poll(id, poll.getText(), poll.getAttachmentId(), poll.getHashtag(), choiceId); //TODO HASHTAG?
             if (errorType != ErrorType.SUCCESS) {
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200, response.getBytes().length);

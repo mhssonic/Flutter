@@ -1,6 +1,8 @@
 package server.database;
 
+import org.checkerframework.checker.units.qual.A;
 import server.enums.TweetType;
+import server.message.Attachment;
 import server.message.tweet.Tweet;
 
 import java.sql.Array;
@@ -8,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 public class TweetDB extends SQLDB {
     public static int createTweet(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime) {
@@ -134,7 +139,11 @@ public class TweetDB extends SQLDB {
 //            Comment[] comments = CommentDB.getComments(Object[]commentId);
             Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
-            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
+
+            ArrayList<Integer> attachments  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachments.add((Integer) obj);
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachments,  likes );
             return tweet;
         } catch (SQLException e) {
             throw new RuntimeException(e);

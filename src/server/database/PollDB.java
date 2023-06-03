@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class PollDB extends TweetDB{
     public static int createPoll(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
         try {
-            Array hashtags = connection.createArrayOf("INT", hashtag);
+            Array hashtags = connection.createArrayOf("VARCHAR", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             Array choices = connection.createArrayOf("INT", choiceId);
             preparedStatement = connection.prepareStatement("INSERT INTO poll (author ,favestar, hashtag, attachment , postingtime, context , choice) VALUES (?,?,?,?,?,?,?) returning id");

@@ -18,7 +18,8 @@ public abstract class Message {
     protected LocalDateTime postingTime;
     protected final static int MAX_LENGTH_MESSAGE = 280;
 
-    Object[] attachmentId;
+    ArrayList<Integer> attachmentId;
+    @JsonIgnore
     ArrayList<Attachment> attachments = new ArrayList<>();
 
 
@@ -27,7 +28,7 @@ public abstract class Message {
 
     }
 
-    public Message(Object messageId, int authorId, String text, LocalDateTime postingTime, Object[] attachmentId) {
+    public Message(Object messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId) {
         this.messageId = messageId;
         this.authorId = authorId;
         this.text = text;
@@ -60,7 +61,7 @@ public abstract class Message {
         return postingTime;
     }
 
-    public Object[] getAttachmentId() {
+    public ArrayList<Integer> getAttachmentId() {
         return attachmentId;
     }
 
@@ -80,7 +81,7 @@ public abstract class Message {
         this.postingTime = postingTime;
     }
 
-    public void setAttachmentId(Object[] attachmentId) {
+    public void setAttachmentId(ArrayList<Integer> attachmentId) {
         this.attachmentId = attachmentId;
     }
 

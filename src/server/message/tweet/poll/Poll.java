@@ -24,7 +24,7 @@ public class Poll extends Tweet {
         Integer[] choiceId = (Integer[]) choices;
         if(!AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
-        int pollId = PollDB.createPoll(userId, context, attachments, hashtag, LocalDateTime.now() , choiceId);
+        int pollId = PollDB.createPoll(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now() , choiceId);
         if (validTweet(context) == ErrorType.SUCCESS){
             return shareTweetWithFollowers(userId,pollId);
         }
