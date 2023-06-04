@@ -4,6 +4,8 @@ import server.database.SQLDB;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,5 +61,12 @@ public class ErrorHandling {
     public static ErrorType validLength(String str , int maxLen){
         if (str.length() > maxLen) return ErrorType.TOO_LONG;
         return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validCountry(String str){
+        Set<String> countries = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA2);
+        if(countries.contains(str))
+            return ErrorType.SUCCESS;
+        return ErrorType.NOT_VALID_COUNTRY;
     }
 }

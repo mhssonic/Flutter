@@ -49,11 +49,12 @@ public class UserController {
             return ErrorType.REQUIRED_FIELD_EMPTY;
         }
 
+        output = ErrorHandling.validCountry(country);
+        if (output != ErrorType.SUCCESS) return output;
 
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
 
-        //TODO check country
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);

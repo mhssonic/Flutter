@@ -323,7 +323,10 @@ public class SQLDB {
                     profileUpdate.put(key, value);
                     break;
                 case "country":
-                    //TODO add some condition
+                    output = ErrorHandling.validCountry(value);
+                    if (output != ErrorType.SUCCESS) return output;
+                    profileUpdate.put(key, value);
+                    break;
                 case "header":
                 case "avatar":
                     profileUpdate.put(key, value);

@@ -23,4 +23,5 @@ public enum ErrorType {
     PERMISSION_DENIED,
     HAVE_NOT_FOLLOWED,
     HAVE_NOT_BLOCKED,
+    NOT_VALID_COUNTRY
 }
