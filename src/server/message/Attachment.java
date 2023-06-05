@@ -2,10 +2,10 @@ package server.message;
 
 import server.database.AttachmentDB;
 import server.enums.FileType;
+import server.enums.error.ErrorType;
 import server.httpServer.handler.FileHttpHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,6 +48,11 @@ public class Attachment {
             return Integer.toString(AttachmentDB.createAttachment(attachment));
         }
         throw new IOException();
+    }
+
+    public static File getFile(int id) throws IOException {
+        String path = (String) AttachmentDB.getAttachmentPath(id);
+        return new File(path);
     }
 
     private static FileType formatToFileType(String format){

@@ -31,7 +31,6 @@ public class AttachmentDB extends SQLDB {
         ArrayList<Attachment> attachments = new ArrayList<>();
         for (int attachmentId : attachmentIds) {
             resultSet = getResultSet("attachment" , attachmentId);
-
             try {
                 if (resultSet.next()){
                     FileType type = (FileType) resultSet.getObject("type");
@@ -44,6 +43,10 @@ public class AttachmentDB extends SQLDB {
         }
 
         return attachments;
+    }
+
+    public static Object getAttachmentPath(int id){
+        return getFieldObject("attachment", id, "path");
     }
 
     public static String getRandomPath(){

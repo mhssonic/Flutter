@@ -38,6 +38,7 @@ public class FlutterHttpServer {
             httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
 
             httpServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
+            httpServer.createContext("/download-file", new FlutterHttpHandler(FileHttpHandler::downloadFile));
 
             httpServer.setExecutor(executorService);
             httpServer.start();
