@@ -20,6 +20,20 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 public class MessageHandler {
+    /**
+     *<h2>Json input</h2>
+     * {<br>
+     *     "text":"kar ma shayad in hast, ke miyan ghole nilofar va gharn, pey avaz haghighat bedavim",<br>
+     *     "attachment-id":[-1999999970],<br>
+     *     "hashtag":["hi"]<br>
+     * }
+     *
+     *  <h2>output</h2>
+     *      SUCCESS,<br>
+     *     DOESNT_EXIST,<br>
+     *     TOO_LONG,<br>
+     * response: bad request
+     */
     public static void tweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Tweet tweet = objectMapper.treeToValue(jsonNode, Tweet.class);
@@ -36,16 +50,26 @@ public class MessageHandler {
         }
     }
 
+    /**
+     *<h2>Json input</h2>
+     * {<br>
+     *     "message-id":-1999999970,<br>
+     * }
+     *
+     *  <h2>output</h2>
+     *      SUCCESS,<br>
+     * response: bad request
+     */
     public static void retweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            Retweet retweet = objectMapper.treeToValue(jsonNode, Retweet.class);
-            ErrorType errorType = Retweet.retweet(retweet.getRetweetedMessageId(), id); //TODO HASHTAG?
-            if (errorType != ErrorType.SUCCESS) {
-                String response = errorType.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
-                exchange.getResponseBody().close();
-            }
+            int messageId = jsonNode.get("message-id").asInt();
+            ErrorType errorType = Retweet.retweet(messageId, id); //TODO HASHTAG?
+
+            String response = errorType.toString();
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
