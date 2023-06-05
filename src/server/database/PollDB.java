@@ -42,21 +42,37 @@ public class PollDB extends TweetDB{
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
-            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+
+
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
             int retweet = resultSet.getInt("retweet");
-            int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
-//            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
+            int likes = sizeOfArrayField("poll", messageId, "likes");
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
+
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
             Object[] choiceId = (Object[]) (resultSet.getArray("choiceId")).getArray();
 //            Choice[] choice = ChoiceDB.getChoice(Object[]choiceId);
 
-            ArrayList<Integer> attachments  = new ArrayList<>();
+            ArrayList<Integer> attachment  = new ArrayList<>();
             for(Object obj : attachmentId)
-                attachments.add((Integer) obj);
-            Poll poll = new Poll(messageId , author , context , postingTime , attachments ,  likes  , choiceId);
+                attachment.add((Integer) obj);
+            Poll poll = new Poll(messageId , author , context , postingTime , attachment ,  likes  , choiceId);
             return poll;
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -95,7 +95,7 @@ public abstract class Message {
         this.attachments = attachments;
     }
 
-    public static void getMessages(Object[] messageIds) {
+    public static ArrayList<Message> getMessages(Object[] messageIds) {
         try {
             Message message = null;
             ArrayList<Message> messages = new ArrayList<>();
@@ -105,14 +105,14 @@ public abstract class Message {
                     messages.add(message);
                 }
             }
-
+            return messages;
         } catch (Exception e) {
             throw new RuntimeException(e);
 
         }
     }
 
-    public static Message getMessage(int  messageId) {
+    public static Message getMessage(int messageId) {
         int type = messageId % (TweetType.count);
         Message message = null;
         switch (type) {

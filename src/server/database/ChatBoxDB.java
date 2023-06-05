@@ -1,15 +1,10 @@
 package server.database;
 
-import server.enums.TweetType;
-import server.message.Message;
-
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Array;
 
 public class ChatBoxDB extends SQLDB {
     public static void main(String[] args) {
         run();
-//        System.out.println(returnMessage(1713722456));
     }
 
     public static void creatChatBox(int id) {
@@ -30,7 +25,7 @@ public class ChatBoxDB extends SQLDB {
         return containFieldKey("chat_box", "id", id);
     }
 
-    public static Array getMessageId(int chatBoxId) {
+    public static Array getMessageIds(int chatBoxId) {
         return (Array) SQLDB.getFieldObject("chat_box", chatBoxId, "message_id");
     }
 }

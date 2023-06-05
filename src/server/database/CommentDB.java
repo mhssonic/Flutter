@@ -42,20 +42,34 @@ public class CommentDB extends TweetDB {
                 if (resultSet.next()) {
                     int author = resultSet.getInt("author");
                     String context = resultSet.getString("context");
-                    Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//                  Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId); //TODO add to constructor?
+                    Object[] attachmentId = null;
+                    Array attachments =  (resultSet.getArray("attachment"));
+                    if (attachments != null){
+                        attachmentId = (Object[]) attachments.getArray();
+                    }
+
                     int retweet = resultSet.getInt("retweet");
                     int likes = sizeOfArrayField("comment", commentId, "likes");
-                    Object[] commentIdS = (Object[]) (resultSet.getArray("comments").getArray());
-//                  Comment[] comments = CommentDB.getComments(Object[]commentId);
-                    Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+
+                    Object[] commentIdS = null;
+                    Array tmp =  (resultSet.getArray("comments"));
+                    if (comments != null){
+                        commentIdS = (Object[]) tmp.getArray();
+                    }
+
+                    Object[] hashtag = null;
+                    Array hashtags =  (resultSet.getArray("hashtag"));
+                    if (hashtags != null){
+                        hashtag = (Object[]) hashtags.getArray();
+                    }
+
                     LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
                     int replyFrom = resultSet.getInt("reply");
 
-                    ArrayList<Integer> attachments  = new ArrayList<>();
+                    ArrayList<Integer> attachment  = new ArrayList<>();
                     for(Object obj : attachmentId)
-                        attachments.add((Integer) obj);
-                    Comment comment = new Comment(commentId, author, context, postingTime, attachments, likes, replyFrom);
+                        attachment.add((Integer) obj);
+                    Comment comment = new Comment(commentId, author, context, postingTime, attachment, likes, replyFrom);
                     comments.add(comment);
                 }
             } catch (SQLException e) {
@@ -73,20 +87,33 @@ public class CommentDB extends TweetDB {
             if (!resultSet.next()) return null;
                 int author = resultSet.getInt("author");
                 String context = resultSet.getString("context");
-                Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//                  Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId); //TODO add to constructor?
-                int retweet = resultSet.getInt("retweet");
-                int likes = sizeOfArrayField("comment", messageId, "likes");
-                Object[] commentIdS = (Object[]) (resultSet.getArray("comments").getArray());
-//                  Comment[] comments = CommentDB.getComments(Object[]commentId);
-                Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
+            int retweet = resultSet.getInt("retweet");
+            int likes = sizeOfArrayField("comment", messageId, "likes");
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
                 LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
                 int replyFrom = resultSet.getInt("reply");
 
-            ArrayList<Integer> attachments  = new ArrayList<>();
+            ArrayList<Integer> attachment  = new ArrayList<>();
             for(Object obj : attachmentId)
-                attachments.add((Integer) obj);
-                Comment comment = new Comment(messageId, author, context, postingTime, attachments, likes, replyFrom);
+                attachment.add((Integer) obj);
+                Comment comment = new Comment(messageId, author, context, postingTime, attachment, likes, replyFrom);
                 return comment;
         } catch (SQLException e) {
             throw new RuntimeException(e);

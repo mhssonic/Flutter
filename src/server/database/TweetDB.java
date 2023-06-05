@@ -1,8 +1,6 @@
 package server.database;
 
-import org.checkerframework.checker.units.qual.A;
 import server.enums.TweetType;
-import server.message.Attachment;
 import server.message.tweet.Tweet;
 
 import java.sql.Array;
@@ -11,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 public class TweetDB extends SQLDB {
     public static int createTweet(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime) {
@@ -131,19 +127,36 @@ public class TweetDB extends SQLDB {
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
-            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId); //TODO add to constructor?
+
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
-//            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                 commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
+
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
 
-            ArrayList<Integer> attachments  = new ArrayList<>();
-            for(Object obj : attachmentId)
-                attachments.add((Integer) obj);
-            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachments,  likes );
+            ArrayList<Integer> attachment  = new ArrayList<>();
+            for(Object obj : attachmentId){
+                attachment.add((Integer) obj);
+            }
+
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachment,  likes );
             return tweet;
         } catch (SQLException e) {
             throw new RuntimeException(e);
