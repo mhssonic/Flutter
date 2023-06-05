@@ -2,12 +2,13 @@ package server.httpServer.handler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.sun.net.httpserver.HttpExchange;
 import server.database.ChoiceDB;
-import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
 import server.message.Direct.DirectMessage;
+import server.message.Message;
 import server.message.tweet.Comment;
 import server.message.tweet.Quote;
 import server.message.tweet.Retweet;
@@ -90,7 +91,7 @@ public class MessageHandler {
     public static void directMessageHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             DirectMessage directMessage = objectMapper.treeToValue(jsonNode, DirectMessage.class);
-            ErrorType error = DirectMessage.sendDirectMessage(id, directMessage.getTargetUser(), directMessage.getText(),directMessage.getReply() , directMessage.getAttachmentId());
+            ErrorType error = DirectMessage.sendDirectMessage(id, directMessage.getTargetUser(), directMessage.getText(), directMessage.getReply(), directMessage.getAttachmentId());
 
             String response = error.toString();
 
@@ -103,10 +104,9 @@ public class MessageHandler {
         } catch (IOException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
-        }
-        catch (Exception e) {
-        FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR);
-        System.out.println(e.getMessage());
+        } catch (Exception e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_INTERNAL_ERROR);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -136,6 +136,27 @@ public class MessageHandler {
     }
 
     public static void showTweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        int messageId = jsonNode.get("messageId").asInt();
+
+        Message message = Message.getMessage(messageId);
+        try {
+            if (message == null) {
+                String response = ErrorType.DOESNT_EXIST.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            String jsonResponse = ow.writeValueAsString(message);
+            exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
+            exchange.getResponseBody().write(jsonResponse.getBytes());
+            exchange.getResponseBody().close();
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+            throw new RuntimeException(e);
+        }
 
     }
 

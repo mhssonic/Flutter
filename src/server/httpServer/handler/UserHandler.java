@@ -43,6 +43,9 @@ public class UserHandler {
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
             }
+
+
+
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -95,7 +95,7 @@ public abstract class Message {
         this.attachments = attachments;
     }
 
-    public static void getMessages(int start, int finish, Object[] messageIds) {
+    public static void getMessages(Object[] messageIds) {
         try {
             Message message = null;
             ArrayList<Message> messages = new ArrayList<>();

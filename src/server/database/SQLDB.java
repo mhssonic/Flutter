@@ -1,8 +1,10 @@
 package server.database;
 
 import server.Tools;
+import server.enums.FileType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
+import server.message.Attachment;
 import server.user.Profile;
 import server.user.SignUpForm;
 import server.user.User;
