@@ -28,6 +28,34 @@ import java.util.Map;
 public class UserHandler {
 
 
+    /**
+     *<h2>Json input</h2>{
+     *     <Tr>"first-name":"omid",<br>
+     *     "last-name":"varam",<br>
+     *     "email": "dorosdstjbashe@asd.com",<br>
+     *     "phone-number":"09pahsmak",<br>
+     *     "country":"CA",<br>
+     *     "username": "hebsdfo",<br>
+     *     "password":"pAssword",<br>
+     *     "confirm-password":"pAssword",<br>
+     *     "birthdate":"1382-12-08",<br>
+     *     "avatar":-1999999960, (id of a attachment)<br>
+     *     "header":1999999960 (id of a attachment)<br>
+     *}
+     *      <h2>output</h2>
+     *    SUCCESS,<br>
+     *     DOESNT_EXIST (avatar or header attachment doesn't exist),<br>
+     *     DUPLICATED_USERNAME,<br>
+     *     INVALID_PASS,<br>
+     *     MISMATCH,<br>
+     *     DUPLICATED_EMAIL,<br>
+     *     INVALID_EMAIL,<br>
+     *     DUPLICATED_PHONE_NUMBER,<br>
+     *     INVALID_PHONE_NUMBER,<br>
+     *     INVALID_BIRTHDATE,<br>
+     *     UNDER_AGE,<br>
+     *     NOT_VALID_COUNTRY,<br>
+     */
     public static void updateProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Map<String, Object> data = objectMapper.convertValue(jsonNode, new TypeReference<Map<String, Object>>() {
@@ -41,19 +69,40 @@ public class UserHandler {
         }
     }
 
+    /**
+     *<h2>Json input</h2>{
+     *     "username": "hebsdfo",<br>
+     *     "user-id":555,<br>
+     *     one of them should be sent<br>
+     *}
+     *      <h2>output</h2>
+     *      {<br>
+     *   "id" : -1999999970,<br>
+     *   "country" : "CA",<br>
+     *   "birthdate" : "1382-12-08",<br>
+     *   "biography" : null,<br>
+     *   "avatar" : 800,<br>
+     *   "header" : 0,<br>
+     *   "username" : "hebo",<br>
+     *   "first-name" : "omid",<br>
+     *   "last-name" : "varam",<br>
+     *   "phone-number" : null<br>
+     * }
+     * response: bad request, http not found
+     */
     public static void showProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             if(jsonNode.has("user-id")){
                 int targetId = jsonNode.get("user-id").asInt();
                 SignUpForm signUpForm = SQLDB.getUserProfileByUserID(targetId);
-                String response;
                 if (signUpForm == null) {
-                    response = ErrorType.DOESNT_EXIST.toString();
+                    FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_NOT_FOUND);
+                    return;
                 }
-                else{
-                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                    response = ow.writeValueAsString(signUpForm);
-                }
+                String response;
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                response = ow.writeValueAsString(signUpForm);
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
@@ -61,14 +110,13 @@ public class UserHandler {
             else if(jsonNode.has("username")) {
                 String targetUsername = jsonNode.get("username").asText();
                 SignUpForm signUpForm = SQLDB.getUserProfileByUsername(targetUsername);
-                String response;
                 if (signUpForm == null) {
-                    response = ErrorType.DOESNT_EXIST.toString();
+                    FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_NOT_FOUND);
+                    return;
                 }
-                else{
-                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                    response = ow.writeValueAsString(signUpForm);
-                }
+                String response;
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                response = ow.writeValueAsString(signUpForm);
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
@@ -82,6 +130,19 @@ public class UserHandler {
 
     }
 
+    /**
+     *<h2>Json input</h2>
+     * {<br>
+     *     "target-id":-1999999990<br>
+     * }
+     *  <h2>output</h2>
+     *      SUCCESS,<br></>
+     *     DOESNT_EXIST,<br>
+     *     BLOCKED,<br>
+     *     ALREADY_EXIST,<br>
+     *     SAME_PERSON you can't follow yourself<br>
+     * response: bad request
+     */
     public static void followHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             int targetId = jsonNode.get("target-id").asInt();
@@ -100,6 +161,21 @@ public class UserHandler {
         }
     }
 
+    /**
+     *<h2>Json input</h2>
+     *
+     * {<br>
+     *     "target-id":-1999999990<br>
+     * }
+     *
+     *
+     *  <h2>output</h2>
+     *      SUCCESS,<br></>
+     *     DOESNT_EXIST,<br>
+     *     HAVE_NOT_FOLLOWED,<br>
+     *     SAME_PERSON you can't follow yourself<br>
+     * response: bad request
+     */
     public static void unFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             int targetId = jsonNode.get("target-id").asInt();
@@ -118,6 +194,18 @@ public class UserHandler {
         }
     }
 
+    /**
+     *<h2>Json input</h2>
+     * {<br>
+     *     "target-id":-1999999990<br>
+     * }
+     *  <h2>output</h2>
+     *      SUCCESS,<br></>
+     *     DOESNT_EXIST,<br>
+     *     ALREADY_EXIST,<br>
+     *     SAME_PERSON you can't follow yourself<br>
+     * response: bad request
+     */
     public static void blockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             int targetId = jsonNode.get("target-id").asInt();
@@ -136,6 +224,22 @@ public class UserHandler {
         }
     }
 
+
+    /**
+     *<h2>Json input</h2>
+     *
+     * {<br>
+     *     "target-id":-1999999990<br>
+     * }
+     *
+     *
+     *  <h2>output</h2>
+     *      SUCCESS,<br></>
+     *     DOESNT_EXIST,<br>
+     *     HAVE_NOT_BLOCKED,<br>
+     *     SAME_PERSON you can't unblock yourself<br>
+     * response: bad request
+     */
     public static void unBlockHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             int targetId = jsonNode.get("target-id").asInt();
@@ -154,6 +258,11 @@ public class UserHandler {
         }
     }
 
+    /**
+     *  <h2>output</h2>
+     *  [array of messages]<br>
+     * response: bad request
+     */
     public static void showTimelineHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             Array messageIds = ChatBoxDB.getMessageIds(Tools.jenkinsHash(id, id, false));
@@ -170,14 +279,22 @@ public class UserHandler {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
 
 
-        } catch (SQLException e) {
-        } catch (JsonProcessingException e) {
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-        } catch (IOException e) {
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-
     }
 
+    /**
+     *<h2>Json input</h2>
+     *
+     * {<br>
+     *     "target-id":-1999999990<br>
+     * }
+     *
+     *  <h2>output</h2>
+     *  [array of messages]<br>
+     * response: bad request
+     */
     public static void showDirectHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
             int targetId = jsonNode.get("target-id").asInt();
@@ -192,10 +309,10 @@ public class UserHandler {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
 
 
-        } catch (SQLException e) {
         } catch (JsonProcessingException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }

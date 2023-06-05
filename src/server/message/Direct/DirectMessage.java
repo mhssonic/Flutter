@@ -5,6 +5,7 @@ import org.bson.Document;
 import server.Tools;
 import server.database.*;
 import server.enums.error.ErrorType;
+import server.httpServer.handler.UserAuthHandler;
 import server.message.Attachment;
 import server.message.Message;
 

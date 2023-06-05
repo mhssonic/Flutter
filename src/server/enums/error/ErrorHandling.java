@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class ErrorHandling {
     public static ErrorType validUsername(String username) {
+        if(username.length() == 0) return ErrorType.REQUIRED_FIELD_EMPTY;
         if (SQLDB.containFieldKey("users", "username" , username)) return ErrorType.DUPLICATED_USERNAME;
         return ErrorType.SUCCESS;
     }
