@@ -69,6 +69,7 @@ public class UserDB extends SQLDB {
     }
 
     public static ErrorType follow(int userId, int targetId) {
+        if(userId == targetId) return ErrorType.SAME_PERSON;
         if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users", targetId, "blocked", userId)) return ErrorType.BLOCKED;
@@ -80,6 +81,7 @@ public class UserDB extends SQLDB {
     }
 
     public static ErrorType unFollow(int userId, int targetId) {
+        if(userId == targetId) return ErrorType.SAME_PERSON;
         if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
         if (!SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) return ErrorType.HAVE_NOT_FOLLOWED;
         SQLDB.removeFromArrayField("users", userId, "following", targetId);
@@ -91,13 +93,14 @@ public class UserDB extends SQLDB {
 
     public static Array getFollower(int userId) {
         return (Array) getFieldObject("users", userId, "follower");
-    }
+    }//TODO handle null
 
     public static Array getFollowing(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "following");
     }
 
     public static ErrorType block(int userId, int targetId) {
+        if(userId == targetId) return ErrorType.SAME_PERSON;
         if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
         if (isBlocked(userId, targetId)) return ErrorType.ALREADY_EXIST;
         if (SQLDB.containInArrayFieldObject("users", userId, "following", targetId)) {
@@ -109,6 +112,7 @@ public class UserDB extends SQLDB {
     }
 
     public static ErrorType unBlock(int userId, int targetId) {
+        if(userId == targetId) return ErrorType.SAME_PERSON;
         if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
         if (!SQLDB.containInArrayFieldObject("users", userId, "blocked", targetId)) return ErrorType.HAVE_NOT_BLOCKED;
         SQLDB.removeFromArrayField("users", userId, "blocked", targetId);
