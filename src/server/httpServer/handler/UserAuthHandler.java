@@ -38,7 +38,7 @@ public class UserAuthHandler {
             JsonNode jsonNode = objectMapper.readTree(exchange.getRequestBody());
 
             SignUpForm signUpForm = objectMapper.treeToValue(jsonNode, SignUpForm.class);
-            ErrorType errorType = UserController.signUp(signUpForm.getFirstName(), signUpForm.getLastName(), signUpForm.getUserName(), signUpForm.getPassword(), signUpForm.getConfirmPassword(), signUpForm.getEmail(), signUpForm.getPhoneNumber(), signUpForm.getCountry(), signUpForm.getBirthdate(), signUpForm.getBiography(), signUpForm.getAvatarPath(), signUpForm.getHeaderPath());
+            ErrorType errorType = UserController.signUp(signUpForm.getFirstName(), signUpForm.getLastName(), signUpForm.getUsername(), signUpForm.getPassword(), signUpForm.getConfirmPassword(), signUpForm.getEmail(), signUpForm.getPhoneNumber(), signUpForm.getCountry(), signUpForm.getBirthdate(), signUpForm.getBiography(), signUpForm.getAvatar(), signUpForm.getHeader());
             if ( errorType != ErrorType.SUCCESS){
                 String response = errorType.toString();
                 exchange.sendResponseHeaders(200 , response.getBytes().length);

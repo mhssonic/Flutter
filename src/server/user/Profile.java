@@ -11,11 +11,11 @@ public class Profile {
     private String country;
     private String birthdate;
     private String biography;
-    private String avatarPath;
-    private String headerPath;
+    private int avatar;
+    private int header;
     private LocalDate lastEdite;
 
-    public Profile(String firstName, String lastName, String email, String phoneNumber, String country, String birthdate, String biography, String avatarPath, String headerPath) {
+    public Profile(String firstName, String lastName, String email, String phoneNumber, String country, String birthdate, String biography, int avatarPath, int header) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -23,8 +23,8 @@ public class Profile {
         this.country = country;
         this.birthdate = birthdate;
         this.biography = biography;
-        this.avatarPath = avatarPath;
-        this.headerPath = headerPath;
+        this.avatar = avatarPath;
+        this.header = header;
     }
 
     public String getProfileId() {
@@ -91,20 +91,20 @@ public class Profile {
         this.biography = biography;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public int getAvatar() {
+        return avatar;
     }
 
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public void setAvatar(int avatar) {
+        this.avatar = avatar;
     }
 
-    public String getHeaderPath() {
-        return headerPath;
+    public int getHeader() {
+        return header;
     }
 
-    public void setHeaderPath(String headerPath) {
-        this.headerPath = headerPath;
+    public void setHeader(int header) {
+        this.header = header;
     }
 
     public LocalDate getLastEdite() {

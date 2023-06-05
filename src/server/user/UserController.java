@@ -26,7 +26,7 @@ public class UserController {
 //    keyFactory.generatePublic(publicKeySpec);
 
 
-    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, String avatarPath, String headerPath) {
+    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, int avatar, int header) {
         ErrorType output;
         output = ErrorHandling.validUsername(username);
         if (output != ErrorType.SUCCESS) return output;
@@ -59,7 +59,7 @@ public class UserController {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);
 
-        SQLDB.createUserProfile(firstName, lastName, username, password, email, phoneNumber, country, date, biography, avatarPath, headerPath);
+        SQLDB.createUserProfile(firstName, lastName, username, password, email, phoneNumber, country, date, biography, avatar, header);
 
         return ErrorType.SUCCESS;
     }

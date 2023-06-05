@@ -264,9 +264,9 @@ public class SQLDB {
     }
 
     //TODO let them add bio and etc at first
-    public static void createUserProfile(String firstName, String lastName, String username, String password, String email, String phoneNumber, String country, LocalDate birthdate, String biography, String avatarPath, String headerPath) {
+    public static void createUserProfile(String firstName, String lastName, String username, String password, String email, String phoneNumber, String country, LocalDate birthdate, String biography, int avatar, int header) {
         int userId = UserDB.createUser(username, password);
-        ProfileDB.createProfile(userId, firstName, lastName, email, phoneNumber, country, birthdate, biography, avatarPath, headerPath);
+        ProfileDB.createProfile(userId, firstName, lastName, email, phoneNumber, country, birthdate, biography, avatar, header);
         ChatBoxDB.creatChatBox(Tools.jenkinsHash(userId, userId, false));
     }
 

@@ -5,18 +5,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SignUpForm {
 
-    @JsonProperty("firstName")
+    @JsonProperty("first-name")
     private String firstName;
+    @JsonProperty("last-name")
     private String lastName;
     private String email;
+    @JsonProperty("phone-number")
     private String phoneNumber;
     private String country;
     private String birthdate;
     private String biography;
-    private String avatarPath;
-    private String headerPath;
-    private String userName;
+    private int avatar;
+    private int header;
+    private String username;
     private String password;
+    @JsonProperty("confirm-password")
     private String confirmPassword;
 
 
@@ -28,11 +31,12 @@ public class SignUpForm {
         this.country = profile.getCountry();
         this.birthdate = profile.getBirthdate();
         this.biography = profile.getBiography();
-        this.avatarPath = profile.getAvatarPath();
-        this.headerPath = profile.getHeaderPath();
-        this.userName = user.getUserName();
-        this.password = user.getPassword();
+        this.avatar = profile.getAvatar();
+        this.header = profile.getHeader();
+        this.username = user.getUserName();
     }
+
+    public SignUpForm(){}
 
     public String getConfirmPassword() {
         return confirmPassword;
@@ -98,28 +102,28 @@ public class SignUpForm {
         this.biography = biography;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public int getAvatar() {
+        return avatar;
     }
 
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public void setAvatar(int avatar) {
+        this.avatar = avatar;
     }
 
-    public String getHeaderPath() {
-        return headerPath;
+    public int getHeader() {
+        return header;
     }
 
-    public void setHeaderPath(String headerPath) {
-        this.headerPath = headerPath;
+    public void setHeader(int header) {
+        this.header = header;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
