@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SignUpForm {
-
+    private int id;
     @JsonProperty("first-name")
     private String firstName;
     @JsonProperty("last-name")
@@ -17,6 +17,7 @@ public class SignUpForm {
     private String biography;
     private int avatar;
     private int header;
+
     private String username;
     private String password;
 
@@ -24,6 +25,7 @@ public class SignUpForm {
 
 
     public SignUpForm(User user , Profile profile) {
+        this.id = user.getUserId();
         this.firstName = profile.getFirstName();
         this.lastName = profile.getLastName();
         this.email = profile.getEmail();
@@ -37,6 +39,15 @@ public class SignUpForm {
     }
 
     public SignUpForm(){}
+
+    @JsonProperty
+    public int getId() {
+        return id;
+    }
+    @JsonIgnore
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @JsonIgnore
     public String getConfirmPassword() {

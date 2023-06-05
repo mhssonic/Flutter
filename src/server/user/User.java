@@ -3,7 +3,7 @@ package server.user;
 import java.util.HashSet;
 
 public class User {
-    private String userId;
+    private int userId;
     private String profileId;
     private String userName;
     private String password;
@@ -12,17 +12,18 @@ public class User {
     HashSet<Integer> follower = new HashSet<>();
     HashSet<Integer> blocked = new HashSet<>();
 
-    public User(String userName, HashSet<Integer> following, HashSet<Integer> follower) {
+    public User(int id, String userName, HashSet<Integer> following, HashSet<Integer> follower) {
+        this.userId = id;
         this.userName = userName;
         this.following = following;
         this.follower = follower;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

@@ -152,7 +152,7 @@ public class UserDB extends SQLDB {
 
             }
 
-            User user = new User(username, following, follower);
+            User user = new User(targetId, username, following, follower);
             return user;
 
         } catch (SQLException e) {
