@@ -43,6 +43,7 @@ public class DirectMessage extends Message {
     public DirectMessage(){}
 
     public static ErrorType sendDirectMessage(int user, int targetUser, String context, int reply, ArrayList<Integer> attachments){
+        if(user == targetUser) return ErrorType.SAME_PERSON;
         ErrorType errorType = validMessage(context);
         if(errorType != ErrorType.SUCCESS)
             return errorType;
@@ -58,6 +59,11 @@ public class DirectMessage extends Message {
         if(!ChatBoxDB.containChatBox(chatBoxId))//TODO handle it better
             ChatBoxDB.creatChatBox(chatBoxId);
         ChatBoxDB.appendMessage(chatBoxId, messageId);
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType getDirectMessage(int user, int targetUser){
+        if(user == targetUser) return ErrorType.SAME_PERSON;
         return ErrorType.SUCCESS;
     }
 
