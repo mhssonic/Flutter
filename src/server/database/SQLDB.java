@@ -1,10 +1,8 @@
 package server.database;
 
 import server.Tools;
-import server.enums.FileType;
 import server.enums.error.ErrorHandling;
 import server.enums.error.ErrorType;
-import server.message.Attachment;
 import server.user.Profile;
 import server.user.SignUpForm;
 import server.user.User;
@@ -388,7 +386,7 @@ public class SQLDB {
         }
     }
 
-    public static SignUpForm getUserProfile( String targetUsername) {
+    public static SignUpForm getUserProfileByUsername(String targetUsername) {
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM  users WHERE username = ?");
             preparedStatement.setObject(1, targetUsername);
@@ -403,6 +401,24 @@ public class SQLDB {
             SignUpForm signUpForm = new SignUpForm(user , profile);
             return signUpForm;
     }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static SignUpForm getUserProfileByUserID(int targetID) {
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM  users WHERE id = ?");
+            preparedStatement.setObject(1, targetID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()){
+                return null; //TODO USERNAME OR ID?
+            }
+
+            User user = UserDB.getUser(targetID);
+            Profile profile = ProfileDB.getProfile(targetID);
+            SignUpForm signUpForm = new SignUpForm(user , profile);
+            return signUpForm;
+        }catch (Exception e){
             throw new RuntimeException(e);
         }
     }

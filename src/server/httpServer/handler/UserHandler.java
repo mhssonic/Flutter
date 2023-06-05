@@ -15,7 +15,6 @@ import server.httpServer.FlutterHttpServer;
 import server.message.Direct.DirectMessage;
 import server.message.Message;
 import server.user.SignUpForm;
-import server.user.User;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -44,23 +43,39 @@ public class UserHandler {
 
     public static void showProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            String targetUsername = jsonNode.get("username").asText();
-
-            SignUpForm signUpForm = SQLDB.getUserProfile(targetUsername);
-            if (signUpForm == null) {
-                String response = ErrorType.DOESNT_EXIST.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
+            if(jsonNode.has("user-id")){
+                int targetId = jsonNode.get("user-id").asInt();
+                SignUpForm signUpForm = SQLDB.getUserProfileByUserID(targetId);
+                String response;
+                if (signUpForm == null) {
+                    response = ErrorType.DOESNT_EXIST.toString();
+                }
+                else{
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    response = ow.writeValueAsString(signUpForm);
+                }
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
             }
-
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            String jsonResponse = ow.writeValueAsString(signUpForm);
-            exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
-            exchange.getResponseBody().write(jsonResponse.getBytes());
-            exchange.getResponseBody().close();
-
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+            else if(jsonNode.has("username")) {
+                String targetUsername = jsonNode.get("username").asText();
+                SignUpForm signUpForm = SQLDB.getUserProfileByUsername(targetUsername);
+                String response;
+                if (signUpForm == null) {
+                    response = ErrorType.DOESNT_EXIST.toString();
+                }
+                else{
+                    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    response = ow.writeValueAsString(signUpForm);
+                }
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+                exchange.getResponseBody().write(response.getBytes());
+                exchange.getResponseBody().close();
+            }
+            else {
+                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
