@@ -8,9 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class QuoteDB extends TweetDB {
-    public static int createQuote(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime, int quotedMessageID) {
+    public static int createQuote(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime, int quotedMessageID) {
         try {
             Array hashtags = connection.createArrayOf("INT", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
@@ -40,17 +41,35 @@ public class QuoteDB extends TweetDB {
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
-            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
             int retweet = resultSet.getInt("retweet");
-            int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comments").getArray());
-//            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comments").getArray());
+            int likes = sizeOfArrayField("quote", messageId, "likes");
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
+
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
             int quotedMessageId = resultSet.getInt("quoted_message_id");
 
-            Quote quote = new Quote(messageId, author, context, postingTime, attachmentId, likes, quotedMessageId);
+            ArrayList<Integer> attachment  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachment.add((Integer) obj);
+            Quote quote = new Quote(messageId, author, context, postingTime, attachment, likes, quotedMessageId);
             return quote;
         } catch (SQLException e) {
             throw new RuntimeException(e);

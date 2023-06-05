@@ -5,12 +5,15 @@ import com.sun.net.httpserver.HttpServer;
 import server.httpServer.handler.*;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FlutterHttpServer {
     public static void run(){
         try {
             InetSocketAddress socket = new InetSocketAddress(5050);
-            HttpServer httpServer = HttpServer.create(socket,50);
+            HttpServer httpServer = HttpServer.create(socket,10);
+            ExecutorService executorService = Executors.newFixedThreadPool(50);
 
             httpServer.createContext("/sign-up", new FlutterAuthHandler(UserAuthHandler::signUpHandler));
             httpServer.createContext("/sign-in", new FlutterAuthHandler(UserAuthHandler::signInHandler));
@@ -20,20 +23,24 @@ public class FlutterHttpServer {
             httpServer.createContext("/unfollow", new FlutterHttpHandler(UserHandler::unFollowHandler));
             httpServer.createContext("/show-direct", new FlutterHttpHandler(UserHandler::showDirectHandler));
             httpServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
-            httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
             httpServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
+            httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
 
             httpServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
             httpServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));
             httpServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
-            httpServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));//TODO we haven't done it
-            httpServer.createContext("/directMessageHandler", new FlutterHttpHandler(MessageHandler::directMessageHandler));
+            httpServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
+            httpServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
             httpServer.createContext("/commentHandler", new FlutterHttpHandler(MessageHandler::commentHandler));
             httpServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
             httpServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
             httpServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
-            httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));
+            httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
 
+            httpServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
+            httpServer.createContext("/download-file", new FlutterHttpHandler(FileHttpHandler::downloadFile));
+
+            httpServer.setExecutor(executorService);
             httpServer.start();
         }catch (Exception e){
             System.out.println(e.getMessage());

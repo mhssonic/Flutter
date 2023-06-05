@@ -26,7 +26,7 @@ public class UserController {
 //    keyFactory.generatePublic(publicKeySpec);
 
 
-    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, String avatarPath, String headerPath) {
+    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, int avatar, int header) {
         ErrorType output;
         output = ErrorHandling.validUsername(username);
         if (output != ErrorType.SUCCESS) return output;
@@ -37,21 +37,35 @@ public class UserController {
         output = ErrorHandling.validConfirm(password, confirmPassword);
         if (output != ErrorType.SUCCESS) return output;
 
-        output = ErrorHandling.validEmail(email);
+        if( email != null){
+            output = ErrorHandling.validEmail(email);
+            if (output != ErrorType.SUCCESS) return output;
+        }
+        else if (phoneNumber != null){
+            output = ErrorHandling.validPhoneNumber(phoneNumber);
+            if (output != ErrorType.SUCCESS) return output;
+        }
+        else {
+            return ErrorType.REQUIRED_FIELD_EMPTY;
+        }
+
+        output = ErrorHandling.validCountry(country);
         if (output != ErrorType.SUCCESS) return output;
 
-        output = ErrorHandling.validPhoneNumber(phoneNumber);
+        output = ErrorHandling.validPicture(avatar);
+        if (output != ErrorType.SUCCESS) return output;
+
+        output = ErrorHandling.validPicture(header);
         if (output != ErrorType.SUCCESS) return output;
 
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
 
-        //TODO check country
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate date = LocalDate.parse(birthdate, dtf);
 
-        SQLDB.createUserProfile(firstName, lastName, username, password, email, phoneNumber, country, date, biography, avatarPath, headerPath);
+        SQLDB.createUserProfile(firstName, lastName, username, password, email, phoneNumber, country, date, biography, avatar, header);
 
         return ErrorType.SUCCESS;
     }

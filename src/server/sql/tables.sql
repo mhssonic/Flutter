@@ -7,11 +7,11 @@ CREATE TABLE IF NOT EXISTS tweet (
     likes INT Array[1024],
     favestar bool,
     comments VARCHAR(50) Array[1024],
-    hashtag INT Array[16],
+    hashtag VARCHAR(50) Array[16],
     postingTime timestamp
 );
 CREATE TABLE IF NOT EXISTS comment (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_comment_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id') + 1,
     author INT,
     context VARCHAR(280),
     attachment INT Array[8],
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS comment (
     likes INT Array[1024],
     favestar bool,
     comments VARCHAR(50) Array[1024],
-    hashtag INT Array[16],
+    hashtag VARCHAR(50) Array[16],
     postingTime timestamp,
     reply INT
     );
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS attachment(
     path VARCHAR(128)
 );
 CREATE TABLE IF NOT EXISTS quote (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_quote_tweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id') + 4,
     author INT,
     context VARCHAR(280),
     attachment INT array[8],
@@ -62,12 +62,12 @@ CREATE TABLE IF NOT EXISTS quote (
     likes INT array[1024],
     favestar bool,
     comments VARCHAR(50) Array[1024],
-    hashtag INT array[16],
+    hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     quoted_message_id INT
 );
 CREATE TABLE IF NOT EXISTS poll (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_poll_tweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id') + 3,
     author INT,
     context VARCHAR(280),
     attachment INT array[8],
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS poll (
     likes INT array[1024],
     favestar bool,
     comments VARCHAR(50) Array[1024],
-    hashtag INT array[16],
+    hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     choice INT Array[16]
 );
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS choice(
     voters INT Array[1024]
 );
 CREATE TABLE IF NOT EXISTS retweet (
-    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_retweet_id'),
+    id INT PRIMARY KEY DEFAULT NEXTVAL('seq_tweet_id') + 2,
     author INT,
     retweeted_message_id INT
 );
@@ -101,10 +101,10 @@ IF NOT EXISTS (
     )
 Then
 CREATE TABLE secret_key (
-    key VARCHAR(50),
+    id VARCHAR(50),
     value VARCHAR(200)
 );
-INSERT INTO secret_key (key, value) values('token', 'ba esm ramz pashmak');
+INSERT INTO secret_key (id, value) values('token', 'ba esm ramz pashmak');
 
 end if;
 

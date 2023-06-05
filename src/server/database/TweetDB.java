@@ -8,12 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
-
 public class TweetDB extends SQLDB {
-    public static int createTweet(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime) {
+    public static int createTweet(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime) {
         try {
-            Array hashtags = connection.createArrayOf("INT", hashtag);
+            Array hashtags = connection.createArrayOf("VARCHAR", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             //TODO attachment and id
             preparedStatement = connection.prepareStatement("INSERT INTO tweet (author ,favestar, hashtag, attachment , postingtime, context) VALUES (?,?,?,?,?,?) returning id");
@@ -63,7 +63,7 @@ public class TweetDB extends SQLDB {
         SQLDB.removeFromArrayField(table, tweetId, "likes", userId);
     }
 
-    public static boolean likedBeforeFromTable(String table, int userId, int tweetId) {
+    public static boolean likedBeforeFromTable(String table, int tweetId, int userId) {
         return SQLDB.containInArrayFieldObject(table, tweetId, "likes", userId);
     }
 
@@ -87,7 +87,7 @@ public class TweetDB extends SQLDB {
         else if(tweetId % TweetType.count == TweetType.POLL.getMod()) removeLikeFromTable("poll", tweetId, userId);
     }
 
-    public static boolean likedBefore(int userId, int tweetId) {
+    public static boolean likedBefore(int tweetId, int userId) {
         if(tweetId % TweetType.count == TweetType.TWEET.getMod()) return likedBeforeFromTable("tweet", tweetId, userId);
         if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) return likedBeforeFromTable("retweet", tweetId, userId);
         if(tweetId % TweetType.count == TweetType.COMMENT.getMod()) return likedBeforeFromTable("comment", tweetId, userId);
@@ -127,15 +127,36 @@ public class TweetDB extends SQLDB {
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
-            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId); //TODO add to constructor?
+
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
-//            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                 commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
+
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
-            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachmentId ,  likes );
+
+            ArrayList<Integer> attachment  = new ArrayList<>();
+            for(Object obj : attachmentId){
+                attachment.add((Integer) obj);
+            }
+
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachment,  likes );
             return tweet;
         } catch (SQLException e) {
             throw new RuntimeException(e);

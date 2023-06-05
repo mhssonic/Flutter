@@ -2,7 +2,11 @@ package server.enums.error;
 
 public enum ErrorType {
     SUCCESS,
+    REQUIRED_FIELD_EMPTY,
+
+    DOESNT_EXIST,
     DUPLICATED_USERNAME,
+    ALREADY_VOTED,
     INVALID_PASS,
     MISMATCH,
     DUPLICATED_EMAIL,
@@ -17,4 +21,8 @@ public enum ErrorType {
     ALREADY_LIKED,
     HAVE_NOT_LIKED,
     PERMISSION_DENIED,
+    HAVE_NOT_FOLLOWED,
+    HAVE_NOT_BLOCKED,
+    NOT_VALID_COUNTRY,
+    SAME_PERSON
 }

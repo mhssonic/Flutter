@@ -1,9 +1,14 @@
 package server.enums.error;
 
+import server.database.AttachmentDB;
 import server.database.SQLDB;
+import server.message.Attachment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +63,22 @@ public class ErrorHandling {
 
     public static ErrorType validLength(String str , int maxLen){
         if (str.length() > maxLen) return ErrorType.TOO_LONG;
+        return ErrorType.SUCCESS;
+    }
+
+    public static ErrorType validCountry(String str){
+        Set<String> countries = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA2);
+        if(countries.contains(str))
+            return ErrorType.SUCCESS;
+        return ErrorType.NOT_VALID_COUNTRY;
+    }
+
+    public static ErrorType validPicture(Integer id){
+        if(id == 0) return ErrorType.SUCCESS;
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(id);
+        if (!AttachmentDB.checkAttachments(temp))
+            return ErrorType.DOESNT_EXIST;
         return ErrorType.SUCCESS;
     }
 }

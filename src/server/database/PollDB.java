@@ -8,13 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
-import static server.database.SQLDB.connection;
+import java.util.ArrayList;
 
 public class PollDB extends TweetDB{
-    public static int createPoll(int authorId, String context, Integer[] attachmentId, Integer[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
+    public static int createPoll(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
         try {
-            Array hashtags = connection.createArrayOf("INT", hashtag);
+            Array hashtags = connection.createArrayOf("VARCHAR", hashtag);
             Array attachments = connection.createArrayOf("INT", attachmentId);
             Array choices = connection.createArrayOf("INT", choiceId);
             preparedStatement = connection.prepareStatement("INSERT INTO poll (author ,favestar, hashtag, attachment , postingtime, context , choice) VALUES (?,?,?,?,?,?,?) returning id");
@@ -43,19 +42,37 @@ public class PollDB extends TweetDB{
 
             int author = resultSet.getInt("author");
             String context = resultSet.getString("context");
-            Object[] attachmentId = (Object[]) (resultSet.getArray("attachment").getArray());
-//            Attachment[] attachments = AttachmentDB.getAttachment(Object[]attachmentId);
+
+
+            Object[] attachmentId = null;
+            Array attachments =  (resultSet.getArray("attachment"));
+            if (attachments != null){
+                attachmentId = (Object[]) attachments.getArray();
+            }
+
             int retweet = resultSet.getInt("retweet");
-            int likes = sizeOfArrayField("tweet", messageId, "likes");
-            Object[] commentId = (Object[]) (resultSet.getArray("comment").getArray());
-//            Comment[] comments = CommentDB.getComments(Object[]commentId);
-            Object[] hashtag = (Object[]) (resultSet.getArray("comment").getArray());
+            int likes = sizeOfArrayField("poll", messageId, "likes");
+
+            Object[] commentId = null;
+            Array comments =  (resultSet.getArray("comments"));
+            if (comments != null){
+                commentId = (Object[]) comments.getArray();
+            }
+
+            Object[] hashtag = null;
+            Array hashtags =  (resultSet.getArray("hashtag"));
+            if (hashtags != null){
+                hashtag = (Object[]) hashtags.getArray();
+            }
+
             LocalDateTime postingTime = resultSet.getTimestamp("postingTime").toLocalDateTime();
             Object[] choiceId = (Object[]) (resultSet.getArray("choiceId")).getArray();
 //            Choice[] choice = ChoiceDB.getChoice(Object[]choiceId);
 
-
-            Poll poll = new Poll(messageId , author , context , postingTime , attachmentId ,  likes  , choiceId);
+            ArrayList<Integer> attachment  = new ArrayList<>();
+            for(Object obj : attachmentId)
+                attachment.add((Integer) obj);
+            Poll poll = new Poll(messageId , author , context , postingTime , attachment ,  likes  , choiceId);
             return poll;
         } catch (SQLException e) {
             throw new RuntimeException(e);

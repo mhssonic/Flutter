@@ -1,6 +1,6 @@
 package server.database;
 
-import server.enums.error.ErrorType;
+import server.user.Profile;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class ProfileDB extends SQLDB {
 
-    public static void createProfile(int userId, String firstName, String lastName, String email, String phoneNumber, String country, LocalDate birthdate, String biography , String avatarPath , String headerPath) {
+    public static void createProfile(int userId, String firstName, String lastName, String email, String phoneNumber, String country, LocalDate birthdate, String biography , int avatar , int header) {
         try {
             LocalDateTime lastEdit = LocalDateTime.now();
 
@@ -25,8 +25,8 @@ public class ProfileDB extends SQLDB {
             preparedStatement.setDate(6, Date.valueOf(birthdate));//TODO
             preparedStatement.setTimestamp(7, Timestamp.valueOf(lastEdit));
             preparedStatement.setString(8, biography);
-            preparedStatement.setString(9, avatarPath);
-            preparedStatement.setString(10, headerPath);
+            preparedStatement.setInt(9, avatar);
+            preparedStatement.setInt(10, header);
             preparedStatement.setInt(11, userId);
 
             preparedStatement.executeUpdate();
@@ -38,6 +38,31 @@ public class ProfileDB extends SQLDB {
     //TODO PROFILE ID?
     public static void updateProfile(HashMap<String,Object> profileUpdate , int profileId){
         SQLDB.updateFieldsKeys("profile" , profileId , profileUpdate);
+    }
+
+
+    public static Profile getProfile(int targetId){
+        try{
+            ResultSet resultSet = getResultSet("profile" , targetId);
+            if (!resultSet.next()) return null;
+
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String email = resultSet.getString("email");
+            String phoneNumber = resultSet.getString("phone_number");
+            String country = resultSet.getString("country");
+            String birthdate = resultSet.getDate("birthdate").toString();//TODO
+            String bio = resultSet.getString("bio");
+            int avatar = resultSet.getInt("avatar");
+            int header = resultSet.getInt("header");
+
+
+
+            Profile profile = new Profile(firstName , lastName , email , phoneNumber , country , birthdate , bio , avatar , header);
+            return profile;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

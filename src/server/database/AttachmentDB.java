@@ -3,7 +3,6 @@ package server.database;
 import server.enums.FileType;
 import server.message.Attachment;
 
-import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,14 +22,8 @@ public class AttachmentDB extends SQLDB {
         }
     }
 
-    public static Integer[] creatAttachments(ArrayList<Attachment> attachments){
-        Integer[] attachmentId = new Integer[attachments.size()];
-        int i = 0;
-        for ( Attachment attachment : attachments) {
-            attachmentId[i] = AttachmentDB.createAttachment(attachment);
-            i++;
-        }
-        return attachmentId;
+    public static boolean checkAttachments(ArrayList<Integer> attachments){
+        return containIdsInTable("attachment", attachments);
     }
 
     public static ArrayList<Attachment> getAttachment(int[]attachmentIds){
@@ -38,7 +31,6 @@ public class AttachmentDB extends SQLDB {
         ArrayList<Attachment> attachments = new ArrayList<>();
         for (int attachmentId : attachmentIds) {
             resultSet = getResultSet("attachment" , attachmentId);
-
             try {
                 if (resultSet.next()){
                     FileType type = (FileType) resultSet.getObject("type");
@@ -51,5 +43,21 @@ public class AttachmentDB extends SQLDB {
         }
 
         return attachments;
+    }
+
+    public static Object getAttachmentPath(int id){
+        return getFieldObject("attachment", id, "path");
+    }
+
+    public static String getRandomPath(){
+        try {
+            preparedStatement = connection.prepareStatement("select NEXTVAL('seq_file_path')");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return Integer.toString(resultSet.getInt("nextval"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);//TODO handle exception
+        }
     }
 }
