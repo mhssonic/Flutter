@@ -52,6 +52,12 @@ public class UserController {
         output = ErrorHandling.validCountry(country);
         if (output != ErrorType.SUCCESS) return output;
 
+        output = ErrorHandling.validPicture(avatar);
+        if (output != ErrorType.SUCCESS) return output;
+
+        output = ErrorHandling.validPicture(header);
+        if (output != ErrorType.SUCCESS) return output;
+
         output = ErrorHandling.validBirthDate(birthdate);
         if (output != ErrorType.SUCCESS) return output;
 

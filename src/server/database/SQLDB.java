@@ -331,6 +331,8 @@ public class SQLDB {
                     break;
                 case "header":
                 case "avatar":
+                    output = ErrorHandling.validPicture(Integer.parseInt(value));
+                    if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
                     break;
             }
