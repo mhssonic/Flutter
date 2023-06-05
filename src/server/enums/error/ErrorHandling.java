@@ -74,7 +74,7 @@ public class ErrorHandling {
     }
 
     public static ErrorType validPicture(Integer id){
-        if(id == null) return ErrorType.SUCCESS;
+        if(id == 0) return ErrorType.SUCCESS;
         ArrayList<Integer> temp = new ArrayList<>();
         temp.add(id);
         if (!AttachmentDB.checkAttachments(temp))

@@ -3,8 +3,6 @@ package server.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
 public class SignUpForm {
 
     @JsonProperty("first-name")
@@ -17,8 +15,8 @@ public class SignUpForm {
     private String country;
     private String birthdate;
     private String biography;
-    private Integer avatar;
-    private Integer header;
+    private int avatar;
+    private int header;
     private String username;
     private String password;
 
@@ -110,19 +108,19 @@ public class SignUpForm {
         this.biography = biography;
     }
 
-    public Integer getAvatar() {
+    public int getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(int avatar) {
         this.avatar = avatar;
     }
 
-    public Integer getHeader() {
+    public int getHeader() {
         return header;
     }
 
-    public void setHeader(Integer header) {
+    public void setHeader(int header) {
         this.header = header;
     }
 
