@@ -1,6 +1,8 @@
 package server.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 
 public class SignUpForm {
@@ -15,11 +17,11 @@ public class SignUpForm {
     private String country;
     private String birthdate;
     private String biography;
-    private int avatar;
-    private int header;
+    private Integer avatar;
+    private Integer header;
     private String username;
     private String password;
-    @JsonProperty("confirm-password")
+
     private String confirmPassword;
 
 
@@ -38,10 +40,12 @@ public class SignUpForm {
 
     public SignUpForm(){}
 
+    @JsonIgnore
     public String getConfirmPassword() {
         return confirmPassword;
     }
 
+    @JsonProperty("confirm-password")
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
@@ -62,18 +66,22 @@ public class SignUpForm {
         this.lastName = lastName;
     }
 
+    @JsonIgnore
     public String getEmail() {
         return email;
     }
 
+    @JsonProperty
     public void setEmail(String email) {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @JsonProperty
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -102,19 +110,19 @@ public class SignUpForm {
         this.biography = biography;
     }
 
-    public int getAvatar() {
+    public Integer getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(int avatar) {
+    public void setAvatar(Integer avatar) {
         this.avatar = avatar;
     }
 
-    public int getHeader() {
+    public Integer getHeader() {
         return header;
     }
 
-    public void setHeader(int header) {
+    public void setHeader(Integer header) {
         this.header = header;
     }
 
@@ -126,10 +134,12 @@ public class SignUpForm {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

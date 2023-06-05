@@ -26,7 +26,7 @@ public class UserController {
 //    keyFactory.generatePublic(publicKeySpec);
 
 
-    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, int avatar, int header) {
+    public static ErrorType signUp(String firstName, String lastName, String username, String password, String confirmPassword, String email, String phoneNumber, String country, String birthdate, String biography, Integer avatar, Integer header) {
         ErrorType output;
         output = ErrorHandling.validUsername(username);
         if (output != ErrorType.SUCCESS) return output;

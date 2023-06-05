@@ -73,8 +73,8 @@ public class ErrorHandling {
         return ErrorType.NOT_VALID_COUNTRY;
     }
 
-    public static ErrorType validPicture(int id){
-        Set<String> countries = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA2);
+    public static ErrorType validPicture(Integer id){
+        if(id == null) return ErrorType.SUCCESS;
         ArrayList<Integer> temp = new ArrayList<>();
         temp.add(id);
         if (!AttachmentDB.checkAttachments(temp))
