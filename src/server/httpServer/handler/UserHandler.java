@@ -12,8 +12,10 @@ import server.database.SQLDB;
 import server.database.UserDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
+import server.message.Direct.DirectMessage;
 import server.message.Message;
 import server.user.SignUpForm;
+import server.user.User;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -143,33 +145,42 @@ public class UserHandler {
             if (messageIds != null) {
                 Object[] tmpMessages = (Object[]) messageIds.getArray();
                 ArrayList<Message> messages = Message.getMessages(tmpMessages);
-//                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//                StringBuffer jsonResponse = null;
-//                for (Message tmp : messages) {
-//                    jsonResponse.append(ow.writeValueAsString(tmp));
-//
-//                }
-                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                String jsonResponse = ow.writeValueAsString(messages);
+
+                String jsonResponse = objectMapper.writeValueAsString(messages);
                 exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
                 exchange.getResponseBody().write(jsonResponse.getBytes());
                 exchange.getResponseBody().close();
-                FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+                return;
             }
-
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
     }
 
     public static void showDirectHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int targetId = jsonNode.get("target-id").asInt();
+            ArrayList<Message> messages = DirectMessage.getDirectMessage(id, targetId);
+            if (messages != null) {
+                String jsonResponse = objectMapper.writeValueAsString(messages);
+                exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
+                exchange.getResponseBody().write(jsonResponse.getBytes());
+                exchange.getResponseBody().close();
+                return;
+            }
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
 
+
+        } catch (SQLException e) {
+        } catch (JsonProcessingException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+        }
     }
 }

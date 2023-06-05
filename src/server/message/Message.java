@@ -114,16 +114,13 @@ public abstract class Message {
 
     public static Message getMessage(int messageId) {
         int type = messageId % (TweetType.count);
-        Message message = null;
         switch (type) {
             case 0: return TweetDB.getTweet(messageId);
             case 1: return CommentDB.getTweet(messageId);
             case 2: return RetweetDB.getTweet(messageId);
             case 3: return PollDB.getTweet(messageId);
             case 4: return QuoteDB.getTweet(messageId);
-            case 5:
-//                        message = DirectMessageDB.getDirect((int) messageId);
-                break;
+            case 5: return DirectMessageDB.getMessage(messageId);
         }
         return null;
     }

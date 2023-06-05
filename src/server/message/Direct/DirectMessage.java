@@ -8,6 +8,8 @@ import server.enums.error.ErrorType;
 import server.message.Attachment;
 import server.message.Message;
 
+import java.sql.Array;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -62,9 +64,15 @@ public class DirectMessage extends Message {
         return ErrorType.SUCCESS;
     }
 
-    public static ErrorType getDirectMessage(int user, int targetUser){
-        if(user == targetUser) return ErrorType.SAME_PERSON;
-        return ErrorType.SUCCESS;
+    public static ArrayList<Message> getDirectMessage(int user, int targetUser) throws SQLException {
+        if(user == targetUser) return null;
+        try {
+            Array arrayMessageIds = ChatBoxDB.getMessageIds(Tools.jenkinsHash(user, targetUser, true));
+            Object[] tmpMessages = (Object[]) arrayMessageIds.getArray();
+            return Message.getMessages(tmpMessages);
+        } catch (SQLException e){
+            return null;
+        }
     }
 
     public int getReply() {
