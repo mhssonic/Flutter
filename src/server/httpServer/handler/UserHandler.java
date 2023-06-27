@@ -19,8 +19,10 @@ import server.user.SignUpForm;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.sql.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 
@@ -124,7 +126,31 @@ public class UserHandler {
                 FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    /**
+     *      <h2>output</h2>
+     *      <br>
+     *      [123, ....]
+     *      <br>
+     *      a set of user ids
+     */
+    public static void getFriends(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            HashSet<Integer> friends = UserDB.getFriendsInSet(id);
+            String response;
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            response = ow.writeValueAsString(friends);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
     }

@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(32),
     following INT array[1024],
     follower INT array[1024],
-    blocked INT array[1024]
+    blocked INT array[1024],
+    friend INT array[1024]
 );
 CREATE TABLE IF NOT EXISTS attachment(
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_attachment_id'),

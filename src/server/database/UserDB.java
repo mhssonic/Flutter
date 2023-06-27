@@ -80,6 +80,11 @@ public class UserDB extends SQLDB {
         return ErrorType.SUCCESS;
     }
 
+    public static void addToFriend(int userId, int targetId) {
+        SQLDB.appendToArrayField("users", userId, "friend", targetId);
+        SQLDB.appendToArrayField("users", targetId, "friend", userId);
+    }
+
     public static ErrorType unFollow(int userId, int targetId) {
         if(userId == targetId) return ErrorType.SAME_PERSON;
         if (!SQLDB.containFieldKey("users", "id", targetId)) return ErrorType.DOESNT_EXIST;
@@ -94,6 +99,21 @@ public class UserDB extends SQLDB {
     public static Array getFollower(int userId) {
         return (Array) getFieldObject("users", userId, "follower");
     }//TODO handle null
+
+    public static Array getFriends(int userId) {
+        return (Array) getFieldObject("users", userId, "friend");
+    }
+
+    public static HashSet<Integer> getFriendsInSet(int userId) throws SQLException {
+        Array arrayFriends = UserDB.getFriends(userId);
+        if(arrayFriends == null)
+            return new HashSet<>();
+        Object[] friends = (Object[]) (arrayFriends.getArray());
+        HashSet<Integer> friendsId = new HashSet<>();
+        for(Object obj : friends)
+            friendsId.add((int) obj);
+        return friendsId;
+    }
 
     public static Array getFollowing(int userId) {
         return (Array) SQLDB.getFieldObject("users", userId, "following");
@@ -135,8 +155,10 @@ public class UserDB extends SQLDB {
             String username = resultSet.getString("username");
             Object[] followerId = null;
             Object[] followingId = null;
+            Object[] friendId = null;
             HashSet<Integer> follower = new HashSet<>();
             HashSet<Integer> following = new HashSet<>();
+            HashSet<Integer> friend = new HashSet<>();
 
             if (resultSet.getArray("follower" )!= null){
                 followerId = (Object[]) (resultSet.getArray("follower").getArray());
@@ -149,10 +171,15 @@ public class UserDB extends SQLDB {
                 for (Object tmp : followingId) {
                     following.add((int) tmp);
                 }
-
+            }
+            if (resultSet.getArray("friend" )!= null){
+                friendId = (Object[]) (resultSet.getArray("friend").getArray());
+                for (Object tmp : friendId) {
+                    friend.add((int) tmp);
+                }
             }
 
-            User user = new User(targetId, username, following, follower);
+            User user = new User(targetId, username, following, follower, friend);
             return user;
 
         } catch (SQLException e) {

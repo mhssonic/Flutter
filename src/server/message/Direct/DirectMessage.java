@@ -59,8 +59,10 @@ public class DirectMessage extends Message {
         DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachments);
 
         int chatBoxId = Tools.jenkinsHash(user, targetUser, true);
-        if(!ChatBoxDB.containChatBox(chatBoxId))//TODO handle it better
+        if(!ChatBoxDB.containChatBox(chatBoxId)) {//TODO handle it better
             ChatBoxDB.creatChatBox(chatBoxId);
+            UserDB.addToFriend(user, targetUser);
+        }
         ChatBoxDB.appendMessage(chatBoxId, messageId);
         return ErrorType.SUCCESS;
     }

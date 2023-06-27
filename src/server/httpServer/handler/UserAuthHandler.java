@@ -86,7 +86,11 @@ public class UserAuthHandler {
         } catch (IOException e) {
             System.out.println(e.getMessage());
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         }catch (Exception e){
+            System.out.println(e.getClass());
             System.out.println(e.getMessage());
         }
     }

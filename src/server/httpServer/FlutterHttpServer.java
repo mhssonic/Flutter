@@ -46,6 +46,7 @@ public class FlutterHttpServer {
             httpsServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
             httpsServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
             httpsServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
+            httpsServer.createContext("/get-friends", new FlutterHttpHandler(UserHandler::getFriends));
 
             httpsServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
             httpsServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));

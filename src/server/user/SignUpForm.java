@@ -3,6 +3,8 @@ package server.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
+
 public class SignUpForm {
     private int id;
     @JsonProperty("first-name")
@@ -10,7 +12,7 @@ public class SignUpForm {
     @JsonProperty("last-name")
     private String lastName;
     private String email;
-    @JsonProperty("phone-number")
+
     private String phoneNumber;
     private String country;
     private String birthdate;
@@ -23,6 +25,9 @@ public class SignUpForm {
 
     private String confirmPassword;
 
+    private HashSet<Integer> friend;
+    private HashSet<Integer> follower;
+    private HashSet<Integer> following;
 
     public SignUpForm(User user , Profile profile) {
         this.id = user.getUserId();
@@ -36,6 +41,33 @@ public class SignUpForm {
         this.avatar = profile.getAvatar();
         this.header = profile.getHeader();
         this.username = user.getUserName();
+        this.follower = user.getFollower();
+        this.following = user.getFollowing();
+        this.friend = user.getFriend();
+    }
+    @JsonIgnore
+    public HashSet<Integer> getFriend() {
+        return friend;
+    }
+    @JsonIgnore
+    public void setFriend(HashSet<Integer> friend) {
+        this.friend = friend;
+    }
+    @JsonProperty
+    public HashSet<Integer> getFollower() {
+        return follower;
+    }
+    @JsonIgnore
+    public void setFollower(HashSet<Integer> follower) {
+        this.follower = follower;
+    }
+    @JsonProperty
+    public HashSet<Integer> getFollowing() {
+        return following;
+    }
+    @JsonIgnore
+    public void setFollowing(HashSet<Integer> following) {
+        this.following = following;
     }
 
     public SignUpForm(){}
@@ -90,7 +122,7 @@ public class SignUpForm {
         return phoneNumber;
     }
 
-    @JsonProperty
+    @JsonProperty("phone-number")
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }

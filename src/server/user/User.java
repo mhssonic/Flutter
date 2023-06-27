@@ -1,5 +1,8 @@
 package server.user;
 
+import server.database.UserDB;
+import server.enums.error.ErrorType;
+
 import java.util.HashSet;
 
 public class User {
@@ -11,12 +14,24 @@ public class User {
     HashSet<Integer> following = new HashSet<>();
     HashSet<Integer> follower = new HashSet<>();
     HashSet<Integer> blocked = new HashSet<>();
+    HashSet<Integer> friend = new HashSet<>();
 
-    public User(int id, String userName, HashSet<Integer> following, HashSet<Integer> follower) {
+
+
+    public User(int id, String userName, HashSet<Integer> following, HashSet<Integer> follower, HashSet<Integer> friend) {
         this.userId = id;
         this.userName = userName;
         this.following = following;
         this.follower = follower;
+        this.friend = friend;
+    }
+
+    public HashSet<Integer> getFriend() {
+        return friend;
+    }
+
+    public void setFriend(HashSet<Integer> friend) {
+        this.friend = friend;
     }
 
     public int getUserId() {
