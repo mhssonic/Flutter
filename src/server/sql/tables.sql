@@ -105,6 +105,7 @@ CREATE TABLE secret_key (
     value VARCHAR(200)
 );
 INSERT INTO secret_key (id, value) values('token', 'ba esm ramz pashmak');
+INSERT INTO secret_key (id, value) values('key_store', 'pashmak');
 
 end if;
 

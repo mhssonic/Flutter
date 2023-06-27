@@ -19,7 +19,6 @@ import server.user.SignUpForm;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.sql.Array;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
