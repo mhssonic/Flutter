@@ -1,5 +1,6 @@
 package server.message;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.database.*;
@@ -17,6 +18,7 @@ public abstract class Message {
 
     @JsonProperty("text")
     protected String text;
+
     protected LocalDateTime postingTime;
     protected final static int MAX_LENGTH_MESSAGE = 280;
     @JsonProperty("attachment-id")
@@ -78,6 +80,7 @@ public abstract class Message {
     public void setText(String text) {
         this.text = text;
     }
+
 
     public void setPostingTime(LocalDateTime postingTime) {
         this.postingTime = postingTime;

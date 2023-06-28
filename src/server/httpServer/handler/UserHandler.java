@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
 import server.database.ChatBoxDB;
@@ -292,10 +293,11 @@ public class UserHandler {
         try {
             Array messageIds = ChatBoxDB.getMessageIds(Tools.jenkinsHash(id, id, false));
             if (messageIds != null) {
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                 Object[] tmpMessages = (Object[]) messageIds.getArray();
                 ArrayList<Message> messages = Message.getMessages(tmpMessages);
 
-                String jsonResponse = objectMapper.writeValueAsString(messages);
+                String jsonResponse = ow.writeValueAsString(messages);
                 exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
                 exchange.getResponseBody().write(jsonResponse.getBytes());
                 exchange.getResponseBody().close();

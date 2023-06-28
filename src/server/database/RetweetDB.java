@@ -33,7 +33,7 @@ public class RetweetDB extends TweetDB {
             int retweetedMessageId = resultSet.getInt("retweeted_message_id");
 
             Tweet tweet = TweetDB.getTweet(retweetedMessageId);
-            Retweet retweet = new Retweet(retweetedMessageId , tweet.getAuthorId() , tweet.getText() , tweet.getPostingTime() , tweet.getAttachmentId() , tweet.getLikes(), tweet.getComment(), tweet.getHashtag(), tweet.getRetweetCount() , retweetId , author );
+            Retweet retweet = new Retweet(retweetId , tweet.getAuthorId() , tweet.getText() , tweet.getPostingTime() , tweet.getAttachmentId() , tweet.getLikes(), tweet.getComment(), tweet.getHashtag(), tweet.getRetweetCount() , retweetedMessageId , author );
             return  retweet;
 
         } catch (SQLException e) {
