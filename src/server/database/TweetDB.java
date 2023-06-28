@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 public class TweetDB extends SQLDB {
     public static int createTweet(int authorId, String context, Integer[] attachmentId, String[] hashtag, LocalDateTime postingTime) {
@@ -71,6 +72,10 @@ public class TweetDB extends SQLDB {
         return sizeOfArrayField(table, tweetId, "likes");
     }
 
+    public static void addToCommentFromTable(String table, int replayFrom, int tweetId) {
+        SQLDB.appendToArrayField(table, replayFrom, "comments", tweetId);
+    }
+
     public static void like(int tweetId, int userId) {
         if(tweetId % TweetType.count == TweetType.TWEET.getMod()) likeFromTable("tweet", tweetId, userId);
         else if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) likeFromTable("retweet", tweetId, userId);
@@ -119,6 +124,14 @@ public class TweetDB extends SQLDB {
         else if(tweetId % TweetType.count == TweetType.POLL.getMod()) setFaveStarToTable("poll", tweetId);
     }
 
+    public static void addToComment(int replayFrom, int tweetId) {
+        if(replayFrom % TweetType.count == TweetType.TWEET.getMod()) addToCommentFromTable("tweet", replayFrom, tweetId);
+        else if(replayFrom % TweetType.count == TweetType.RETWEET.getMod()) addToCommentFromTable("retweet", replayFrom, tweetId);
+        else if(replayFrom % TweetType.count == TweetType.COMMENT.getMod()) addToCommentFromTable("comment", replayFrom, tweetId);
+        else if(replayFrom % TweetType.count == TweetType.QUOTE_TWEET.getMod()) addToCommentFromTable("quote", replayFrom, tweetId);
+        else if(replayFrom % TweetType.count == TweetType.POLL.getMod()) addToCommentFromTable("poll", replayFrom, tweetId);
+    }
+
     public static Tweet getTweet(int messageId) {
 
         try{
@@ -137,13 +150,13 @@ public class TweetDB extends SQLDB {
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("tweet", messageId, "likes");
 
-            Object[] commentId = null;
+            Object[] commentId = {};
             Array comments =  (resultSet.getArray("comments"));
             if (comments != null){
                  commentId = (Object[]) comments.getArray();
             }
 
-            Object[] hashtag = null;
+            Object[] hashtag = {};
             Array hashtags =  (resultSet.getArray("hashtag"));
             if (hashtags != null){
                 hashtag = (Object[]) hashtags.getArray();
@@ -156,7 +169,10 @@ public class TweetDB extends SQLDB {
                 attachment.add((Integer) obj);
             }
 
-            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachment,  likes );
+            String[] strHashtag = Arrays.copyOf(hashtag, hashtag.length, String[].class);
+            Integer[] intComment = Arrays.copyOf(commentId, commentId.length, Integer[].class);
+
+            Tweet tweet = new Tweet(messageId , author , context , postingTime , attachment,  likes, intComment, strHashtag, retweet);
             return tweet;
         } catch (SQLException e) {
             throw new RuntimeException(e);

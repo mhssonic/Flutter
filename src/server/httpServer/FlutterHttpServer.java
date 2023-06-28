@@ -53,7 +53,7 @@ public class FlutterHttpServer {
             httpsServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
             httpsServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
             httpsServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
-            httpsServer.createContext("/commentHandler", new FlutterHttpHandler(MessageHandler::commentHandler));
+            httpsServer.createContext("/comment", new FlutterHttpHandler(MessageHandler::commentHandler));
             httpsServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
             httpsServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
             httpsServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));

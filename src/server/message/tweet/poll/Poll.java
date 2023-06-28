@@ -14,8 +14,8 @@ public class Poll extends Tweet {
     private Object[] choiceId;
     private  Object[] choices;
 
-    public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes ,Object[] choiceId ) {
-        super(messageId, authorId, text, postingTime, attachmentId, likes);
+    public Poll(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes ,Integer[] comment, String[] hashtag, int retweetCount ,Object[] choiceId ) {
+        super(messageId, authorId, text, postingTime, attachmentId, likes, comment, hashtag, retweetCount);
         this.choiceId = choiceId;
     }
 
@@ -24,8 +24,8 @@ public class Poll extends Tweet {
         Integer[] choiceId = (Integer[]) choices;
         if(!AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
-        int pollId = PollDB.createPoll(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now() , choiceId);
         if (validTweet(context) == ErrorType.SUCCESS){
+            int pollId = PollDB.createPoll(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now() , choiceId);
             return shareTweetWithFollowers(userId,pollId);
         }
         else return validTweet(context);

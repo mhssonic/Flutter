@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS tweet (
     retweet smallint default 0,
     likes INT Array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) Array[16],
     postingTime timestamp
 );
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS comment (
     retweet smallint default 0,
     likes INT Array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) Array[16],
     postingTime timestamp,
     reply INT
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS quote (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     quoted_message_id INT
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS poll (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     choice INT Array[16]

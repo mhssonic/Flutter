@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PollDB extends TweetDB{
     public static int createPoll(int authorId, String context, Integer[] attachmentId, Object[] hashtag, LocalDateTime postingTime , Integer[] choiceId) {
@@ -53,13 +54,13 @@ public class PollDB extends TweetDB{
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("poll", messageId, "likes");
 
-            Object[] commentId = null;
+            Object[] commentId = {};
             Array comments =  (resultSet.getArray("comments"));
             if (comments != null){
                 commentId = (Object[]) comments.getArray();
             }
 
-            Object[] hashtag = null;
+            Object[] hashtag = {};
             Array hashtags =  (resultSet.getArray("hashtag"));
             if (hashtags != null){
                 hashtag = (Object[]) hashtags.getArray();
@@ -72,7 +73,12 @@ public class PollDB extends TweetDB{
             ArrayList<Integer> attachment  = new ArrayList<>();
             for(Object obj : attachmentId)
                 attachment.add((Integer) obj);
-            Poll poll = new Poll(messageId , author , context , postingTime , attachment ,  likes  , choiceId);
+
+            String[] strHashtag = Arrays.copyOf(hashtag, hashtag.length, String[].class);
+            Integer[] intComment = Arrays.copyOf(commentId, commentId.length, Integer[].class);
+
+
+            Poll poll = new Poll(messageId , author , context , postingTime , attachment ,  likes,intComment, strHashtag,  retweet, choiceId);
             return poll;
         } catch (SQLException e) {
             throw new RuntimeException(e);

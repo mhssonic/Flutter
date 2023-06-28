@@ -11,8 +11,8 @@ public class Retweet extends Tweet {
     private int retweetedMessageId;
     private int retweeterId;
 
-    public Retweet(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes, int retweetId, int retweeterId) {
-        super(messageId, authorId, text, postingTime, attachmentId, likes);
+    public Retweet(int messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes, Integer[] comment, String[] hashtag, int retweetCount, int retweetId, int retweeterId) {
+        super(messageId, authorId, text, postingTime, attachmentId, likes,  comment,  hashtag,  retweetCount);
         this.retweetId = retweetId;
         this.retweeterId = retweeterId;
     }
