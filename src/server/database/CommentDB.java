@@ -97,13 +97,13 @@ public class CommentDB extends TweetDB {
             int retweet = resultSet.getInt("retweet");
             int likes = sizeOfArrayField("comment", messageId, "likes");
 
-            Object[] commentId = null;
+            Object[] commentId = {};
             Array comments =  (resultSet.getArray("comments"));
             if (comments != null){
                 commentId = (Object[]) comments.getArray();
             }
 
-            Object[] hashtag = null;
+            Object[] hashtag = {};
             Array hashtags =  (resultSet.getArray("hashtag"));
             if (hashtags != null){
                 hashtag = (Object[]) hashtags.getArray();
