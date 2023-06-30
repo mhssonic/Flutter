@@ -186,5 +186,4 @@ public class UserDB extends SQLDB {
             throw new RuntimeException(e);
         }
     }
-
 }

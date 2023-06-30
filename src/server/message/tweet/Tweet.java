@@ -1,5 +1,6 @@
 package server.message.tweet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.Tools;
 import server.database.AttachmentDB;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Tweet extends Message{
+    @JsonIgnore
     HashSet<User> like = new HashSet<>();
     int likes;
     Integer[] comment;

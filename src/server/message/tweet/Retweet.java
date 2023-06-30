@@ -2,6 +2,8 @@ package server.message.tweet;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.database.RetweetDB;
+import server.database.SQLDB;
+import server.database.TweetDB;
 import server.enums.error.ErrorType;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ public class Retweet extends Tweet {
 
     public static ErrorType retweet(int retweetedMessageId, int retweeterId) {
         int retweetId = RetweetDB.createRetweet(retweetedMessageId, retweeterId);
+        TweetDB.increaseRetweet(retweetedMessageId);
         return shareTweetWithFollowers(retweeterId, retweetId);
     }
 

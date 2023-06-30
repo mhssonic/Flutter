@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sun.net.httpserver.HttpExchange;
 import server.Tools;
 import server.database.ChatBoxDB;
@@ -20,7 +19,6 @@ import server.user.SignUpForm;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.sql.Array;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +92,7 @@ public class UserHandler {
      */
     public static void showProfileHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            if(jsonNode.has("user-id")){
+            if(jsonNode.has("user-id") && !jsonNode.get("user-id").asText().equals("")){
                 int targetId = jsonNode.get("user-id").asInt();
                 SignUpForm signUpForm = SQLDB.getUserProfileByUserID(targetId);
                 if (signUpForm == null) {
@@ -109,7 +107,7 @@ public class UserHandler {
                 exchange.getResponseBody().write(response.getBytes());
                 exchange.getResponseBody().close();
             }
-            else if(jsonNode.has("username")) {
+            else if(jsonNode.has("username") && !jsonNode.get("username").asText().equals("")) {
                 String targetUsername = jsonNode.get("username").asText();
                 SignUpForm signUpForm = SQLDB.getUserProfileByUsername(targetUsername);
                 if (signUpForm == null) {
@@ -132,6 +130,44 @@ public class UserHandler {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    /**
+     *<h2>Json input</h2>{
+     *     "username": "hebsdfo",<br>
+     *     and search for users with their username contains username that have send
+     *}
+     *      <h2>output</h2>
+     *      [{<br>
+     *   "id" : -1999999970,<br>
+     *   "country" : "CA",<br>
+     *   "birthdate" : "1382-12-08",<br>
+     *   "biography" : null,<br>
+     *   "avatar" : 800,<br>
+     *   "header" : 0,<br>
+     *   "username" : "hebo",<br>
+     *   "first-name" : "omid",<br>
+     *   "last-name" : "varam",<br>
+     *   "phone-number" : null<br>
+     * }]
+     * response: bad request, http not found
+     */
+    public static void searchUsers(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            String targetUsername = jsonNode.get("username").asText();
+            ArrayList<SignUpForm> users = SQLDB.searchInUsernames(targetUsername);
+
+            String response;
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            response = ow.writeValueAsString(users);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -189,12 +225,9 @@ public class UserHandler {
 
     /**
      *<h2>Json input</h2>
-     *
      * {<br>
      *     "target-id":-1999999990<br>
      * }
-     *
-     *
      *  <h2>output</h2>
      *      SUCCESS,<br></>
      *     DOESNT_EXIST,<br>
@@ -257,8 +290,6 @@ public class UserHandler {
      * {<br>
      *     "target-id":-1999999990<br>
      * }
-     *
-     *
      *  <h2>output</h2>
      *      SUCCESS,<br></>
      *     DOESNT_EXIST,<br>

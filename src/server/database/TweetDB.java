@@ -76,6 +76,11 @@ public class TweetDB extends SQLDB {
         SQLDB.appendToArrayField(table, replayFrom, "comments", tweetId);
     }
 
+    public static void increaseRetweetFromTable(String table, int tweetId) {
+        SQLDB.increaseFieldKeyByOne(table, tweetId, "retweet");
+    }
+
+
     public static void like(int tweetId, int userId) {
         if(tweetId % TweetType.count == TweetType.TWEET.getMod()) likeFromTable("tweet", tweetId, userId);
         else if(tweetId % TweetType.count == TweetType.RETWEET.getMod()) likeFromTable("retweet", tweetId, userId);
@@ -108,6 +113,14 @@ public class TweetDB extends SQLDB {
         if(tweetId % TweetType.count == TweetType.QUOTE_TWEET.getMod()) return getNumberOfLikesFromTable("quote", tweetId);
         if(tweetId % TweetType.count == TweetType.POLL.getMod()) return getNumberOfLikesFromTable("poll", tweetId);
         return 0;
+    }
+
+    public static void increaseRetweet(int tweetId) {
+        if(tweetId % TweetType.count == TweetType.TWEET.getMod())  increaseRetweetFromTable("tweet", tweetId);
+        if(tweetId % TweetType.count == TweetType.RETWEET.getMod())  increaseRetweetFromTable("retweet", tweetId);
+        if(tweetId % TweetType.count == TweetType.COMMENT.getMod())  increaseRetweetFromTable("comment", tweetId);
+        if(tweetId % TweetType.count == TweetType.QUOTE_TWEET.getMod())  increaseRetweetFromTable("quote", tweetId);
+        if(tweetId % TweetType.count == TweetType.POLL.getMod())  increaseRetweetFromTable("poll", tweetId);
     }
 
     public static void setFaveStarToTable(String table, int tweetId) {
