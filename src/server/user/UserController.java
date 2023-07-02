@@ -37,11 +37,11 @@ public class UserController {
         output = ErrorHandling.validConfirm(password, confirmPassword);
         if (output != ErrorType.SUCCESS) return output;
 
-        if( email != null){
+        if( email != null && !email.equals("")){
             output = ErrorHandling.validEmail(email);
             if (output != ErrorType.SUCCESS) return output;
         }
-        else if (phoneNumber != null){
+        else if (phoneNumber != null && !phoneNumber.equals("")){
             output = ErrorHandling.validPhoneNumber(phoneNumber);
             if (output != ErrorType.SUCCESS) return output;
         }

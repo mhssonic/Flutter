@@ -14,6 +14,7 @@ import server.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Tweet extends Message{
@@ -64,10 +65,14 @@ public class Tweet extends Message{
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Integer> attachments, String[] hashtag ){
-        if (!AttachmentDB.checkAttachments(attachments))
+        if (attachments != null && !AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
         if (validTweet(context) == ErrorType.SUCCESS){
-            int tweetId = TweetDB.createTweet(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now());
+            int tweetId;
+            if(attachments != null)
+                tweetId = TweetDB.createTweet(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now());
+            else
+                tweetId = TweetDB.createTweet(userId, context, new Integer[0], hashtag, LocalDateTime.now());
             return shareTweetWithFollowers(userId,tweetId);
         }
         else return validTweet(context);

@@ -52,6 +52,10 @@ public class UserDB extends SQLDB {
         }
     }
 
+    public static boolean alreadyFollowed(int userId, int targetId){
+        return SQLDB.containInArrayFieldObject("users", userId, "following", targetId);
+    }
+
     public static Boolean containUsername(String username) {
         return containFieldKey("users", "username", username);
     }

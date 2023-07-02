@@ -18,10 +18,14 @@ public class Comment extends Tweet{
     public Comment(){}
 
     public static ErrorType comment(int userId, String context, ArrayList<Integer> attachments, String[] hashtag , int replyFrom){
-        if(!AttachmentDB.checkAttachments(attachments))
+        if(attachments != null && !AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
         if (validTweet(context) == ErrorType.SUCCESS){
-            int commentId = CommentDB.createComment(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now(),replyFrom);
+            int commentId;
+            if(attachments == null)
+                commentId = CommentDB.createComment(userId, context, new Integer[0], hashtag, LocalDateTime.now(),replyFrom);
+            else
+                commentId = CommentDB.createComment(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now(),replyFrom);
             TweetDB.addToComment(replyFrom, commentId);
             return shareTweetWithFollowers(userId,commentId);
         }

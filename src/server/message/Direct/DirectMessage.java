@@ -52,7 +52,7 @@ public class DirectMessage extends Message {
             return errorType;
         if(UserDB.isBlocked(user, targetUser))
             return ErrorType.BLOCKED;
-        if(!AttachmentDB.checkAttachments(attachments))
+        if(attachments != null && !AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
 
         int messageId = SQLDB.getDirectMessageId();

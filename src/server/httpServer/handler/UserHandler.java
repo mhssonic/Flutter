@@ -179,7 +179,14 @@ public class UserHandler {
      */
     public static void getFriends(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            HashSet<Integer> friends = UserDB.getFriendsInSet(id);
+            ArrayList<SignUpForm> friends= new ArrayList<>();
+            HashSet<Integer> friendsId = UserDB.getFriendsInSet(id);
+            for(Integer friend : friendsId){
+                SignUpForm signUpForm = SQLDB.getUserProfileByUserID(friend);
+                if (signUpForm != null) {
+                    friends.add(signUpForm);
+                }
+            }
             String response;
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             response = ow.writeValueAsString(friends);
@@ -195,7 +202,7 @@ public class UserHandler {
     /**
      *<h2>Json input</h2>
      * {<br>
-     *     "target-id":-1999999990<br>
+     *     "user-id":-1999999990<br>
      * }
      *  <h2>output</h2>
      *      SUCCESS,<br></>
@@ -207,10 +214,27 @@ public class UserHandler {
      */
     public static void followHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            int targetId = jsonNode.get("target-id").asInt();
+            int targetId = jsonNode.get("user-id").asInt();
             ErrorType error = UserDB.follow(id, targetId);
 
             String response = error.toString();
+
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+        } catch (NullPointerException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        } catch (IOException e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void alreadyFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int targetId = jsonNode.get("user-id").asInt();
+            boolean bool = UserDB.alreadyFollowed(id, targetId);
+            String response = Boolean.toString(bool);
 
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, response.getBytes().length);
             exchange.getResponseBody().write(response.getBytes());
@@ -237,7 +261,7 @@ public class UserHandler {
      */
     public static void unFollowHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            int targetId = jsonNode.get("target-id").asInt();
+            int targetId = jsonNode.get("user-id").asInt();
             ErrorType error = UserDB.unFollow(id, targetId);
 
             String response = error.toString();

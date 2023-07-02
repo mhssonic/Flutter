@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.sun.net.httpserver.HttpExchange;
 import server.database.ChoiceDB;
+import server.database.TweetDB;
 import server.enums.error.ErrorType;
 import server.httpServer.FlutterHttpServer;
 import server.message.Direct.DirectMessage;
@@ -160,26 +161,30 @@ public class MessageHandler {
     }
 
     public static void showTweetHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
-        int messageId = jsonNode.get("messageId").asInt();
 
-        Message message = Message.getMessage(messageId);
         try {
-            if (message == null) {
-                String response = ErrorType.DOESNT_EXIST.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
-                exchange.getResponseBody().close();
-            }
-
+            int messageId = jsonNode.get("message-id").asInt();
+            Message message = Message.getMessage(messageId);
+            Tweet tweet = (Tweet)message;
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            String jsonResponse = ow.writeValueAsString(message);
+            if(tweet.getComment() == null){
+                ArrayList<Message> messages = new ArrayList<>();
+                String jsonResponse = ow.writeValueAsString(messages);
+                exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
+                exchange.getResponseBody().write(jsonResponse.getBytes());
+                exchange.getResponseBody().close();
+                return;
+            }
+            ArrayList<Message> messages = Message.getMessages(tweet.getComment());
+
+            String jsonResponse = ow.writeValueAsString(messages);
             exchange.sendResponseHeaders(200, jsonResponse.getBytes().length);
             exchange.getResponseBody().write(jsonResponse.getBytes());
             exchange.getResponseBody().close();
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
 
     }
@@ -208,12 +213,10 @@ public class MessageHandler {
             int messageId = jsonNode.get("message-id").asInt();
 
             ErrorType errorType = Tweet.like(id, messageId);
-            if (errorType != ErrorType.SUCCESS) {
-                String response = errorType.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
-                exchange.getResponseBody().close();
-            }
+            String response = errorType.toString();
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -226,12 +229,26 @@ public class MessageHandler {
             int messageId = jsonNode.get("message-id").asInt();
 
             ErrorType errorType = Tweet.removeLike(id, messageId);
-            if (errorType != ErrorType.SUCCESS) {
-                String response = errorType.toString();
-                exchange.sendResponseHeaders(200, response.getBytes().length);
-                exchange.getResponseBody().write(response.getBytes());
-                exchange.getResponseBody().close();
-            }
+            String response = errorType.toString();
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+        }
+    }
+
+    public static void alreadyLiked(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
+        try {
+            int messageId = jsonNode.get("message-id").asInt();
+
+            boolean bool = TweetDB.likedBefore(messageId, id);
+            String response = Boolean.toString(bool);
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes());
+            exchange.getResponseBody().close();
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());

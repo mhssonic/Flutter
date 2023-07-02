@@ -23,6 +23,7 @@ public class FileHttpHandler {
     private static final String FILE_PATH = "files/";
     public static void uploadFile(HttpExchange exchange, int id){
         try {
+            System.out.println("im here");
             InputStream inputStream = exchange.getRequestBody();
             String format = exchange.getRequestHeaders().get("Content-Type").get(0).split("file/")[1];
 
@@ -47,13 +48,14 @@ public class FileHttpHandler {
         try {
             int attachmentId = jsonNode.get("attachment-id").asInt();
             File file = Attachment.getFile(attachmentId);
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, file.length());
             String name = file.getName();
             String format = name.split("\\.")[1];
             exchange.getResponseHeaders().set("Content-Type", "file/" + format);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, file.length());
 
             OutputStream outputStream = exchange.getResponseBody();
             Files.copy(file.toPath(), outputStream);
+
             outputStream.flush();
             outputStream.close();
 

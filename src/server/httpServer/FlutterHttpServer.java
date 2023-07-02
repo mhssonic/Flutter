@@ -41,6 +41,7 @@ public class FlutterHttpServer {
             httpsServer.createContext("/block", new FlutterHttpHandler(UserHandler::blockHandler));
             httpsServer.createContext("/unblock", new FlutterHttpHandler(UserHandler::unBlockHandler));
             httpsServer.createContext("/follow", new FlutterHttpHandler(UserHandler::followHandler));
+            httpsServer.createContext("/already-follow", new FlutterHttpHandler(UserHandler::alreadyFollowHandler));
             httpsServer.createContext("/unfollow", new FlutterHttpHandler(UserHandler::unFollowHandler));
             httpsServer.createContext("/show-direct", new FlutterHttpHandler(UserHandler::showDirectHandler));
             httpsServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
@@ -55,9 +56,10 @@ public class FlutterHttpServer {
             httpsServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
             httpsServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
             httpsServer.createContext("/comment", new FlutterHttpHandler(MessageHandler::commentHandler));
-            httpsServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
+            httpsServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));
             httpsServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
             httpsServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
+            httpsServer.createContext("/already-liked", new FlutterHttpHandler(MessageHandler::alreadyLiked));
             httpsServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
 
             httpsServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));

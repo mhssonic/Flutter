@@ -29,6 +29,9 @@ public class SignUpForm {
     private HashSet<Integer> follower;
     private HashSet<Integer> following;
 
+    private int countFollowing;
+    private int countFollower;
+
     public SignUpForm(User user , Profile profile) {
         this.id = user.getUserId();
         this.firstName = profile.getFirstName();
@@ -44,7 +47,27 @@ public class SignUpForm {
         this.follower = user.getFollower();
         this.following = user.getFollowing();
         this.friend = user.getFriend();
+        this.countFollower = follower.size();
+        this.countFollowing = following.size();
     }
+@JsonProperty("count-following")
+    public int getCountFollowing() {
+        return countFollowing;
+    }
+    @JsonIgnore
+    public void setCountFollowing(int countFollowing) {
+        this.countFollowing = countFollowing;
+    }
+
+    @JsonProperty("count-follower")
+    public int getCountFollower() {
+        return countFollower;
+    }
+    @JsonIgnore
+    public void setCountFollower(int countFollower) {
+        this.countFollower = countFollower;
+    }
+
     @JsonIgnore
     public HashSet<Integer> getFriend() {
         return friend;
