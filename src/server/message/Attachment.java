@@ -39,6 +39,8 @@ public class Attachment {
     }
 
     public static String saveFile(InputStream inputStream, String format, String filePath) throws IOException {
+        if(format.equals("jpeg"))
+            format = "jpg";
         String fileName = AttachmentDB.getRandomPath() + "." + format;
         Path path = Paths.get(filePath + fileName);
         FileType fileType = formatToFileType(format);

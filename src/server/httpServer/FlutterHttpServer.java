@@ -2,46 +2,71 @@ package server.httpServer;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpsConfigurator;
+import com.sun.net.httpserver.HttpsServer;
+import server.database.SecretKeyDB;
 import server.httpServer.handler.*;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import java.io.FileInputStream;
 import java.net.InetSocketAddress;
+import java.security.KeyStore;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FlutterHttpServer {
     public static void run(){
         try {
+            char[] keystorePassword = SecretKeyDB.getKeyStorePassword().toCharArray();
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            FileInputStream fis = new FileInputStream("src/server/httpServer/keystore.jks");
+            keyStore.load(fis, keystorePassword);
+
+// Create SSL context
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            kmf.init(keyStore, keystorePassword);
+            sslContext.init(kmf.getKeyManagers(), null, null);
+
             InetSocketAddress socket = new InetSocketAddress(5050);
-            HttpServer httpServer = HttpServer.create(socket,10);
+
+            HttpsServer httpsServer = HttpsServer.create(socket,10);
+            httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext));
+
             ExecutorService executorService = Executors.newFixedThreadPool(50);
 
-            httpServer.createContext("/sign-up", new FlutterAuthHandler(UserAuthHandler::signUpHandler));
-            httpServer.createContext("/sign-in", new FlutterAuthHandler(UserAuthHandler::signInHandler));
-            httpServer.createContext("/block", new FlutterHttpHandler(UserHandler::blockHandler));
-            httpServer.createContext("/unblock", new FlutterHttpHandler(UserHandler::unBlockHandler));
-            httpServer.createContext("/follow", new FlutterHttpHandler(UserHandler::followHandler));
-            httpServer.createContext("/unfollow", new FlutterHttpHandler(UserHandler::unFollowHandler));
-            httpServer.createContext("/show-direct", new FlutterHttpHandler(UserHandler::showDirectHandler));
-            httpServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
-            httpServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
-            httpServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
+            httpsServer.createContext("/sign-up", new FlutterAuthHandler(UserAuthHandler::signUpHandler));
+            httpsServer.createContext("/sign-in", new FlutterAuthHandler(UserAuthHandler::signInHandler));
+            httpsServer.createContext("/block", new FlutterHttpHandler(UserHandler::blockHandler));
+            httpsServer.createContext("/unblock", new FlutterHttpHandler(UserHandler::unBlockHandler));
+            httpsServer.createContext("/follow", new FlutterHttpHandler(UserHandler::followHandler));
+            httpsServer.createContext("/already-follow", new FlutterHttpHandler(UserHandler::alreadyFollowHandler));
+            httpsServer.createContext("/unfollow", new FlutterHttpHandler(UserHandler::unFollowHandler));
+            httpsServer.createContext("/show-direct", new FlutterHttpHandler(UserHandler::showDirectHandler));
+            httpsServer.createContext("/show-profile", new FlutterHttpHandler(UserHandler::showProfileHandler));
+            httpsServer.createContext("/update-profile", new FlutterHttpHandler(UserHandler::updateProfileHandler));
+            httpsServer.createContext("/show-timeline", new FlutterHttpHandler(UserHandler::showTimelineHandler));
+            httpsServer.createContext("/get-friends", new FlutterHttpHandler(UserHandler::getFriends));
+            httpsServer.createContext("/search-users", new FlutterHttpHandler(UserHandler::searchUsers));
 
-            httpServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
-            httpServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));
-            httpServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
-            httpServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
-            httpServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
-            httpServer.createContext("/commentHandler", new FlutterHttpHandler(MessageHandler::commentHandler));
-            httpServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));//TODO we haven't dont it
-            httpServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
-            httpServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
-            httpServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
+            httpsServer.createContext("/tweet", new FlutterHttpHandler(MessageHandler::tweetHandler));
+            httpsServer.createContext("/retweet", new FlutterHttpHandler(MessageHandler::retweetHandler));
+            httpsServer.createContext("/quote", new FlutterHttpHandler(MessageHandler::quoteHandler));
+            httpsServer.createContext("/poll", new FlutterHttpHandler(MessageHandler::pollHandler));
+            httpsServer.createContext("/direct-message", new FlutterHttpHandler(MessageHandler::directMessageHandler));
+            httpsServer.createContext("/comment", new FlutterHttpHandler(MessageHandler::commentHandler));
+            httpsServer.createContext("/show-tweet", new FlutterHttpHandler(MessageHandler::showTweetHandler));
+            httpsServer.createContext("/like", new FlutterHttpHandler(MessageHandler::likeHandler));
+            httpsServer.createContext("/unlike", new FlutterHttpHandler(MessageHandler::unlikeHandler));
+            httpsServer.createContext("/already-liked", new FlutterHttpHandler(MessageHandler::alreadyLiked));
+            httpsServer.createContext("/vote", new FlutterHttpHandler(MessageHandler::voteHandler));//TODO we haven't done it
 
-            httpServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
-            httpServer.createContext("/download-file", new FlutterHttpHandler(FileHttpHandler::downloadFile));
+            httpsServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
+            httpsServer.createContext("/download-file", new FlutterHttpHandler(FileHttpHandler::downloadFile));
 
-            httpServer.setExecutor(executorService);
-            httpServer.start();
+            httpsServer.setExecutor(executorService);
+            httpsServer.start();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }

@@ -5,6 +5,7 @@ import org.bson.Document;
 import server.Tools;
 import server.database.*;
 import server.enums.error.ErrorType;
+import server.httpServer.handler.UserAuthHandler;
 import server.message.Attachment;
 import server.message.Message;
 
@@ -51,15 +52,17 @@ public class DirectMessage extends Message {
             return errorType;
         if(UserDB.isBlocked(user, targetUser))
             return ErrorType.BLOCKED;
-        if(!AttachmentDB.checkAttachments(attachments))
+        if(attachments != null && !AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
 
         int messageId = SQLDB.getDirectMessageId();
         DirectMessageDB.createDirectMessage(messageId, user, context, reply, attachments);
 
         int chatBoxId = Tools.jenkinsHash(user, targetUser, true);
-        if(!ChatBoxDB.containChatBox(chatBoxId))//TODO handle it better
+        if(!ChatBoxDB.containChatBox(chatBoxId)) {//TODO handle it better
             ChatBoxDB.creatChatBox(chatBoxId);
+            UserDB.addToFriend(user, targetUser);
+        }
         ChatBoxDB.appendMessage(chatBoxId, messageId);
         return ErrorType.SUCCESS;
     }

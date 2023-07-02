@@ -14,7 +14,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class SQLDB {
     protected static Connection connection;
@@ -275,6 +277,8 @@ public class SQLDB {
 
         for (String key : updatedData.keySet()) {
             String value = (String) updatedData.get(key);
+            if(value.equals("") || value.equals("null"))
+                continue;
             switch (key) {
                 case "first_name":
                 case "last_name":
@@ -317,7 +321,7 @@ public class SQLDB {
                     LocalDate date = LocalDate.parse(value, dtf);
                     profileUpdate.put(key, value);
                     break;
-                case "bio":
+                case "biography":
                     output = ErrorHandling.validLength(value, 160);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);
@@ -418,6 +422,55 @@ public class SQLDB {
             Profile profile = ProfileDB.getProfile(targetID);
             SignUpForm signUpForm = new SignUpForm(user , profile);
             return signUpForm;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<SignUpForm> searchInUsernames(String likeUsername){
+        likeUsername = "%" + likeUsername + "%";
+
+        try {
+            preparedStatement = connection.prepareStatement("select * from users where username like ?");
+            preparedStatement.setString(1, likeUsername);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ArrayList<SignUpForm> users = new ArrayList<>();
+            while (resultSet.next()){
+                String username = resultSet.getString("username");
+                int targetId = resultSet.getInt("id");
+                Object[] followerId;
+                Object[] followingId;
+                Object[] friendId;
+                HashSet<Integer> follower = new HashSet<>();
+                HashSet<Integer> following = new HashSet<>();
+                HashSet<Integer> friend = new HashSet<>();
+
+                if (resultSet.getArray("follower" )!= null){
+                    followerId = (Object[]) (resultSet.getArray("follower").getArray());
+                    for (Object tmp : followerId) {
+                        follower.add((int) tmp);
+                    }
+                }
+                if (resultSet.getArray("following") != null){
+                    followingId = (Object[]) (resultSet.getArray("following").getArray());
+                    for (Object tmp : followingId) {
+                        following.add((int) tmp);
+                    }
+                }
+                if (resultSet.getArray("friend" )!= null){
+                    friendId = (Object[]) (resultSet.getArray("friend").getArray());
+                    for (Object tmp : friendId) {
+                        friend.add((int) tmp);
+                    }
+                }
+
+                User user = new User(targetId, username, following, follower, friend);
+
+
+                users.add(new SignUpForm(user, ProfileDB.getProfile(targetId)));
+            }
+            return users;
         }catch (Exception e){
             throw new RuntimeException(e);
         }

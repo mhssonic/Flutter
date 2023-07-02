@@ -1,5 +1,6 @@
 package server.message.tweet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.Tools;
 import server.database.AttachmentDB;
@@ -13,21 +14,26 @@ import server.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Tweet extends Message{
+    @JsonIgnore
     HashSet<User> like = new HashSet<>();
     int likes;
-    HashSet<String> comment;
+    Integer[] comment;
     String[] hashtag;
     @JsonProperty("retweet-count")
     int retweetCount;
     Boolean faveStar;
     final static int FAVESTAR_NUMBER = 10;
 
-    public Tweet(Object messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes) {
+    public Tweet(Object messageId, int authorId, String text, LocalDateTime postingTime, ArrayList<Integer> attachmentId, int likes, Integer[] comment, String[] hashtag, int retweetCount) {
         super(messageId, authorId, text, postingTime, attachmentId);
         this.likes = likes;
+        this.retweetCount = retweetCount;
+        this.hashtag = hashtag;
+        this.comment = comment;
     }
     public Tweet(){
         super();
@@ -42,7 +48,7 @@ public class Tweet extends Message{
         return likes;
     }
 
-    public HashSet<String> getComment() {
+    public Integer[] getComment() {
         return comment;
     }
 
@@ -59,10 +65,14 @@ public class Tweet extends Message{
     }
 
     public static ErrorType tweet(int userId, String context, ArrayList<Integer> attachments, String[] hashtag ){
-        if (!AttachmentDB.checkAttachments(attachments))
+        if (attachments != null && !AttachmentDB.checkAttachments(attachments))
             return ErrorType.DOESNT_EXIST;
-        int tweetId = TweetDB.createTweet(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now());
         if (validTweet(context) == ErrorType.SUCCESS){
+            int tweetId;
+            if(attachments != null)
+                tweetId = TweetDB.createTweet(userId, context, attachments.toArray(new Integer[attachments.size()]), hashtag, LocalDateTime.now());
+            else
+                tweetId = TweetDB.createTweet(userId, context, new Integer[0], hashtag, LocalDateTime.now());
             return shareTweetWithFollowers(userId,tweetId);
         }
         else return validTweet(context);
@@ -133,7 +143,7 @@ public class Tweet extends Message{
         this.likes = likes;
     }
 
-    public void setComment(HashSet<String> comment) {
+    public void setComment(Integer[] comment) {
         this.comment = comment;
     }
 

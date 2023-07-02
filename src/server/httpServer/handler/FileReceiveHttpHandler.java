@@ -22,10 +22,10 @@ public class FileReceiveHttpHandler implements HttpHandler {
             return;
         }
 
-        if(! exchange.getRequestHeaders().get("Content-Type").get(0).contains("file/")){//TODO search for a better content-type
-            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
-            return;
-        }
+//        if(! exchange.getRequestHeaders().get("Content-Type").get(0).contains("file/")){//TODO search for a better content-type
+//            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
+//            return;
+//        }
         try {
             String strCookies = exchange.getRequestHeaders().get("Cookie").get(0);
             String[] cookies = strCookies.split("token=", 2);

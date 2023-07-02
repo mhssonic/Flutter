@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS tweet (
     retweet smallint default 0,
     likes INT Array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) Array[16],
     postingTime timestamp
 );
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS comment (
     retweet smallint default 0,
     likes INT Array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) Array[16],
     postingTime timestamp,
     reply INT
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(32),
     following INT array[1024],
     follower INT array[1024],
-    blocked INT array[1024]
+    blocked INT array[1024],
+    friend INT array[1024]
 );
 CREATE TABLE IF NOT EXISTS attachment(
     id INT PRIMARY KEY DEFAULT NEXTVAL('seq_attachment_id'),
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS quote (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     quoted_message_id INT
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS poll (
     retweet smallint default 0,
     likes INT array[1024],
     favestar bool,
-    comments VARCHAR(50) Array[1024],
+    comments INT Array[1024],
     hashtag VARCHAR(50) array[16],
     postingTime timestamp,
     choice INT Array[16]
@@ -105,6 +106,7 @@ CREATE TABLE secret_key (
     value VARCHAR(200)
 );
 INSERT INTO secret_key (id, value) values('token', 'ba esm ramz pashmak');
+INSERT INTO secret_key (id, value) values('key_store', 'pashmak');
 
 end if;
 

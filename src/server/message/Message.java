@@ -1,5 +1,6 @@
 package server.message;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.database.*;
@@ -78,6 +79,7 @@ public abstract class Message {
     public void setText(String text) {
         this.text = text;
     }
+
 
     public void setPostingTime(LocalDateTime postingTime) {
         this.postingTime = postingTime;
