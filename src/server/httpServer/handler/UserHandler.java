@@ -65,7 +65,6 @@ public class UserHandler {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 

@@ -277,6 +277,8 @@ public class SQLDB {
 
         for (String key : updatedData.keySet()) {
             String value = (String) updatedData.get(key);
+            if(value.equals("") || value.equals("null"))
+                continue;
             switch (key) {
                 case "first_name":
                 case "last_name":
@@ -319,7 +321,7 @@ public class SQLDB {
                     LocalDate date = LocalDate.parse(value, dtf);
                     profileUpdate.put(key, value);
                     break;
-                case "bio":
+                case "biography":
                     output = ErrorHandling.validLength(value, 160);
                     if (output != ErrorType.SUCCESS) return output;
                     profileUpdate.put(key, value);

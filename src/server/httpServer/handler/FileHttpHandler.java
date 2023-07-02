@@ -25,7 +25,7 @@ public class FileHttpHandler {
         try {
             System.out.println("im here");
             InputStream inputStream = exchange.getRequestBody();
-            String format = exchange.getRequestHeaders().get("Content-Type").get(0).split("file/")[1];
+            String format = "jpg";
 
             String response = Attachment.saveFile(inputStream, format, FILE_PATH);
             exchange.sendResponseHeaders(200, response.getBytes().length);
