@@ -378,7 +378,7 @@ public class UserHandler {
      */
     public static void showDirectHandler(HttpExchange exchange, ObjectMapper objectMapper, JsonNode jsonNode, int id) {
         try {
-            int targetId = jsonNode.get("target-id").asInt();
+            int targetId = jsonNode.get("user-id").asInt();
             ArrayList<Message> messages = DirectMessage.getDirectMessage(id, targetId);
             if (messages != null) {
                 String jsonResponse = objectMapper.writeValueAsString(messages);
@@ -393,6 +393,7 @@ public class UserHandler {
         } catch (JsonProcessingException e) {
             FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
         } catch (Exception e) {
+            FlutterHttpServer.sendWithoutBodyResponse(exchange, HttpURLConnection.HTTP_BAD_REQUEST);
             System.out.println(e.getMessage());
         }
     }
