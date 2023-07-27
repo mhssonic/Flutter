@@ -14,25 +14,29 @@ import java.net.InetSocketAddress;
 import java.security.KeyStore;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FlutterHttpServer {
     public static void run(){
         try {
-            char[] keystorePassword = SecretKeyDB.getKeyStorePassword().toCharArray();
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            FileInputStream fis = new FileInputStream("src/server/httpServer/keystore.jks");
-            keyStore.load(fis, keystorePassword);
-
-// Create SSL context
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(keyStore, keystorePassword);
-            sslContext.init(kmf.getKeyManagers(), null, null);
+//            char[] keystorePassword = SecretKeyDB.getKeyStorePassword().toCharArray();
+//            KeyStore keyStore = KeyStore.getInstance("JKS");
+//            FileInputStream fis = new FileInputStream("src/server/httpServer/keystore.jks");
+//            keyStore.load(fis, keystorePassword);
+//
+//// Create SSL context
+//            SSLContext sslContext = SSLContext.getInstance("TLS");
+//            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+//            kmf.init(keyStore, keystorePassword);
+//            sslContext.init(kmf.getKeyManagers(), null, null);
 
             InetSocketAddress socket = new InetSocketAddress(5050);
 
-            HttpsServer httpsServer = HttpsServer.create(socket,10);
-            httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext));
+//            HttpsServer httpsServer = HttpsServer.create(socket,10);
+//            httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext));
+            HttpServer httpsServer = HttpServer.create(socket,10);
 
             ExecutorService executorService = Executors.newFixedThreadPool(50);
 
@@ -64,6 +68,13 @@ public class FlutterHttpServer {
 
             httpsServer.createContext("/upload-file", new FileReceiveHttpHandler(FileHttpHandler::uploadFile));
             httpsServer.createContext("/download-file", new FlutterHttpHandler(FileHttpHandler::downloadFile));
+
+//            System.setProperty("javax.net.debug", "ssl");
+//            Logger serverLogger = Logger.getLogger("com.sun.net.httpserver");
+//            ConsoleHandler consoleHandler = new ConsoleHandler();
+//            consoleHandler.setLevel(Level.ALL);
+//            serverLogger.addHandler(consoleHandler);
+//            serverLogger.setLevel(Level.ALL);
 
             httpsServer.setExecutor(executorService);
             httpsServer.start();

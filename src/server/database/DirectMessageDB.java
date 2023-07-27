@@ -7,6 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.internal.connection.Time;
 import org.bson.Document;
+import org.bson.codecs.ObjectIdGenerator;
+import org.bson.types.ObjectId;
 import server.message.Direct.DirectMessage;
 
 import java.time.LocalDateTime;
@@ -36,7 +38,6 @@ public class DirectMessageDB {
     public static DirectMessage getMessage(int messageId){
         MongoCollection messageCollection = database.getCollection("direct_message");
         Document doc = (Document) messageCollection.find(Filters.eq("_id", messageId)).first();
-
         Date date = (Date) doc.get("time");
         DirectMessage directMessage = new DirectMessage(messageId, (int) doc.get("author"), (String) doc.get("context"), date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), (ArrayList<Integer>) doc.get("attachment"), (int) doc.get("reply"));
         return directMessage;
